@@ -1,7 +1,9 @@
 from main import app
 from extensions import db
 from app.models.student import Student
+from app.models.lesson import Lesson
 from app.models.class_ import Class
+
 
 def list_students():
     students = Student.query.all()

@@ -2,8 +2,10 @@ import unittest
 from main import app
 from extensions import db
 from app.database import operations
-from app.models.class_ import Class
 from app.models.student import Student
+from app.models.lesson import Lesson
+from app.models.class_ import Class
+
 
 class TestOperations(unittest.TestCase):
     def setUp(self):

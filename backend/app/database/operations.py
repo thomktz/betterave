@@ -1,6 +1,7 @@
 from extensions import db, bcrypt
-from app.models.class_ import Class
 from app.models.student import Student
+from app.models.lesson import Lesson
+from app.models.class_ import Class
 
 ### Student operations ###
 def hash_password(password: str) -> str:

@@ -12,6 +12,9 @@ class Class(db.Model):
     tutor = db.Column(db.String)
     # Many-to-Many relationship with Student
     students = db.relationship('Student', secondary=student_classes, back_populates='classes')
+    # Many-to-One relationship with Lesson
+    lessons = db.relationship('Lesson', back_populates='class_')
+
 
     def get_id(self):
         return str(self.class_id)
