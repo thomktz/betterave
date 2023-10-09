@@ -1,16 +1,17 @@
-from sqlalchemy import Column, Integer, String
+from main import db, login_manager
+from flask_login import UserMixin
+from . import student_classes
 
-from app.database.session import Base
-
-
-class Student(Base):
+class Student(db.Model, UserMixin):
     """SQLAlchemy object for students."""
     
     __tablename__ = "students"
-    student_id = Column(Integer, primary_key=True)
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    name = Column(String)
-    surname = Column(String)
-    profile_pic = Column(String)
-    level = Column(String)
+    student_id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    hashed_password = db.Column(db.String(120), nullable=False)
+    name = db.Column(db.String(80), nullable=False)
+    surname = db.Column(db.String(120), nullable=False)
+    profile_pic = db.Column(db.String(120), nullable=True)
+    level = db.Column(db.String(30), nullable=False)
+    # Many-to-Many relationship with Class
+    classes = db.relationship('Class', secondary=student_classes, back_populates='students')

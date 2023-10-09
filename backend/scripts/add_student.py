@@ -1,11 +1,11 @@
-import sys
-from pathlib import Path
+"""Script to add a new student to the database."""
 
-sys.path.append(str(Path(__file__).parent.parent))
+from main import app, db
 from app.database.operations import add_student, get_student_by_id
 
-if __name__ == "__main__":
+def add_new_student():
     print("---- Add a new student ----")
+    
     name = input("Enter student's first name: ")
     surname = input("Enter student's surname: ")
     profile_pic = input("Enter student's profile picture link (or leave empty): ")
@@ -23,3 +23,7 @@ if __name__ == "__main__":
     print(f"ID: {student.student_id}")
     print(f"Email: {student.email}")
     print(f"Password (Hashed): {student.hashed_password}")
+
+if __name__ == "__main__":
+    with app.app_context():
+        add_new_student()
