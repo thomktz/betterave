@@ -32,7 +32,7 @@ def add_student(name: str, surname: str, profile_pic: str, level: str, enrolled_
 
     # Associating the student with classes
     for class_id in enrolled_classes_ids:
-        class_ = db.session.query(Class).get(class_id)
+        class_ = db.session.get(Class, class_id)
         if class_:
             new_student.classes.append(class_)
 
@@ -42,7 +42,7 @@ def add_student(name: str, surname: str, profile_pic: str, level: str, enrolled_
 
 def get_student_by_id(student_id: int):
     """Get a student by their ID."""
-    return db.session.query(Student).get(student_id)
+    return db.session.get(Student, student_id)
 
 def get_student_by_email(email: str):
     """Get a student by their email."""
@@ -81,5 +81,5 @@ def get_all_classes():
 
 def get_students_by_class_id(class_id):
     """Get all students enrolled in a class."""
-    target_class = db.session.query(Class).get(class_id)
+    target_class = db.session.get(Class, class_id)
     return target_class.students if target_class else []
