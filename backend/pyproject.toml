@@ -13,7 +13,6 @@ sqlalchemy = "^2.0.21"
 bcrypt = "^4.0.1"
 pytest = "^7.4.2"
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

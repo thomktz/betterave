@@ -1,9 +1,10 @@
 import sys
 from pathlib import Path
+
 sys.path.append(str(Path(__file__).parent.parent))
 from app.database.operations import add_class
 
-def main():
+if __name__ == "__main__":
     print("---- Add a new class ----")
     class_id = input("Enter class ID: ")
     name = input("Enter class name: ")
@@ -12,6 +13,3 @@ def main():
 
     add_class(class_id, name, ects_credits, tutor)
     print(f"Class {name} added successfully!")
-
-if __name__ == "__main__":
-    main()
