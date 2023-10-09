@@ -1,5 +1,6 @@
 import unittest
-from main import app, db
+from main import app
+from extensions import db
 from app.database import operations
 from app.models.class_ import Class
 from app.models.student import Student

@@ -1,4 +1,4 @@
-from main import db, bcrypt
+from extensions import db, bcrypt
 from app.models.class_ import Class
 from app.models.student import Student
 

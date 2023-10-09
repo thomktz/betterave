@@ -1,4 +1,4 @@
-from main import db
+from extensions import db
 
 # Association table for the many-to-many relationship
 student_classes = db.Table(
