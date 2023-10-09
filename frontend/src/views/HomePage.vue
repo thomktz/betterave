@@ -33,7 +33,7 @@ export default {
   },
   async mounted() {
     try {
-      const response = await axios.get('http://127.0.0.1:5000/profile');
+      const response = await axios.get('http://127.0.0.1:5000/profile', { withCredentials: true });
       this.user = response.data;
     } catch (error) {
       console.error("There was an error fetching user data:", error);
@@ -43,15 +43,7 @@ export default {
     async logout() {
       try {
         // Make a call to the server's logout endpoint
-        await axios.post('http://127.0.0.1:5000/logout');
-
-        // Clear the locally stored authentication token
-        localStorage.removeItem('authToken');
-
-        // Remove the auth header from axios
-        delete axios.defaults.headers.common['Authorization'];
-
-        // Redirect the user to the login page
+        await axios.post('http://127.0.0.1:5000/logout', { withCredentials: true });
         this.$router.push({ name: 'Login' });
       } catch (error) {
         console.error("There was an error logging out:", error);

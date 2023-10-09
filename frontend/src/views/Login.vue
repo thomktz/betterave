@@ -35,15 +35,12 @@ export default {
         const response = await axios.post('http://127.0.0.1:5000/login', {
           email: this.email,
           password: this.password
+        }, 
+        { 
+          withCredentials: true
         });
         if (response.data.status === "success") {
-          // Assume the token is returned in the response. Adjust the property path as needed.
-          const token = response.data.token;
-          
-          // Save token to local storage (or session storage or cookies, based on preference)
-          localStorage.setItem('authToken', token);
-          
-          // Redirect user to home page using Vue Router
+          // Redirect user to home page
           this.$router.push({ name: 'homepage' });
         } else {
           console.error("Login failed:", response.data.message);

@@ -15,6 +15,7 @@ def login_user_route():
     student = Student.query.filter_by(email=email).first()
     if student and check_password(student.hashed_password, password):
         login_user(student)
+        print("Current logged user:", current_user.email)
         return jsonify(message="Login successful", status="success"), 200
     else:
         return jsonify(message="Login unsuccessful. Please check email and password", status="error"), 401

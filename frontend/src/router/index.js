@@ -12,15 +12,6 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
-    beforeEnter: (to, from, next) => {
-      const token = localStorage.getItem('authToken');
-
-      if (token) {
-        next({ name: 'homepage' }); // Redirect to home page if token exists
-      } else {
-        next(); // Continue to login page if no token
-      }
-    }
   }
 ]
 
