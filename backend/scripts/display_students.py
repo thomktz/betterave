@@ -1,4 +1,5 @@
-from main import db, app
+from main import app
+from extensions import db
 from app.models.student import Student
 from app.models.class_ import Class
 

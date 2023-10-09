@@ -12,3 +12,6 @@ class Class(db.Model):
     tutor = db.Column(db.String)
     # Many-to-Many relationship with Student
     students = db.relationship('Student', secondary=student_classes, back_populates='classes')
+
+    def get_id(self):
+        return str(self.class_id)

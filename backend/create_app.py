@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from extensions import db, bcrypt, login_manager
 
 @login_manager.user_loader
@@ -20,5 +21,11 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+
+    CORS(app, resources={r"/*": {
+        "origins": "http://localhost:8080",
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": "*"
+    }})
 
     return app

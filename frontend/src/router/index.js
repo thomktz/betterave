@@ -1,17 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
-import Home from '../views/Home.vue'
+import HomePage from '../views/HomePage.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home
+    name: 'homepage',
+    component: HomePage
   },
   {
     path: '/login',
-    name: 'login',
-    component: Login
+    name: 'Login',
+    component: Login,
+    beforeEnter: (to, from, next) => {
+      const token = localStorage.getItem('authToken');
+
+      if (token) {
+        next({ name: 'homepage' }); // Redirect to home page if token exists
+      } else {
+        next(); // Continue to login page if no token
+      }
+    }
   }
 ]
 

@@ -1,6 +1,7 @@
 """Script to add a new student to the database."""
 
-from main import app, db
+from main import app
+from extensions import db
 from app.database.operations import add_student, get_student_by_id
 
 def add_new_student():

@@ -7,11 +7,11 @@
         <v-card class="elevation-12" dark>
           <v-card-title>Login</v-card-title>
           <v-card-text>
-            <v-text-field label="Email" name="login" prepend-icon="mdi-email" type="text"></v-text-field>
-            <v-text-field label="Password" name="password" prepend-icon="mdi-lock" type="password"></v-text-field>
+            <v-text-field label="Email" v-model="email" prepend-icon="mdi-email" type="text"></v-text-field>
+            <v-text-field label="Password" v-model="password" prepend-icon="mdi-lock" type="password"></v-text-field>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary">Login</v-btn>
+            <v-btn color="primary" @click="login">Login</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -20,20 +20,40 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
-  name: 'Login',
   data() {
     return {
       email: '',
       password: ''
-    };
+    }
   },
   methods: {
-    login() {
-      // Handle your login logic here
+    async login() {
+      try {
+        const response = await axios.post('http://127.0.0.1:5000/login', {
+          email: this.email,
+          password: this.password
+        });
+        if (response.data.status === "success") {
+          // Assume the token is returned in the response. Adjust the property path as needed.
+          const token = response.data.token;
+          
+          // Save token to local storage (or session storage or cookies, based on preference)
+          localStorage.setItem('authToken', token);
+          
+          // Redirect user to home page using Vue Router
+          this.$router.push({ name: 'homepage' });
+        } else {
+          console.error("Login failed:", response.data.message);
+        }
+      } catch (error) {
+        console.error("There was an error logging in:", error);
+      }
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -46,7 +66,7 @@ export default {
   position: absolute;
   top: 20px;
   left: 20px;
-  height: 250px;  /* Adjust as needed for your logo's dimensions */
+  height: 250px;
   width: auto;
 }
 </style>

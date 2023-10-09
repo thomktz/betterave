@@ -15,3 +15,6 @@ class Student(db.Model, UserMixin):
     level = db.Column(db.String(30), nullable=False)
     # Many-to-Many relationship with Class
     classes = db.relationship('Class', secondary=student_classes, back_populates='students')
+    
+    def get_id(self):
+        return str(self.student_id)
