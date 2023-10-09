@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "betterave-backend"
+version = "0.1.0"
+description = "Backend for Betterave - Pamplemousse alternative"
+authors = ["ENSAE students"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "betterave_backend"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+sqlalchemy = "^2.0.21"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
