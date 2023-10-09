@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
-from database.operations import add_class
+from app.database.operations import add_class
 
 def main():
     print("---- Add a new class ----")

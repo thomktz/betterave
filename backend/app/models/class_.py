@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Table
-from database.session import Base
+from app.database.session import Base
 
 student_classes = Table('student_classes', Base.metadata,
     Column('student_id', Integer, ForeignKey('students.student_id')),
