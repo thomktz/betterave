@@ -15,7 +15,7 @@ class Lesson(db.Model):
 
     # Relationship to the Class model
     class_ref = db.relationship("Class", back_populates="lessons")
-
+    
     # Ordering methods
     def __lt__(self, other):
         if not isinstance(other, Lesson):

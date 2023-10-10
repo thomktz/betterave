@@ -3,7 +3,11 @@ from flask_login import UserMixin
 from . import student_classes
 
 class Student(db.Model, UserMixin):
-    """SQLAlchemy object for students."""
+    """
+    SQLAlchemy object for students.
+    
+    Since students are the users, we inherit from flask_login's UserMixin.
+    """
     
     __tablename__ = "students"
     student_id = db.Column(db.Integer, primary_key=True)

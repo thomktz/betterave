@@ -62,7 +62,7 @@ def get_all_students():
     return Student.query.all()
 
 ### Class operations ###
-def add_class(class_id, name, ects_credits, tutor):
+def add_class(class_id, name, ects_credits, tutor, **kwargs):
     """Add a class to the database."""
     
     ensae_link = f"https://www.ensae.fr/courses/{class_id}"
@@ -160,4 +160,4 @@ def get_lessons_by_student(student_id: int):
     for class_ in enrolled_classes:
         lessons.extend(get_lessons_by_class_id(class_.class_id))
 
-    return lessons
+    return sorted(lessons)

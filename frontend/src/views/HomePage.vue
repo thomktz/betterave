@@ -14,6 +14,7 @@
             <v-btn color="primary" @click="logout">Logout</v-btn>
           </v-card-actions>
         </v-card>
+        <StudentCalendar />
       </v-col>
     </v-row>
   </v-container>
@@ -21,8 +22,12 @@
 
 <script>
 import axios from 'axios';
+import StudentCalendar from '@/components/StudentCalendar.vue';
 
 export default {
+  components: {
+    StudentCalendar
+  },
   data() {
     return {
       user: {

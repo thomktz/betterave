@@ -3,6 +3,10 @@ from flask import Flask
 from flask_cors import CORS
 from extensions import db, bcrypt, login_manager
 
+from app.routes import bp as auth_bp
+from app.routes.api_routes import *
+from app.routes.auth_routes import *
+
 @login_manager.user_loader
 def load_user(user_id):
     from app.models.student import Student
@@ -30,8 +34,7 @@ def create_app():
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
-
-    from app.routes.auth_routes import bp as auth_bp
+    
     app.register_blueprint(auth_bp)
 
     with app.app_context():
