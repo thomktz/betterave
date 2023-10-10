@@ -22,7 +22,11 @@
         calendarOptions: {
           plugins: [ timeGridPlugin, interactionPlugin ],
           initialView: 'timeGridWeek',
-          events: []
+          events: [],
+          slotMinTime: '08:00:00',
+          slotMaxTime: '20:00:00',
+          hiddenDays: [0, 6],
+          height: '90vh'
         },
       };
     },
@@ -37,7 +41,9 @@
   }
   </script>
   
-  <style scoped>
-  /* Add styles here if necessary */
-  </style>
+<style scoped>
+  div {
+  width: 100%;
+  }
+</style>
   

@@ -1,32 +1,26 @@
 <template>
   <v-container class="fill-height" fluid>
-    <img src="/logo_ensae.png" alt="ENSAE Logo" class="logo" />
+    <header class="header">
+      <img src="/logo_ensae.png" alt="ENSAE Logo" class="logo" />
+      <h1>Hello, {{ user.name }}</h1>
+      <ProfilePill :userEmail="user.email" @logout="logout" />
+    </header>
 
-    <v-row align="center" justify="center">
-      <v-col cols="12" sm="8" md="4">
-        <v-card class="elevation-12" dark>
-          <v-card-title>Welcome, {{ user.name }}</v-card-title>
-          <v-card-text>
-            <p>Email: {{ user.email }}</p>
-            <!-- Add more fields as needed -->
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" @click="logout">Logout</v-btn>
-          </v-card-actions>
-        </v-card>
-        <StudentCalendar />
-      </v-col>
-    </v-row>
+    <div class="calendar-container">
+      <StudentCalendar />
+    </div>
   </v-container>
 </template>
 
 <script>
 import axios from 'axios';
 import StudentCalendar from '@/components/StudentCalendar.vue';
+import ProfilePill from '@/components/ProfilePill.vue';
 
 export default {
   components: {
-    StudentCalendar
+    StudentCalendar,
+    ProfilePill
   },
   data() {
     return {
@@ -45,15 +39,7 @@ export default {
     }
   },
   methods: {
-    async logout() {
-      try {
-        await axios.post('http://127.0.0.1:5000/logout', {}, { withCredentials: true });
-        // Redirect to Login page
-        this.$router.push({ name: 'Login' });
-      } catch (error) {
-        console.error("There was an error logging out:", error);
-      }
-    }
+
   }
 }
 </script>
@@ -62,13 +48,34 @@ export default {
 .fill-height {
   min-height: 100vh;
   background: #a3cdcf;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 0;
 }
 
 .logo {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  height: 250px;
+  height: 150px;
   width: auto;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+.calendar-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 </style>
