@@ -1,0 +1,9 @@
+# Cache files
+__pycache__/
+*.pyc
+
+# Database
+test.db
+
+# Local dev settings
+.pre-commit-config.yaml
