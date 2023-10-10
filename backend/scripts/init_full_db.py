@@ -42,7 +42,7 @@ last_names = [
     "Ghosh", "Hills", "Irwin", "Jones", "Klein", "Lopez", 
     "Mason", "Nalty", "Ochoa", "Patel", "Quinn", "Reily", 
     "Smith", "Trott", "Usman", "Valdo", "White", "Xiang", 
-    "Yakub", "Zafar",
+    "Yakub", "Zafar", "Kientz",
 ]
 
 first_names = [
@@ -50,7 +50,7 @@ first_names = [
     "Grace", "Hal", "Isaac", "Julia", "Karl", "Lara", 
     "Max", "Nora", "Oscar", "Paul", "Quinn", "Rob", 
     "Susan", "Tom", "Ursula", "Victor", "Wendy", "Xavier", 
-    "Yara", "Zack"
+    "Yara", "Zack", "Thomas",
 ]
 
 class_ids = list(set([class_["class_id"] for class_ in classes]))
@@ -60,7 +60,7 @@ def initialize_database():
         db.create_all()
         for class_ in classes:
             add_class(**class_)
-        for i in range(26):
+        for i in range(27):
             add_student(
                 name=first_names[i],
                 surname=last_names[i],

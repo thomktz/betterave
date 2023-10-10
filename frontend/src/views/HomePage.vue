@@ -42,8 +42,8 @@ export default {
   methods: {
     async logout() {
       try {
-        // Make a call to the server's logout endpoint
-        await axios.post('http://127.0.0.1:5000/logout', { withCredentials: true });
+        await axios.post('http://127.0.0.1:5000/logout', {}, { withCredentials: true });
+        // Redirect to Login page
         this.$router.push({ name: 'Login' });
       } catch (error) {
         console.error("There was an error logging out:", error);
