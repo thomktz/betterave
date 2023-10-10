@@ -10,6 +10,8 @@ class Class(db.Model):
     ects_credits = db.Column(db.Integer)
     ensae_link = db.Column(db.String, nullable=True)
     tutor = db.Column(db.String, nullable=True)
+    backgroundColor = db.Column(db.String, nullable=True)
+    
     # Many-to-Many relationship with Student
     students = db.relationship('Student', secondary=student_classes, back_populates='classes')
     # One-to-Many relationship with Lesson

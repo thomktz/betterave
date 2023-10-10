@@ -43,17 +43,23 @@
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  background-color: #ffffff;
+  background-color: #2f5b5b; /* dark background */
+  color: #ffffff; /* light text color */
   border-radius: 25px;
   cursor: pointer;
   position: relative;
+  transition: background-color 0.3s; /* smooth hover transition */
+}
+
+.profile-pill:hover {
+  background-color: #4596a6; /* slightly lighter on hover */
 }
 
 .profile-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
+  width: 45px;
+  height: 45px;
+  border-radius: 100%;
+  margin-right: 20px;
 }
 
 .dropdown-content {
@@ -62,9 +68,11 @@
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #ffffff;
+  background-color: #333; /* dark background for consistency */
+  color: #ffffff; /* light text color */
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
+  border-radius: 8px; /* added border-radius for a modern touch */
 }
 
 .dropdown-content button {
@@ -75,10 +83,16 @@
   display: block;
   width: 100%;
   text-align: left;
+  transition: background-color 0.3s; /* smooth hover transition for the button */
+}
+
+.dropdown-content button:hover {
+  background-color: #555; /* slightly lighter on hover for the button */
 }
 
 .email-with-icon {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
+
 </style>

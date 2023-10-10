@@ -24,6 +24,7 @@ def get_lessons_route():
             'start': datetime.combine(lesson.date, lesson.start_time).isoformat(),
             'end': datetime.combine(lesson.date, lesson.end_time).isoformat(),
             'title': lesson.class_ref.name,
+            "color": lesson.class_ref.backgroundColor,
         }
         for lesson in lessons
     ]

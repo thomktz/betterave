@@ -45,6 +45,7 @@ classes = [
             ("monday", "09:00:00", "10:30:00"),
             ("monday", "10:45:00", "12:15:00"),
         ],
+        "backgroundColor": '#dbb1bc',
     },{
         "class_id": 2,
         "name": "Introduction à la macroéconomie",
@@ -54,6 +55,7 @@ classes = [
             ("monday", "14:15:00", "15:45:00"),
             ("monday", "16:00:00", "17:30:00"),
         ],
+        "backgroundColor": '#d3c4e3',
     },{
         "class_id": 4,
         "name": "Microéconomie 1 (FR)",
@@ -63,6 +65,7 @@ classes = [
             ("tuesday", "09:00:00", "10:30:00"),
             ("tuesday", "10:45:00", "12:15:00"),
         ],
+        "backgroundColor": '#8f95d3',
     },{
         "class_id": 5,
         "name": "Macroéconomie 1 (FR)",
@@ -72,6 +75,7 @@ classes = [
             ("tuesday", "14:15:00", "15:45:00"),
             ("tuesday", "16:00:00", "17:30:00"),
         ],
+        "backgroundColor": '#45b69c',
     },{
         "class_id": 6,
         "name": "Théorie des jeux",
@@ -81,6 +85,7 @@ classes = [
             ("thursday", "09:00:00", "10:30:00"),
             ("thursday", "10:45:00", "12:15:00"),
         ],
+        "backgroundColor": '#D1D0A3',
     },{
         "class_id": 7,
         "name": "Infrastructures et systèmes logiciels",
@@ -90,6 +95,7 @@ classes = [
             ("thursday", "14:15:00", "15:45:00"),
             ("thursday", "16:00:00", "17:30:00"),
         ],
+        "backgroundColor": '#446BC5',
     },
 ]
 
@@ -125,7 +131,7 @@ def initialize_database():
                 surname=last_names[i],
                 profile_pic=f"photos/{first_names[i]}{last_names[i]}.jpg",
                 level=str(random.randint(1, 3))+"A",
-                enrolled_classes_ids=random.sample(class_ids, random.randint(1, len(class_ids))),
+                enrolled_classes_ids=random.sample(class_ids, random.randint(3, len(class_ids))),
             )
         print("Database initialized successfully!")
 

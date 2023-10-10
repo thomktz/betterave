@@ -12,7 +12,6 @@
   import dayGridPlugin from '@fullcalendar/daygrid'; // for day view
   import timeGridPlugin from '@fullcalendar/timegrid'; // for week view
   import listPlugin from '@fullcalendar/list'; // for list view
-
   import interactionPlugin from '@fullcalendar/interaction';
   
   export default {
@@ -31,11 +30,13 @@
           hiddenDays: [0, 6],
           height: '90vh',
           allDaySlot: false,
+          locale: 'fr',
           headerToolbar: {
             left: 'prev,next today',
             center: 'title',
             right: 'dayGridDay,timeGridWeek,listWeek'
-          }
+          },
+          eventTextColor: '#000000',
         },
       };
     },
@@ -46,6 +47,8 @@
       } catch (error) {
         console.error("There was an error fetching lessons:", error);
       }
+    },
+    methods : {
     }
   }
   </script>
@@ -54,5 +57,17 @@
   div {
   width: 100%;
   }
+  .tooltip .tooltip-inner {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.tooltip .tooltip-arrow {
+  border-color: #ccc;
+}
 </style>
   

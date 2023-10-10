@@ -62,7 +62,7 @@ def get_all_students():
     return Student.query.all()
 
 ### Class operations ###
-def add_class(class_id, name, ects_credits, tutor, **kwargs):
+def add_class(class_id, name, ects_credits, tutor, backgroundColor, **kwargs):
     """Add a class to the database."""
     
     ensae_link = f"https://www.ensae.fr/courses/{class_id}"
@@ -72,6 +72,7 @@ def add_class(class_id, name, ects_credits, tutor, **kwargs):
         ects_credits=ects_credits,
         ensae_link=ensae_link,
         tutor=tutor,
+        backgroundColor=backgroundColor,
     )
     db.session.add(new_class)
     db.session.commit()
