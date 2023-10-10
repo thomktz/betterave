@@ -7,7 +7,9 @@
     </header>
 
     <div class="calendar-container">
-      <StudentCalendar />
+      <div class="calendar-box">
+        <StudentCalendar />
+      </div>
     </div>
   </v-container>
 </template>
@@ -74,8 +76,19 @@ h1 {
 .calendar-container {
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  justify-content: flex-end; /* push the calendar to the right */
+  padding: 20px; /* Add some spacing from the edges of the screen */
+  width: 100%; /* Full width */
 }
+
+.calendar-box {
+  background-color: #f5f5f5; /* light background color */
+  border-radius: 10px; /* rounded corners */
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* subtle shadow for modern effect */
+  width: calc(50% - 40px); /* adjust for padding */
+  overflow: hidden; /* hide overflow for nested elements to ensure corners are rounded */
+  height: 75vh; /* adjust based on your design preference */
+}
+
+
 </style>
