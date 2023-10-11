@@ -1,11 +1,5 @@
 <template>
   <v-container class="fill-height" fluid>
-    <header class="header">
-      <img src="/logo_ensae.png" alt="ENSAE Logo" class="logo" />
-      <h1>Hello, {{ user.name }}</h1>
-      <ProfilePill :userEmail="user.email" />
-    </header>
-
     <div class="content-container">
       <!-- Left Side Columns -->
       <div class="columns-container">
@@ -67,27 +61,6 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 97%;
-  background-color: #f5f5f5; /* Background color for the square */
-  border-radius: 10px; /* Rounded corners */
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* subtle shadow for modern effect */
-  margin-bottom: 20px; /* some margin to separate header from content */
-}
-
-.logo {
-  height: 150px;
-  width: auto;
-}
-
-h1 {
-  font-size: 2rem;
-  font-weight: 700; 
 }
 
 .calendar-box {
