@@ -4,7 +4,7 @@ from app.models.user import User
 from app.models.lesson import Lesson
 from app.models.class_ import Class
 
-### Student operations ###
+### User operations ###
 def hash_password(password: str) -> str:
     """Hash a given password."""
     return bcrypt.generate_password_hash(password).decode("utf-8")
@@ -30,10 +30,10 @@ def add_user(name: str, surname: str, profile_pic: str, level: str,user_type : s
         user_type=user_type
     )
     
-    # Add the student to the session first
+    # Add the user to the session first
     db.session.add(new_user)
 
-    # Associating the student with classes
+    # Associating the user with classes
     for class_id in enrolled_classes_ids:
         class_ = db.session.get(Class, class_id)
         if class_:
