@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import HomePage from '../views/HomePage.vue'
+import ClassPage from '../views/ClassPage.vue'
 import axios from 'axios';
 
 const routes = [
@@ -13,6 +14,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/class/:classId', // dynamic segment for class id
+    name: 'class-details',
+    component: ClassPage
   }
 ]
 
