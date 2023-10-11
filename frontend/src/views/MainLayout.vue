@@ -1,7 +1,9 @@
 <template>
-    <div id="app">
+    <div>
       <header class="header">
-        <img src="/logo_ensae.png" alt="ENSAE Logo" class="logo" />
+        <router-link to="/">
+            <img src="/logo_ensae.png" alt="ENSAE Logo" class="logo" title="Home page" />
+        </router-link>
         <h1>Hello, {{ user.name }}</h1>
         <ProfilePill :userEmail="user.email" />
       </header>
@@ -14,7 +16,6 @@
   import ProfilePill from '@/components/ProfilePill.vue';
   
   export default {
-    name: 'App',
     components: {
       ProfilePill
     },
@@ -38,9 +39,6 @@
   </script>
   
   <style>
-  .app {
-    background: #a3cdcf;
-  }
   .header {
     display: flex;
     align-items: center;
@@ -59,5 +57,13 @@
     font-size: 2rem;
     font-weight: 700; 
   }
+
+.fill-height {
+  min-height: calc(100vh - 150px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
   </style>
   

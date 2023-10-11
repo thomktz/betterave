@@ -54,14 +54,6 @@ export default {
 </script>
 
 <style scoped>
-.fill-height {
-  min-height: 100vh;
-  background: #a3cdcf;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
 
 .calendar-box {
   background-color: #f5f5f5; /* light background color */

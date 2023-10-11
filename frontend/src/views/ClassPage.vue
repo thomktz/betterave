@@ -47,13 +47,6 @@
   </script>
   
   <style scoped>
-  .fill-height {
-    min-height: 100vh;
-    background: #a3cdcf;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
   
   .content-section {
     display: flex;

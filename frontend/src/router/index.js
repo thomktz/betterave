@@ -2,23 +2,30 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import HomePage from '../views/HomePage.vue'
 import ClassPage from '../views/ClassPage.vue'
+import MainLayout from '../views/MainLayout.vue'  // <-- make sure the path is correct
 import axios from 'axios';
 
 const routes = [
   {
     path: '/',
-    name: 'homepage',
-    component: HomePage
+    component: MainLayout, // MainLayout becomes the default layout for HomePage and ClassPage
+    children: [
+      {
+        path: '',  // empty path as this will match the root path within MainLayout
+        name: 'homepage',
+        component: HomePage
+      },
+      {
+        path: 'class/:classId', // dynamic segment for class id
+        name: 'class-details',
+        component: ClassPage
+      }
+    ]
   },
   {
     path: '/login',
     name: 'Login',
     component: Login,
-  },
-  {
-    path: '/class/:classId', // dynamic segment for class id
-    name: 'class-details',
-    component: ClassPage
   }
 ]
 
@@ -50,4 +57,4 @@ router.beforeEach(async (to, from, next) => {
   }
 });
 
-export default router
+export default router;

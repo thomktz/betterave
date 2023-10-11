@@ -17,8 +17,7 @@
 </v-snackbar>
   <v-container class="fill-height" fluid>
     <img src="/logo_ensae.png" alt="ENSAE Logo" class="logo" />
-
-    <v-row align="center" justify="center">
+    <v-row align="center" justify="center" style="width: 100%;">
       <v-col cols="12" sm="8" md="4">
         <v-card class="elevation-12" dark>
           <v-card-title>Login</v-card-title>
@@ -27,7 +26,9 @@
             <v-text-field label="Password" v-model="password" prepend-icon="mdi-lock" type="password" @keyup.enter="login"></v-text-field>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" @click="login">Login</v-btn>
+            <v-btn rounded block class="centered-button" @click="login">
+              Login
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -84,5 +85,11 @@ export default {
   left: 20px;
   height: 250px;
   width: auto;
+}
+.centered-button {
+  background-color: #80808084;
+  text-align: center;
+  margin: 0 auto; 
+  display: block; 
 }
 </style>
