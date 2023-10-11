@@ -6,7 +6,7 @@ def add_new_student():
     class_id = input("Enter class ID: ")
     name = input("Enter class name: ")
     ects_credits = int(input("Enter class ECTS credits: "))
-    tutor = input("Enter tutor's name: ")
+    tutor = input("Enter tutor"s name: ")
 
     add_class(class_id, name, ects_credits, tutor)
     print(f"Class {name} added successfully!")

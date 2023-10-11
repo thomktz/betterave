@@ -37,6 +37,27 @@
             right: 'dayGridDay,timeGridWeek,listWeek'
           },
           eventTextColor: '#000000',
+          nowIndicator: true, 
+          eventDidMount: function(info) {
+            // Insert the room info after the times
+            const timeTextNode = info.el.querySelector('.fc-event-time');
+            if (timeTextNode) {
+              const roomSpan = document.createElement('span');
+              roomSpan.textContent = `${info.event.extendedProps.room}`;
+              roomSpan.style.marginLeft = '30px';
+              timeTextNode.appendChild(roomSpan);
+            }
+          },
+          eventClick: (info) => {
+            const classId = info.event.extendedProps.class_id;
+            this.$router.push(`/class/${classId}`);
+          },
+          eventMouseEnter: function(info) {
+            info.el.style.cursor = 'pointer';
+          },
+          eventMouseLeave: function(info) {
+            info.el.style.cursor = '';
+          }
         },
       };
     },

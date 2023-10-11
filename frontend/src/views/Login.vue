@@ -1,4 +1,20 @@
 <template>
+  <v-snackbar
+    v-model="showSnackbar"
+    color="error"
+    :timeout="1000"
+    right
+    top 
+  >
+    Incorrect e-mail or password!
+    <v-btn
+        dark
+        text
+        @click="showSnackbar = false"
+    >
+        Close
+    </v-btn>
+</v-snackbar>
   <v-container class="fill-height" fluid>
     <img src="/logo_ensae.png" alt="ENSAE Logo" class="logo" />
 
@@ -8,7 +24,7 @@
           <v-card-title>Login</v-card-title>
           <v-card-text>
             <v-text-field label="Email" v-model="email" prepend-icon="mdi-email" type="text"></v-text-field>
-            <v-text-field label="Password" v-model="password" prepend-icon="mdi-lock" type="password"></v-text-field>
+            <v-text-field label="Password" v-model="password" prepend-icon="mdi-lock" type="password" @keyup.enter="login"></v-text-field>
           </v-card-text>
           <v-card-actions>
             <v-btn color="primary" @click="login">Login</v-btn>
@@ -26,7 +42,8 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      showSnackbar: false
     }
   },
   methods: {
@@ -47,6 +64,8 @@ export default {
         }
       } catch (error) {
         console.error("There was an error logging in:", error);
+        this.showSnackbar = true;
+
       }
     }
   }

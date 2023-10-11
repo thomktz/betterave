@@ -74,7 +74,6 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 97%;
-  padding: 15px; /* Padding to give space inside the square */
   background-color: #f5f5f5; /* Background color for the square */
   border-radius: 10px; /* Rounded corners */
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* subtle shadow for modern effect */

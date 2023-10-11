@@ -6,14 +6,17 @@
           <div class="class-header">
             <h1>{{ classDetails.name }}</h1>
           </div>
+          <p><strong>ECTS Credits:</strong> {{ classDetails.ects_credits }}</p>
+          <p><strong>Tutor:</strong> {{ classDetails.tutor }}</p>
+          <p><a :href="classDetails.ensae_link" target="_blank">View ENSAE Link</a></p>
           <!-- Other information related to class -->
         </div>
-  
+    
         <!-- Middle Container -->
         <div class="info-container">
           <!-- Content for the middle container -->
         </div>
-  
+    
         <!-- Right Container -->
         <div class="info-container">
           <!-- Content for the right container -->
