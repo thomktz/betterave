@@ -3,7 +3,7 @@
     <header class="header">
       <img src="/logo_ensae.png" alt="ENSAE Logo" class="logo" />
       <h1>Hello, {{ user.name }}</h1>
-      <ProfilePill :userEmail="user.email" @logout="logout" />
+      <ProfilePill :userEmail="user.email" />
     </header>
 
     <div class="content-container">

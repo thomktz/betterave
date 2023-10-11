@@ -1,6 +1,6 @@
 from . import bp
 from flask import request, jsonify
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 from app.database.operations import check_password
 from app.models.student import Student
 
@@ -25,3 +25,8 @@ def logout_user_route():
     logout_user()
     # Respond to the client
     return jsonify(message="Logged out successfully", status="success"), 200
+
+@bp.route('/check-auth', methods=['GET'])
+@login_required
+def check_authentication():
+    return jsonify(message="User is authenticated", status="authenticated"), 200
