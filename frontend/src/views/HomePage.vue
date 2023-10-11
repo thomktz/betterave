@@ -1,34 +1,48 @@
 <template>
   <v-container class="fill-height" fluid>
-    <img src="/logo_ensae.png" alt="ENSAE Logo" class="logo" />
+    <header class="header">
+      <img src="/logo_ensae.png" alt="ENSAE Logo" class="logo" />
+      <h1>Hello, {{ user.name }}</h1>
+      <ProfilePill :userEmail="user.email" @logout="logout" />
+    </header>
 
-    <v-row align="center" justify="center">
-      <v-col cols="12" sm="8" md="4">
-        <v-card class="elevation-12" dark>
-          <v-card-title>Welcome, {{ user.name }}</v-card-title>
-          <v-card-text>
-            <p>Email: {{ user.email }}</p>
-            <!-- Add more fields as needed -->
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" @click="logout">Logout</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
+    <div class="content-container">
+      <!-- Left Side Columns -->
+      <div class="columns-container">
+        <InfoColumn title="Next classes" :list="upcomingClasses" />
+        <InfoColumn title="Homework" :list="homeworkList" />
+        <InfoColumn title="Notifications" :list="notifications" />
+      </div>
+
+      <!-- Right Side Calendar -->
+      <div class="calendar-box">
+        <StudentCalendar />
+      </div>
+    </div>
   </v-container>
 </template>
 
 <script>
 import axios from 'axios';
+import StudentCalendar from '@/components/StudentCalendar.vue';
+import ProfilePill from '@/components/ProfilePill.vue';
+import InfoColumn from '@/components/InfoColumn.vue';
 
 export default {
+  components: {
+    StudentCalendar,
+    ProfilePill,
+    InfoColumn,
+  },
   data() {
     return {
       user: {
         name: '',
         email: ''
-      }
+      },
+      upcomingClasses: [{ id: 1, text: "Math class" , color: "#FF5733" }, { id: 2, text: "History class" }],
+      homeworkList: [{ id: 1, text: "Algebra homework" }, { id: 2, text: "Essay on WW2" }],
+      notifications: [{ id: 1, text: "Meeting tomorrow" }, { id: 2, text: "Homework due" }]
     };
   },
   async mounted() {
@@ -40,15 +54,7 @@ export default {
     }
   },
   methods: {
-    async logout() {
-      try {
-        // Make a call to the server's logout endpoint
-        await axios.post('http://127.0.0.1:5000/logout', { withCredentials: true });
-        this.$router.push({ name: 'Login' });
-      } catch (error) {
-        console.error("There was an error logging out:", error);
-      }
-    }
+
   }
 }
 </script>
@@ -57,13 +63,57 @@ export default {
 .fill-height {
   min-height: 100vh;
   background: #a3cdcf;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 97%;
+  padding: 15px; /* Padding to give space inside the square */
+  background-color: #f5f5f5; /* Background color for the square */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* subtle shadow for modern effect */
+  margin-bottom: 20px; /* some margin to separate header from content */
 }
 
 .logo {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  height: 250px;
+  height: 150px;
   width: auto;
 }
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700; 
+}
+
+.calendar-box {
+  background-color: #f5f5f5; /* light background color */
+  border-radius: 10px; /* rounded corners */
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* subtle shadow for modern effect */
+  width: calc(50% - 40px); /* adjust for padding */
+  overflow: hidden; /* hide overflow for nested elements to ensure corners are rounded */
+  height: 70vh;
+}
+
+.content-container {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  width: 100%;
+}
+
+.columns-container {
+  display: flex;
+  justify-content: space-between;
+  width: calc(50% - 40px); /* adjust for padding */
+  height: 70vh;
+}
+
 </style>

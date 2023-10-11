@@ -1,9 +1,8 @@
-from flask import Blueprint, request, jsonify, make_response
-from flask_login import login_user, login_required, current_user, logout_user
+from . import bp
+from flask import request, jsonify
+from flask_login import login_user, current_user, logout_user
 from app.database.operations import check_password
 from app.models.student import Student
-
-bp = Blueprint('auth', __name__)
 
 @bp.route('/login', methods=['POST'])
 def login_user_route():
@@ -15,7 +14,6 @@ def login_user_route():
     student = Student.query.filter_by(email=email).first()
     if student and check_password(student.hashed_password, password):
         login_user(student)
-        print("Current logged user:", current_user.email)
         return jsonify(message="Login successful", status="success"), 200
     else:
         return jsonify(message="Login unsuccessful. Please check email and password", status="error"), 401
@@ -27,13 +25,3 @@ def logout_user_route():
     logout_user()
     # Respond to the client
     return jsonify(message="Logged out successfully", status="success"), 200
-
-
-@bp.route('/profile', methods=['GET'])
-@login_required
-def profile_route():
-    return jsonify(
-        email=current_user.email,
-        name=current_user.name,
-        status="success"
-    ), 200

@@ -1,0 +1,98 @@
+<template>
+<div class="profile-pill" @mouseover="showDropdown = true" @mouseleave="showDropdown = false">
+    <div class="email-with-icon">
+    <img src="/default-profile.png" alt="Profile Icon" class="profile-icon" />
+    <span>{{ userEmail }}</span>
+    </div>
+    <div v-if="showDropdown" class="dropdown-content">
+    <button @click="logout">Logout</button>
+    </div>
+</div>
+</template>
+  
+  <script>
+  import axios from 'axios';
+  
+  export default {
+    props: {
+      userEmail: {
+        type: String,
+        required: true
+      }
+    },
+    data() {
+      return {
+        showDropdown: false
+      };
+    },
+    methods: {
+      async logout() {
+        try {
+          await axios.post('http://127.0.0.1:5000/logout', {}, { withCredentials: true });
+          this.$router.push({ name: 'Login' });
+        } catch (error) {
+          console.error("There was an error logging out:", error);
+        }
+      }
+    }
+  }
+  </script>
+
+<style scoped>
+.profile-pill {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #2f5b5b; /* dark background */
+  color: #ffffff; /* light text color */
+  border-radius: 25px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s; /* smooth hover transition */
+}
+
+.profile-pill:hover {
+  background-color: #4596a6; /* slightly lighter on hover */
+}
+
+.profile-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 100%;
+  margin-right: 20px;
+}
+
+.dropdown-content {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333; /* dark background for consistency */
+  color: #ffffff; /* light text color */
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 8px; /* added border-radius for a modern touch */
+}
+
+.dropdown-content button {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.3s; /* smooth hover transition for the button */
+}
+
+.dropdown-content button:hover {
+  background-color: #555; /* slightly lighter on hover for the button */
+}
+
+.email-with-icon {
+  display: flex;
+  align-items: center;
+}
+
+</style>

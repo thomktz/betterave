@@ -11,5 +11,10 @@ export default {
 </script>
 
 <style>
-/* Add global styles here */
+body, button, input, textarea {
+  font-family: 'Montserrat', sans-serif;
+}
+.fc .fc-timegrid-col.fc-day-today {
+    --fc-today-bg-color: #9ad2d28e; /* Or any color of your choice */
+}
 </style>
