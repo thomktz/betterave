@@ -9,8 +9,8 @@ from app.routes.auth_routes import *
 
 @login_manager.user_loader
 def load_user(user_id):
-    from app.models.student import Student
-    return Student.query.get(int(user_id))
+    from app.models.user import User
+    return User.query.get(int(user_id))
 
 def create_app():
     """Function to create app instance"""

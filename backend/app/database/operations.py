@@ -1,6 +1,6 @@
 from datetime import datetime
 from extensions import db, bcrypt
-from app.models.student import Student
+from app.models.user import User
 from app.models.lesson import Lesson
 from app.models.class_ import Class
 
@@ -13,53 +13,54 @@ def check_password(hashed_password, password):
     """Check if a given password matches a hashed password."""
     return bcrypt.check_password_hash(hashed_password, password)
    
-def add_student(name: str, surname: str, profile_pic: str, level: str, enrolled_classes_ids: list):
-    """Add a student to the database."""
+def add_user(name: str, surname: str, profile_pic: str, level: str,user_type : str, enrolled_classes_ids: list):
+    """Add a user to the database."""
     
     email = f"{name.lower()}.{surname.replace(' ', '-').lower()}@ensae.fr"
     password = f"{name[0].lower()}{surname.replace(' ', '-').lower()}"
     hashed_password = hash_password(password)
 
-    new_student = Student(
+    new_user = User(
         email=email,
         hashed_password=hashed_password,
         name=name,
         surname=surname,
         profile_pic=profile_pic,
         level=level,
+        user_type=user_type
     )
     
     # Add the student to the session first
-    db.session.add(new_student)
+    db.session.add(new_user)
 
     # Associating the student with classes
     for class_id in enrolled_classes_ids:
         class_ = db.session.get(Class, class_id)
         if class_:
-            new_student.classes.append(class_)
+            new_user.classes.append(class_)
 
     db.session.commit()
 
-    return new_student.student_id
+    return new_user.user_id
 
-def get_student_by_id(student_id: int):
-    """Get a student by their ID."""
-    return db.session.get(Student, student_id)
+def get_user_by_id(user_id: int):
+    """Get a user by their ID."""
+    return db.session.get(User, user_id)
 
-def get_student_by_email(email: str):
-    """Get a student by their email."""
-    return Student.query.filter_by(email=email).first()
+def get_user_by_email(email: str):
+    """Get a user by their email."""
+    return User.query.filter_by(email=email).first()
 
-def authenticate_student(email: str, password: str) -> bool:
-    """Authenticate a student using their email and password."""
-    student = get_student_by_email(email)
-    if not student:
+def authenticate_user(email: str, password: str) -> bool:
+    """Authenticate a user using their email and password."""
+    user = get_user_by_email(email)
+    if not user:
         return False
-    return check_password(student.hashed_password, password)
+    return check_password(user.hashed_password, password)
 
-def get_all_students():
-    """Return all students in the database."""
-    return Student.query.all()
+def get_all_users():
+    """Return all users in the database."""
+    return User.query.all()
 
 ### Class operations ###
 def add_class(class_id, name, ects_credits, tutor, backgroundColor, **kwargs):
@@ -82,10 +83,10 @@ def get_all_classes():
     """Return all classes in the database."""
     return Class.query.all()
 
-def get_students_by_class_id(class_id):
-    """Get all students enrolled in a class."""
+def get_users_by_class_id(class_id):
+    """Get all users enrolled in a class."""
     target_class = db.session.get(Class, class_id)
-    return target_class.students if target_class else []
+    return target_class.users if target_class else []
 
 ### Lesson operations ###
 
@@ -145,16 +146,16 @@ def delete_lesson(lesson_id: int):
     db.session.commit()
     return True
 
-def get_lessons_by_student(student_id: int):
-    """Get all lessons for a particular student."""
+def get_lessons_by_user(user_id: int):
+    """Get all lessons for a particular user."""
     
-    # Fetch the student from the database
-    student = get_student_by_id(student_id)
-    if not student:
+    # Fetch the user from the database
+    user = get_user_by_id(user_id)
+    if not user:
         return []
 
-    # Fetch all the classes the student is enrolled in
-    enrolled_classes = student.classes
+    # Fetch all the classes the user is enrolled in
+    enrolled_classes = user.classes
 
     # For each class, get the associated lessons
     lessons = []

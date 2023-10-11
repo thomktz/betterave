@@ -1,7 +1,7 @@
 from main import app
 from extensions import db
 from app.database.operations import get_lessons_by_student
-from app.models.student import Student
+from backend.app.models.user import Student
 from app.models.class_ import Class
 
 

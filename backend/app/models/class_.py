@@ -12,8 +12,8 @@ class Class(db.Model):
     tutor = db.Column(db.String, nullable=True)
     backgroundColor = db.Column(db.String, nullable=True)
     
-    # Many-to-Many relationship with Student
-    students = db.relationship('Student', secondary=student_classes, back_populates='classes')
+    # Many-to-Many relationship with User
+    students = db.relationship('User', secondary=student_classes, back_populates='classes')
     # One-to-Many relationship with Lesson
     lessons = db.relationship('Lesson', back_populates='class_ref')
 

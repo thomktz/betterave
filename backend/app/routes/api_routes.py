@@ -3,7 +3,7 @@ from datetime import datetime
 from . import bp
 from flask import jsonify
 from flask_login import login_required, current_user
-from app.database.operations import get_lessons_by_student
+from app.database.operations import get_lessons_by_user
 
 @bp.route('/profile', methods=['GET'])
 @login_required
@@ -17,7 +17,7 @@ def profile_route():
 @bp.route('/lessons', methods=['GET'])
 @login_required
 def get_lessons_route():
-    lessons = get_lessons_by_student(current_user.student_id)
+    lessons = get_lessons_by_user(current_user.user_id)
     formatted_lessons = [
         {
             'id': str(lesson.lesson_id),

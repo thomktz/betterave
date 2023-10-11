@@ -2,7 +2,7 @@ import random
 import datetime
 from main import app
 from extensions import db
-from app.database.operations import add_class, add_student, add_lesson
+from app.database.operations import add_class, add_user, add_lesson
 
 
 
@@ -115,6 +115,14 @@ first_names = [
     "Yara", "Zack", "Thomas",
 ]
 
+role = [
+    "student", "student", "student_asso", "student", "student", "student", 
+    "student_asso", "admin", "admin", "admin", "teacher", "teacher", 
+    "teacher", "student", "student", "student", "student_asso", "students_asso", 
+    "teacher", "admin", "student", "student", "admin", "admin", 
+    "admin", "student", "student",
+]
+
 class_ids = list(set([class_["class_id"] for class_ in classes]))
 
 def initialize_database():
@@ -126,11 +134,12 @@ def initialize_database():
                 add_weekly_lessons(class_["class_id"], "2023-10-01", "2023-12-31", *lesson)
             
         for i in range(27):
-            add_student(
+            add_user(
                 name=first_names[i],
                 surname=last_names[i],
                 profile_pic=f"photos/{first_names[i]}{last_names[i]}.jpg",
                 level=str(random.randint(1, 3))+"A",
+                user_type=role[i],
                 enrolled_classes_ids=random.sample(class_ids, random.randint(3, len(class_ids))),
             )
         print("Database initialized successfully!")
