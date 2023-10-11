@@ -13,6 +13,7 @@ def load_user(user_id):
     return Student.query.get(int(user_id))
 
 def create_app():
+    """Function to create app instance"""
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or b'\x05\xe1C\x07k\x1ay<\xb6\xa4\xf8\xc6\xa8f\xb4*'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./test.db'
