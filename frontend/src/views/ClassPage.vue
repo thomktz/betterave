@@ -19,7 +19,7 @@
     
         <!-- Right Container -->
         <div class="info-container">
-          <!-- Content for the right container -->
+            <Chat :classId="classId"></Chat>
         </div>
       </div>
     </v-container>
@@ -27,11 +27,16 @@
   
   <script>
   import axios from 'axios';
+  import Chat from '@/components/Chat.vue';
   
   export default {
+    components: {
+        Chat
+    },
     data() {
       return {
-        classDetails: {}
+        classDetails: {},
+        classId: this.$route.params.classId
       };
     },
     async mounted() {

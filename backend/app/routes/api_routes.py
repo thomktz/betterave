@@ -1,10 +1,11 @@
 
 from datetime import datetime
 from . import bp
-from flask import jsonify
+from flask import jsonify, request
 from flask_login import login_required, current_user
-from app.database.operations import get_lessons_by_student, get_all_students
+from app.database.operations import get_lessons_by_student, get_all_students, is_student_in_class, get_class_messages, add_class_message
 from app.models.class_ import Class
+from app.models.message import Message
 
 @bp.route("/profile", methods=["GET"])
 @login_required
@@ -64,3 +65,25 @@ def get_class_detail(class_id):
         }), 200
     else:
         return jsonify(message="Class not found", status="error"), 404
+
+@bp.route('/classes/<int:class_id>/messages', methods=['GET'])
+@login_required
+def get_messages(class_id):
+    # Check if the user is part of the class
+    if not is_student_in_class(current_user, class_id):
+        return jsonify(message="Unauthorized. User not part of the class.", status="error"), 403
+    
+    messages = get_class_messages(class_id)
+    return jsonify([msg.as_dict() for msg in messages])
+
+@bp.route('/classes/<int:class_id>/messages', methods=['POST'])
+@login_required
+def post_message(class_id):
+    # Check if the user is part of the class
+    if not is_student_in_class(current_user, class_id):
+        return jsonify(message="Unauthorized. User not part of the class.", status="error"), 403
+    
+    data = request.get_json()
+    msg = add_class_message(data['content'], class_id, current_user.student_id)
+    return jsonify(msg.as_dict()), 201
+
