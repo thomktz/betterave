@@ -6,7 +6,7 @@ class Student(db.Model, UserMixin):
     """
     SQLAlchemy object for students.
     
-    Since students are the users, we inherit from flask_login"s UserMixin.
+    Since students are the users, we inherit from flask_login's UserMixin.
     """
     
     __tablename__ = "students"
