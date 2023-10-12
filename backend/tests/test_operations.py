@@ -12,8 +12,8 @@ class TestOperations(unittest.TestCase):
         self.app = app.test_client()
         self.ctx = app.app_context()
         self.ctx.push()
-        app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+        app.config["TESTING"] = True
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
         db.create_all()
 
     def tearDown(self):
@@ -104,5 +104,5 @@ class TestOperations(unittest.TestCase):
         self.assertEqual(str(sorted_lessons[0].start_time), "10:00:00")
         self.assertEqual(str(sorted_lessons[1].start_time), "14:00:00")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

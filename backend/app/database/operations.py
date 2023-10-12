@@ -162,3 +162,9 @@ def get_lessons_by_student(student_id: int):
         lessons.extend(get_lessons_by_class_id(class_.class_id))
 
     return sorted(lessons)
+
+def get_student_profile_pic(studeint_id: int)->str:
+    """Get the profil picture of a particular student."""
+    # Fetch the student from the database
+    student = get_student_by_id(student_id)
+    return student.profile_pic
