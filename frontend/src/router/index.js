@@ -2,24 +2,37 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import HomePage from '../views/HomePage.vue'
 import Photochart from '../views/Photochart.vue'
+import ClassPage from '../views/ClassPage.vue'
+import MainLayout from '../views/MainLayout.vue'
 import axios from 'axios';
 
 const routes = [
   {
     path: '/',
-    name: 'homepage',
-    component: HomePage
+    component: MainLayout,
+    children: [
+      {
+        path: '', 
+        name: 'homepage',
+        component: HomePage
+      },
+      {
+        path: 'class/:classId', // dynamic segment for class id
+        name: 'class-details',
+        component: ClassPage
+      },
+      {
+        path: '/photochart',
+        name: 'Photochart',
+        component: Photochart,
+      }
+    ]
   },
   {
     path: '/login',
     name: 'Login',
     component: Login,
   },
-  {
-    path: '/photochart',
-    name: 'Photochart',
-    component: Photochart,
-  }
 ]
 
 const router = createRouter({
@@ -29,7 +42,6 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   // If the user is navigating to the login page, just continue.
-  console.log(to.name)
   if (to.name === 'Login') {
     next();
     return;
@@ -37,20 +49,18 @@ router.beforeEach(async (to, from, next) => {
 
   // Otherwise, check if the user is authenticated.
   try {
-    console.log("Fetching auth")
     const response = await axios.get('http://127.0.0.1:5000/check-auth', {
       withCredentials: true,
     });
-    console.log(response.data)
     if (response.data.status === 'authenticated') {
       next();
     } else {
       next({ name: 'Login' });  // Redirect to login
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     next({ name: 'Login' });  // Redirect to login in case of error
   }
 });
 
-export default router
+export default router;

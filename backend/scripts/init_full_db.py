@@ -15,8 +15,8 @@ def add_weekly_lessons(class_id, start_date, end_date, day_of_week, start_time, 
     day_num = days.index(day_of_week.lower())
 
     # Parse the start_date and end_date strings into datetime.date objects
-    start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d').date()
-    end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d').date()
+    start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d").date()
+    end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d").date()
 
     lesson_ids = []
     current_date = start_date
@@ -45,7 +45,7 @@ classes = [
             ("monday", "09:00:00", "10:30:00"),
             ("monday", "10:45:00", "12:15:00"),
         ],
-        "backgroundColor": '#dbb1bc',
+        "backgroundColor": "#dbb1bc",
     },{
         "class_id": 2,
         "name": "Introduction à la macroéconomie",
@@ -55,7 +55,7 @@ classes = [
             ("monday", "14:15:00", "15:45:00"),
             ("monday", "16:00:00", "17:30:00"),
         ],
-        "backgroundColor": '#d3c4e3',
+        "backgroundColor": "#d3c4e3",
     },{
         "class_id": 4,
         "name": "Microéconomie 1 (FR)",
@@ -65,7 +65,7 @@ classes = [
             ("tuesday", "09:00:00", "10:30:00"),
             ("tuesday", "10:45:00", "12:15:00"),
         ],
-        "backgroundColor": '#8f95d3',
+        "backgroundColor": "#8f95d3",
     },{
         "class_id": 5,
         "name": "Macroéconomie 1 (FR)",
@@ -75,7 +75,7 @@ classes = [
             ("tuesday", "14:15:00", "15:45:00"),
             ("tuesday", "16:00:00", "17:30:00"),
         ],
-        "backgroundColor": '#45b69c',
+        "backgroundColor": "#45b69c",
     },{
         "class_id": 6,
         "name": "Théorie des jeux",
@@ -85,7 +85,7 @@ classes = [
             ("thursday", "09:00:00", "10:30:00"),
             ("thursday", "10:45:00", "12:15:00"),
         ],
-        "backgroundColor": '#D1D0A3',
+        "backgroundColor": "#D1D0A3",
     },{
         "class_id": 7,
         "name": "Infrastructures et systèmes logiciels",
@@ -95,7 +95,7 @@ classes = [
             ("thursday", "14:15:00", "15:45:00"),
             ("thursday", "16:00:00", "17:30:00"),
         ],
-        "backgroundColor": '#446BC5',
+        "backgroundColor": "#446BC5",
     },
 ]
 
@@ -115,6 +115,8 @@ first_names = [
     "Yara", "Zack", "Thomas", "Claire"
 ]
 
+
+
 class_ids = list(set([class_["class_id"] for class_ in classes]))
 
 def initialize_database():
@@ -123,7 +125,7 @@ def initialize_database():
         for class_ in classes:
             add_class(**class_)
             for lesson in class_["lesson_times"]:
-                add_weekly_lessons(class_["class_id"], "2023-10-01", "2023-12-31", *lesson)
+                add_weekly_lessons(class_["class_id"], "2023-10-01", "2023-12-31", *lesson, room=random.randint(2001, 2048))
             
         for i in range(27):
             add_student(
