@@ -8,9 +8,7 @@
       >
         <img :src="message.student_profile_pic" :alt="message.student_name" class="msg-img" />
         <div class="msg-bubble">
-          <div class="msg-info">
-            <div class="msg-info-name">{{ message.student_name }}</div>
-          </div>
+          <div class="msg-name">{{ message.student_name }}</div>
           <div class="msg-text">{{ message.content }}</div>
         </div>
       </div>
@@ -147,16 +145,13 @@
   background: #eee;
 }
 
-.msg-info {
+.msg-name {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.msg-info-name {
-  font-weight: 400;
-}
 
 .left-msg .msg-bubble {
   border-bottom-left-radius: 0;
