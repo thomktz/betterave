@@ -43,6 +43,8 @@
       return {
         messages: [],
         newMessage: '',
+        hoveredMessageId: null,
+        
       };
     },
     mounted() {
@@ -129,7 +131,7 @@
 .msg {
   display: flex;
   align-items: flex-end;
-  margin-bottom: 10px;
+  margin-bottom: 18px;
 }
 
 .msg:last-of-type {
@@ -150,6 +152,7 @@
 
 .whole-message {
   max-width: 450px;
+  position: relative;
 }
 
 .msg-name {
@@ -224,15 +227,22 @@
 }
 
 .msg-date {
-  margin-top: 5px;
+  position: absolute;
+  bottom: -18px; /* Adjust as needed to position the date appropriately below the message */
+  left: 0;
+  right: 0;
+  white-space: nowrap;
+  margin-top: 0; /* No margin needed since we're positioning it absolutely */
   font-size: 0.7em;
   color: rgb(113, 113, 113);
+  visibility: hidden;
   opacity: 0;
-  transition: opacity 0.3s; 
+  transition: opacity 0.3s, visibility 0.3s;
 }
 
 .msg:hover .msg-date {
   opacity: 1;
+  visibility: visible;
 }
 
 
