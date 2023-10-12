@@ -22,8 +22,8 @@
     data() {
       return {
         students: [],
-        classes: ['1A', '2A', '3A'], // Liste des classes
-        selectedClass: 'all', // Classe sélectionnée dans la barre déroulante
+        classes: ['1A', '2A', '3A'], // List of classes
+        selectedClass: 'all', // Current selected class
     };
 },
     computed: {
@@ -36,7 +36,7 @@
       },
     },
     async mounted() {
-      this.$emit('updateTitle', "Trombinoscope");
+      this.$emit('updateTitle', "Trombinoscope"); // Update the title in the header
       try {
         const response = await axios.get('http://127.0.0.1:5000/photochart', { withCredentials: true });
         this.students = response.data;
@@ -51,12 +51,10 @@
   </script>
   
   <style scoped>
-  
-/* Style to ensure full height */
 .trombi-grid {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* This will take the full height of the viewport. Adjust if there are other headers/footers */
+  height: 100vh;
 }
 
 .custom-select {
@@ -78,13 +76,13 @@
 }
 
 
-.custom-select::after { /* Custom arrow for the dropdown */
+.custom-select::after { 
   content: '▼'; 
   position: absolute;
   top: 50%;
   right: 15px;
   transform: translateY(-50%);
-  pointer-events: none; /* Ensures the dropdown can still be clicked */
+  pointer-events: none;
 }
 
 .custom-select select {
@@ -96,7 +94,7 @@
   background-color: #f2f2f2;
   color: #333;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* subtle shadow for modern feel */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .student {
