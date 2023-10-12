@@ -5,11 +5,14 @@
         v-for="message in messages" 
         :key="message.id" 
         :class="message.student_id === studentId ? 'msg right-msg' : 'msg left-msg'"
+        @mouseover="showDate(message)" 
+        @mouseleave="hideDate()"
       >
-        <img :src="message.student_profile_pic" :alt="message.student_name" class="msg-img" />
+        <img :src="'/' + message.student_profile_pic" :alt="message.student_name" class="msg-img" />
         <div class="whole-message">
-          <div class="msg-name">{{ message.student_name }}</div>
+          <div class="msg-name">{{ message.student_name }} {{ message.student_surname }}</div>
           <div class="msg-text">{{ message.content }}</div>
+          <div class="msg-date" v-show="hoveredMessageId === message.id">{{ formatDate(message.timestamp) }}</div>
         </div>
       </div>
     </main>
@@ -49,6 +52,12 @@
       formatDate(isoString) {
         return format(new Date(isoString), 'yyyy-MM-dd HH:mm');
       },
+      showDate(message) {
+        this.hoveredMessageId = message.id;
+      },
+      hideDate() {
+        this.hoveredMessageId = null;
+      },
       async fetchClassMessages() {
         try {
           const response = await axios.get(`http://127.0.0.1:5000/classes/${this.classId}/messages`, { withCredentials: true });
@@ -63,24 +72,17 @@
       },
       async sendMessage() {
         if (!this.newMessage.trim()) return;  // Don't send empty messages
-
         try {
           const response = await axios.post(`http://127.0.0.1:5000/classes/${this.classId}/messages`, 
             { content: this.newMessage }, 
             { withCredentials: true }
           );
-
-          if (response.data && response.data.status === "success") {
-            this.messages.push({
-              id: response.data.messageId,  // assuming the backend returns the new message's id
-              content: this.newMessage
-            });
-            this.newMessage = '';  // Clear the input after successful send
-          }
+          this.newMessage = ''
         } catch (error) {
           console.error("There was an error sending the message:", error);
           // Handle error (e.g., showing an error message to the user)
         }
+        this.fetchClassMessages()
       },
     },
   };
@@ -160,7 +162,7 @@
 }
 
 .left-msg .msg-text {
-  background: #eee;
+  background: #cdcdcd;
   border-bottom-left-radius: 0;
 }
 .left-msg .msg-name {
@@ -213,5 +215,18 @@
 .msger-send-btn:hover {
   background: rgb(0, 180, 50);
 }
+
+.msg-date {
+  margin-top: 5px;
+  font-size: 0.7em;
+  color: rgb(113, 113, 113);
+  opacity: 0;
+  transition: opacity 0.3s; 
+}
+
+.msg:hover .msg-date {
+  opacity: 1;
+}
+
 
 </style>
