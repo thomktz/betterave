@@ -13,11 +13,6 @@
         <StudentCalendar />
       </div>
     </div>
-
-    <!-- Box for "Photochart" -->
-    <div class="box">
-      <router-link to="/photochart">Go to Photochart</router-link>
-    </div>
     
   </v-container>
 </template>

@@ -1,78 +1,88 @@
 <template>
-    <div>
-      <h1 class="page-title">Trombinoscope</h1>
-      <div class="custom-select"> <!-- Ajout d'une classe pour personnaliser la barre déroulante -->
-        <select v-model="selectedClass">
-          <option value="all">Toutes les classes</option>
-          <option v-for="cls in classes" :value="cls">{{ cls }}</option>
-        </select>
-      </div>
-  
-      <div class="trombinoscope">
-        <div v-for="user in filteredTrombinoscope" :key="user.id" class="user">
-          <img :src="user.profile_pic" :alt="user.name" />
-          <p>{{ user.name }}</p>
-        </div>
+  <v-spacer class="trombi-grid" fluid>
+    <div class="custom-select">
+      <select v-model="selectedClass">
+        <option value="all">Toutes les classes</option>
+        <option v-for="cls in classes" :value="cls">{{ cls }}</option>
+      </select>
+    </div>
+
+    <div class="trombinoscope">
+      <div v-for="student in filteredStudents" :key="student.id" class="student">
+        <img :src="student.profile_pic" :alt="student.name" />
+        <p>{{ student.name }} {{ student.surname }}</p>
       </div>
     </div>
+    </v-spacer>
   </template>
   
   <script>
   import axios from 'axios';
-  import ProfilePill from '@/components/ProfilePill.vue';
-
   export default {
-    components: {
-    ProfilePill,
-  },
     data() {
       return {
-      user: {
-        name: '',
-        email: '',
-        level: ''
-      },
-        classes: ['1A', '2A', '3A'], // Liste des classes
-        selectedClass: 'all', // Classe sélectionnée dans la barre déroulante
-
+        students: [],
+        classes: ['1A', '2A', '3A'], // List of classes
+        selectedClass: 'all', // Current selected class
     };
 },
     computed: {
-      filteredTrombinoscope() {
+      filteredStudents() {
         if (this.selectedClass === 'all') {
-          return this.trombinoscope;
+          return this.students;
         } else {
-          return this.trombinoscope.filter((user) => user.class === this.selectedClass);
+          return this.students.filter((student) => student.level === this.selectedClass);
         }
       },
     },
     async mounted() {
-    try {
-      const response = await axios.get('http://127.0.0.1:5000/photochart', { withCredentials: true });
-      this.user = response.data;
-    } catch (error) {
-      console.error("There was an error fetching user data:", error);
-    }
-  },
-  methods: {
-  }
+      this.$emit('updateTitle', "Trombinoscope"); // Update the title in the header
+      try {
+        const response = await axios.get('http://127.0.0.1:5000/photochart', { withCredentials: true });
+        this.students = response.data;
+      } catch (error) {
+        console.error("There was an error fetching student data:", error);
+      }
+    },
+    methods: { },
   }
 
   
   </script>
   
   <style scoped>
-  .page-title {
-    text-align: center; /* Pour centrer le titre */
-    background-color: #a3cdcf; /* Couleur de fond */
-    color: white; /* Couleur du texte */
-    padding: 20px; /* Espace intérieur */
-  }
-  
-  .custom-select {
-  text-align: center;
+.trombi-grid {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.custom-select {
   margin-top: 20px;
-  position: relative; /* Permet de positionner les éléments fils */
+  margin-bottom: 20px;
+  width: 250px;
+  position: relative;
+}
+
+/* Styles for the trombinoscope to occupy the remaining height after .custom-select */
+.trombinoscope {
+  flex: 1; /* This ensures it takes up the remaining height */
+  overflow-y: auto; /* This will allow scrolling if content overflows */
+  
+  /* Your grid styles */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+
+.custom-select::after { 
+  content: '▼'; 
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .custom-select select {
@@ -80,36 +90,29 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  appearance: none; /* Supprime le style par défaut du navigateur */
-  -webkit-appearance: none; /* Pour les navigateurs WebKit */
-  -moz-appearance: none; /* Pour les navigateurs basés sur Gecko */
+  appearance: none;
   background-color: #f2f2f2;
   color: #333;
   cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Style de survol du curseur */
-.custom-select select:hover {
-  background-color: #e0e0e0;
+.student {
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+  padding: 10px;
+  overflow: hidden;
 }
-  .trombinoscope {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  .select-container {
-  text-align: center; /* Pour centrer la barre déroulante horizontalement */
-  margin-bottom: 20px; /* Pour ajouter de l'espace en bas de la barre déroulante */
+img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-top: 10px;
 }
 
-  .person {
-    margin: 10px;
-    text-align: center;
-  }
-  
-  img {
-    max-width: 200px;
-    max-height: 200px;
-  }
   </style>
     
