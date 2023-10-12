@@ -1,15 +1,27 @@
 <template>
   <div>
     <header class="header">
-      <router-link to="/">
-        <img src="/logo_ensae.png" alt="ENSAE Logo" class="logo" title="Home page" />
-      </router-link>
+      <!-- Grouped Logos -->
+      <div class="logos-block">
+        <!-- Betterave Logo with Link to Home page -->
+        <router-link to="/">
+          <img src="/betterave-logo.png" alt="Betterave Logo" class="betterave-logo" title="Home page" />
+        </router-link>
+        
+        <!-- ENSAE Logo with Link to ENSAE website -->
+        <a href="https://www.ensae.fr/" target="_blank" rel="noopener noreferrer">
+          <img src="/logo_ensae.png" alt="ENSAE Logo" class="ensae-logo" title="ENSAE website" />
+        </a>
+      </div>
+      
       <h1>{{ headerTitle }}</h1>
       <ProfilePill :userEmail="user.email" />
     </header>
     <router-view @updateTitle="setTitle" />
   </div>
 </template>
+
+
   
 <script>
 import axios from 'axios';
@@ -55,9 +67,21 @@ export default {
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* subtle shadow for modern effect */
 }
 
-.logo {
+.betterave-logo {
+  height: 70px; 
+  width: auto;
+  margin-left: 15px;
+
+}
+
+.ensae-logo {
   height: 150px;
   width: auto;
+}
+
+.logos-block {
+  display: flex;
+  align-items: center; /* This aligns children vertically in the middle */
 }
 
 h1 {
