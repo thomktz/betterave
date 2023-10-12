@@ -104,7 +104,7 @@ last_names = [
     "Ghosh", "Hills", "Irwin", "Jones", "Klein", "Lopez", 
     "Mason", "Nalty", "Ochoa", "Patel", "Quinn", "Reily", 
     "Smith", "Trott", "Usman", "Valdo", "White", "Xiang", 
-    "Yakub", "Zafar", "Kientz", "Dechaux"
+    "Yakub", "Zafar", "Kientz", "Dechaux", "Voisin"
 ]
 
 first_names = [
@@ -112,7 +112,7 @@ first_names = [
     "Grace", "Hal", "Isaac", "Julia", "Karl", "Lara", 
     "Max", "Nora", "Oscar", "Paul", "Quinn", "Rob", 
     "Susan", "Tom", "Ursula", "Victor", "Wendy", "Xavier", 
-    "Yara", "Zack", "Thomas", "Claire"
+    "Yara", "Zack", "Thomas", "Claire", "Clothilde"
 ]
 
 
@@ -131,7 +131,7 @@ def initialize_database():
             add_student(
                 name=first_names[i],
                 surname=last_names[i],
-                profile_pic=f"photos/{first_names[i]}{last_names[i]}.jpg",
+                profile_pic=f"photos/{first_names[i].lower()}_{last_names[i].lower()}.jpg",
                 level=str(random.randint(1, 3))+"A",
                 enrolled_classes_ids=random.sample(class_ids, random.randint(3, len(class_ids))),
             )
