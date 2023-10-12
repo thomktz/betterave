@@ -7,7 +7,7 @@
         :class="message.student_id === studentId ? 'msg right-msg' : 'msg left-msg'"
       >
         <img :src="message.student_profile_pic" :alt="message.student_name" class="msg-img" />
-        <div class="msg-bubble">
+        <div class="whole-message">
           <div class="msg-name">{{ message.student_name }}</div>
           <div class="msg-text">{{ message.content }}</div>
         </div>
@@ -94,7 +94,7 @@
   height: 100%;
   border-radius: 5px;
   overflow: hidden;
-  box-shadow: 0 15px 15px -5px rgba(0, 0, 0, 0.2);
+  font-family: 'Arial', sans-serif;
 }
 
 /* Chat styling */
@@ -102,7 +102,7 @@
   flex: 1;
   overflow-y: auto;
   padding: 10px;
-  background-color: #fcfcfe;
+  background-color: #f5f5f5;
 }
 
 .msger-chat::-webkit-scrollbar {
@@ -136,32 +136,42 @@
   background-position: center;
   background-size: cover;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
-.msg-bubble {
+.whole-message {
   max-width: 450px;
-  padding: 15px;
-  border-radius: 15px;
-  background: #eee;
 }
 
 .msg-name {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  font-size: 0.8em;
+  color: #4e4e4e;
 }
 
+.msg-text {
+  border-radius: 20px;
+  padding: 10px;
+  font-size: 0.9em;
+  word-wrap: break-word;
+}
 
-.left-msg .msg-bubble {
+.left-msg .msg-text {
+  background: #eee;
   border-bottom-left-radius: 0;
+}
+.left-msg .msg-name {
+  justify-content: flex-start;
 }
 
 .right-msg {
   flex-direction: row-reverse;
 }
 
-.right-msg .msg-bubble {
+.right-msg .msg-text {
   background: #0084ff;
   color: #fff;
   border-bottom-right-radius: 0;
