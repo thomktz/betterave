@@ -52,7 +52,9 @@ def all_students_route():
     return jsonify(formatted_students), 200
 
 @bp.route("/class/<int:class_id>", methods=["GET"])
+@login_required
 def get_class_detail(class_id):
+    print("current user", current_user.student_id)
     class_instance = Class.query.get(class_id)
     if class_instance:
         # serialize and send data
@@ -61,7 +63,9 @@ def get_class_detail(class_id):
             "ects_credits": class_instance.ects_credits,
             "ensae_link": class_instance.ensae_link,
             "tutor": class_instance.tutor,
-            "backgroundColor": class_instance.backgroundColor
+            "backgroundColor": class_instance.backgroundColor,
+            "studentId": current_user.student_id,
+            "studentAuthorised": is_student_in_class(current_user, class_id)
         }), 200
     else:
         return jsonify(message="Class not found", status="error"), 404

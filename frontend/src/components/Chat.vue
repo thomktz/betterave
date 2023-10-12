@@ -1,15 +1,30 @@
 <template>
-    <div>
-      <div v-for="message in messages" :key="message.id">
-        <b>{{ message.student_name }}</b>: {{ message.content }}
+  <section class="msger">
+    <main class="msger-chat">
+      <div 
+        v-for="message in messages" 
+        :key="message.id" 
+        :class="message.student_id === studentId ? 'msg right-msg' : 'msg left-msg'"
+      >
+        <img :src="message.student_profile_pic" :alt="message.student_name" class="msg-img" />
+        <div class="msg-bubble">
+          <div class="msg-info">
+            <div class="msg-info-name">{{ message.student_name }}</div>
+          </div>
+          <div class="msg-text">{{ message.content }}</div>
+        </div>
       </div>
-      <input v-model="newMessage" @keyup.enter="sendMessage" placeholder="Type a message...">
-      <button @click="sendMessage">Send</button>
-    </div>
-  </template>
+    </main>
+    <form class="msger-inputarea" @submit.prevent="sendMessage">
+      <input type="text" v-model="newMessage" class="msger-input" placeholder="Enter your message..." @keyup.enter="sendMessage">
+      <button type="submit" class="msger-send-btn">Send</button>
+    </form>
+  </section>
+</template>
   
   <script>
   import axios from 'axios';
+  import { format } from 'date-fns';
 
 
   export default {
@@ -17,7 +32,11 @@
       classId: {
         type: String,
         required: true,
-      }
+      },
+      studentId: {
+        type: Number,
+        required: true,
+      },
     },
     data() {
       return {
@@ -29,6 +48,9 @@
       this.fetchClassMessages();
     },
     methods: {
+      formatDate(isoString) {
+        return format(new Date(isoString), 'yyyy-MM-dd HH:mm');
+      },
       async fetchClassMessages() {
         try {
           const response = await axios.get(`http://127.0.0.1:5000/classes/${this.classId}/messages`, { withCredentials: true });
@@ -66,3 +88,125 @@
   };
   </script>
   
+  <style scoped>
+/* General styling */
+.msger {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 15px 15px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Chat styling */
+.msger-chat {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #fcfcfe;
+}
+
+.msger-chat::-webkit-scrollbar {
+  width: 6px;
+}
+
+.msger-chat::-webkit-scrollbar-track {
+  background: #ddd;
+}
+
+.msger-chat::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+}
+
+.msg {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+
+.msg:last-of-type {
+  margin: 0;
+}
+
+.msg-img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  background: #ddd;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border-radius: 50%;
+}
+
+.msg-bubble {
+  max-width: 450px;
+  padding: 15px;
+  border-radius: 15px;
+  background: #eee;
+}
+
+.msg-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.msg-info-name {
+  font-weight: 400;
+}
+
+.left-msg .msg-bubble {
+  border-bottom-left-radius: 0;
+}
+
+.right-msg {
+  flex-direction: row-reverse;
+}
+
+.right-msg .msg-bubble {
+  background: #0084ff;
+  color: #fff;
+  border-bottom-right-radius: 0;
+}
+
+.right-msg .msg-img {
+  margin: 0 0 0 10px;
+}
+
+/* Input styling */
+.msger-inputarea {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  background: #eee;
+}
+
+.msger-inputarea * {
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  font-size: 1em;
+}
+
+.msger-input {
+  flex: 1;
+  background: #ddd;
+}
+
+.msger-send-btn {
+  margin-left: 10px;
+  background: rgb(0, 196, 65);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.23s;
+}
+
+.msger-send-btn:hover {
+  background: rgb(0, 180, 50);
+}
+
+</style>

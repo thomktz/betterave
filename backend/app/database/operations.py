@@ -173,6 +173,8 @@ def get_student_profile_pic(student_id: int)->str:
 def is_student_in_class(student, class_id):
     """Check if a student is in a specific class."""
     class_instance = Class.query.get(class_id)
+    print("class_instance", class_instance)
+    print("class_instance.students", class_instance.students)
     if not class_instance:
         return False
     return student in class_instance.students
