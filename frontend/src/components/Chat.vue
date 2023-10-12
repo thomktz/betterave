@@ -1,6 +1,6 @@
 <template>
   <section class="msger">
-    <main class="msger-chat">
+    <main class="msger-chat" ref="chatContainer">
       <div 
         v-for="message in messages" 
         :key="message.id" 
@@ -47,6 +47,7 @@
     },
     mounted() {
       this.fetchClassMessages();
+      this.scrollToBottom();
     },
     methods: {
       formatDate(isoString) {
@@ -57,6 +58,11 @@
       },
       hideDate() {
         this.hoveredMessageId = null;
+      },
+      scrollToBottom() {
+        this.$nextTick(() => {
+          this.$refs.chatContainer.scrollTop = this.$refs.chatContainer.scrollHeight;
+        });
       },
       async fetchClassMessages() {
         try {
@@ -69,6 +75,7 @@
           console.error("There was an error fetching class messages:", error);
           // Handle error (e.g., showing an error message to the user)
         }
+        this.scrollToBottom();
       },
       async sendMessage() {
         if (!this.newMessage.trim()) return;  // Don't send empty messages
