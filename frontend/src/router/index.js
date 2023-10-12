@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import HomePage from '../views/HomePage.vue'
+import Photochart from '../views/Photochart.vue'
 import ClassPage from '../views/ClassPage.vue'
 import MainLayout from '../views/MainLayout.vue'
 import axios from 'axios';
@@ -19,6 +20,11 @@ const routes = [
         path: 'class/:classId', // dynamic segment for class id
         name: 'class-details',
         component: ClassPage
+      },
+      {
+        path: '/photochart',
+        name: 'Photochart',
+        component: Photochart,
       }
     ]
   },
@@ -26,7 +32,7 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
-  }
+  },
 ]
 
 const router = createRouter({
