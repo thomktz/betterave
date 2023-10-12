@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import HomePage from '../views/HomePage.vue'
+import Photochart from '../views/Photochart.vue'
 import axios from 'axios';
 
 const routes = [
@@ -13,6 +14,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/photochart',
+    name: 'Photochart',
+    component: Photochart,
   }
 ]
 

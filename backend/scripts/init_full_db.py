@@ -104,7 +104,7 @@ last_names = [
     "Ghosh", "Hills", "Irwin", "Jones", "Klein", "Lopez", 
     "Mason", "Nalty", "Ochoa", "Patel", "Quinn", "Reily", 
     "Smith", "Trott", "Usman", "Valdo", "White", "Xiang", 
-    "Yakub", "Zafar", "Kientz",
+    "Yakub", "Zafar", "Kientz", "Dechaux"
 ]
 
 first_names = [
@@ -112,7 +112,7 @@ first_names = [
     "Grace", "Hal", "Isaac", "Julia", "Karl", "Lara", 
     "Max", "Nora", "Oscar", "Paul", "Quinn", "Rob", 
     "Susan", "Tom", "Ursula", "Victor", "Wendy", "Xavier", 
-    "Yara", "Zack", "Thomas",
+    "Yara", "Zack", "Thomas", "Claire"
 ]
 
 class_ids = list(set([class_["class_id"] for class_ in classes]))
