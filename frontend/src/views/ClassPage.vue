@@ -19,7 +19,7 @@
     
         <!-- Right Container -->
         <div class="info-container">
-          <!-- Content for the right container -->
+            <Chat :classId="classId" :studentId="studentId"></Chat>
         </div>
       </div>
     </v-container>
@@ -27,11 +27,18 @@
   
   <script>
   import axios from 'axios';
+  import Chat from '@/components/Chat.vue';
   
   export default {
+    components: {
+        Chat
+    },
     data() {
       return {
-        classDetails: {}
+        classDetails: {},
+        classId: this.$route.params.classId,
+        studentId: NaN,
+        studentAuthorised: false
       };
     },
     async mounted() {
@@ -39,6 +46,8 @@
       try {
         const response = await axios.get(`http://127.0.0.1:5000/class/${classId}`, { withCredentials: true });
         this.classDetails = response.data;
+        this.studentId = this.classDetails.studentId;
+        this.studentAuthorised = this.classDetails.studentAuthorised;
         this.$emit('updateTitle', this.classDetails.name);
       } catch (error) {
         console.error("Error fetching class details:", error);

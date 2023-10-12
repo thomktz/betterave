@@ -3,6 +3,7 @@ from extensions import db, bcrypt
 from app.models.student import Student
 from app.models.lesson import Lesson
 from app.models.class_ import Class
+from app.models.message import Message
 
 ### Student operations ###
 def hash_password(password: str) -> str:
@@ -163,8 +164,28 @@ def get_lessons_by_student(student_id: int):
 
     return sorted(lessons)
 
-def get_student_profile_pic(studeint_id: int)->str:
+def get_student_profile_pic(student_id: int)->str:
     """Get the profil picture of a particular student."""
     # Fetch the student from the database
     student = get_student_by_id(student_id)
     return student.profile_pic
+
+def is_student_in_class(student, class_id):
+    """Check if a student is in a specific class."""
+    class_instance = Class.query.get(class_id)
+    print("class_instance", class_instance)
+    print("class_instance.students", class_instance.students)
+    if not class_instance:
+        return False
+    return student in class_instance.students
+
+def get_class_messages(class_id):
+    """Retrieve messages for a specific class."""
+    return Message.query.filter_by(class_id=class_id).order_by(Message.timestamp).all()
+
+def add_class_message(content, class_id, student_id):
+    """Add a message to a specific class."""
+    msg = Message(content=content, class_id=class_id, student_id=student_id)
+    db.session.add(msg)
+    db.session.commit()
+    return msg
