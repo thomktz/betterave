@@ -56,7 +56,7 @@
 .trombi-grid {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: calc(100vh - 150px);
 }
 
 .custom-select {
@@ -68,15 +68,14 @@
 
 /* Styles for the trombinoscope to occupy the remaining height after .custom-select */
 .trombinoscope {
-  flex: 1; /* This ensures it takes up the remaining height */
-  overflow-y: auto; /* This will allow scrolling if content overflows */
-  
-  /* Your grid styles */
+  flex: 1; 
+  overflow-y: auto; 
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-auto-rows: 250px; /* Set fixed row height */
   gap: 20px;
+  align-content: flex-start; /* Prevents grid items from stretching if there are only a few rows */
 }
-
 
 .custom-select::after { 
   content: '▼'; 
