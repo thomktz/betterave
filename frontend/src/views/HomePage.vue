@@ -43,6 +43,7 @@ export default {
     try {
       const response = await axios.get('http://127.0.0.1:5000/profile', { withCredentials: true });
       this.user = response.data;
+      this.$emit('updateTitle', "Hello, " + this.user.name + "!");
     } catch (error) {
       console.error("There was an error fetching user data:", error);
     }

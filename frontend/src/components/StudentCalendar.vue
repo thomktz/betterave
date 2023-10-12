@@ -1,5 +1,3 @@
-<!-- LessonCalendar.vue -->
-
 <template>
     <div>
       <FullCalendar :options="calendarOptions" />
@@ -8,10 +6,10 @@
   
   <script>
   import axios from 'axios';
-  import FullCalendar from '@fullcalendar/vue3'
-  import dayGridPlugin from '@fullcalendar/daygrid'; // for day view
-  import timeGridPlugin from '@fullcalendar/timegrid'; // for week view
-  import listPlugin from '@fullcalendar/list'; // for list view
+  import FullCalendar from '@fullcalendar/vue3';
+  import dayGridPlugin from '@fullcalendar/daygrid';
+  import timeGridPlugin from '@fullcalendar/timegrid';
+  import listPlugin from '@fullcalendar/list';
   import interactionPlugin from '@fullcalendar/interaction';
   
   export default {

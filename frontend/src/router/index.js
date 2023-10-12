@@ -2,16 +2,16 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import HomePage from '../views/HomePage.vue'
 import ClassPage from '../views/ClassPage.vue'
-import MainLayout from '../views/MainLayout.vue'  // <-- make sure the path is correct
+import MainLayout from '../views/MainLayout.vue'
 import axios from 'axios';
 
 const routes = [
   {
     path: '/',
-    component: MainLayout, // MainLayout becomes the default layout for HomePage and ClassPage
+    component: MainLayout,
     children: [
       {
-        path: '',  // empty path as this will match the root path within MainLayout
+        path: '', 
         name: 'homepage',
         component: HomePage
       },
