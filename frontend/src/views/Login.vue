@@ -15,10 +15,11 @@
         Close
     </v-btn>
 </v-snackbar>
-  <v-container class="fill-height" fluid>
+<v-container class="fill-height" fluid>
     <img src="/logo_ensae.png" alt="ENSAE Logo" class="logo" />
     <v-row align="center" justify="center" style="width: 100%;">
-      <v-col cols="12" sm="8" md="4">
+      <v-col cols="12" sm="8" md="4" class="login-col">
+        <img src="/betterave-logo.png" alt="Betterave Logo" class="betterave-logo" />
         <v-card class="elevation-12" dark>
           <v-card-title>Login</v-card-title>
           <v-card-text>
@@ -35,7 +36,6 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
 import axios from 'axios';
 
@@ -91,5 +91,18 @@ export default {
   text-align: center;
   margin: 0 auto; 
   display: block; 
+}
+.betterave-logo {
+  width: 70%;
+  height: auto;
+  margin-bottom: 10px; /* The only margin required is at the bottom to space it from the card */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+.login-col {
+  margin-bottom: 100px;
 }
 </style>
