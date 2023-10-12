@@ -1,7 +1,7 @@
 <template>
 <div class="profile-pill" @mouseover="showDropdown = true" @mouseleave="showDropdown = false">
     <div class="email-with-icon">
-    <img src="/default-profile.png" alt="Profile Icon" class="profile-icon" />
+    <img :src="userProfilePic" alt="Profile Icon" class="profile-icon" />
     <span>{{ userEmail }}</span>
     </div>
     <div v-if="showDropdown" class="dropdown-content">
@@ -18,6 +18,10 @@
   export default {
     props: {
       userEmail: {
+        type: String,
+        required: true
+      },
+      userProfilePic: {
         type: String,
         required: true
       }

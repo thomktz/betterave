@@ -13,6 +13,7 @@ def profile_route():
     return jsonify(
         email=current_user.email,
         name=current_user.name,
+        profile_pic=current_user.profile_pic,
         status="success",
     ), 200
 

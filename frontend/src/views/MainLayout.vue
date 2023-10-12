@@ -15,7 +15,7 @@
       </div>
       
       <h1>{{ headerTitle }}</h1>
-      <ProfilePill :userEmail="user.email" />
+      <ProfilePill :userEmail="user.email" :userProfilePic="user.profile_pic" />
     </header>
     <router-view @updateTitle="setTitle" />
   </div>
@@ -36,7 +36,8 @@ export default {
     return {
       user: {
         name: '',
-        email: ''
+        email: '',
+        profile_pic: '',
       },
       headerTitle: ref("Welcome to Betterave!")
     };
