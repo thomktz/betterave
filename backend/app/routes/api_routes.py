@@ -40,8 +40,9 @@ def all_students_route():
     students = get_all_students()
     formatted_students = [
         {
-            'id' : student.id,
+            'id' : student.student_id,
             'name': student.name,
+            "surname": student.surname,
             'level' : student.level,
             'profile_pic': student.profile_pic
         }

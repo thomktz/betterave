@@ -127,7 +127,7 @@ def initialize_database():
             for lesson in class_["lesson_times"]:
                 add_weekly_lessons(class_["class_id"], "2023-10-01", "2023-12-31", *lesson, room=random.randint(2001, 2048))
             
-        for i in range(27):
+        for i in range(len(first_names)):
             add_student(
                 name=first_names[i],
                 surname=last_names[i],
