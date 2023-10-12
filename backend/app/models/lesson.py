@@ -5,7 +5,7 @@ class Lesson(db.Model):
     
     __tablename__ = "lessons"
     lesson_id = db.Column(db.Integer, primary_key=True)
-    class_id = db.Column(db.Integer, db.ForeignKey('classes.class_id'))
+    class_id = db.Column(db.Integer, db.ForeignKey("classes.class_id"))
     date = db.Column(db.Date)
     start_time = db.Column(db.Time)
     end_time = db.Column(db.Time)
