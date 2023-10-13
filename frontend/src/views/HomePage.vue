@@ -16,7 +16,7 @@
 
       <!-- Right Side Calendar -->
       <div class="calendar-box">
-        <StudentCalendar />
+        <UserCalendar />
       </div>
     </div>
   </v-container>
@@ -24,13 +24,13 @@
 
 <script>
 import axios from 'axios';
-import StudentCalendar from '@/components/StudentCalendar.vue';
+import UserCalendar from '@/components/UserCalendar.vue';
 import ProfilePill from '@/components/ProfilePill.vue';
 import InfoColumn from '@/components/InfoColumn.vue';
 
 export default {
   components: {
-    StudentCalendar,
+    UserCalendar,
     ProfilePill,
     InfoColumn,
   },
