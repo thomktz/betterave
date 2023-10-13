@@ -15,7 +15,7 @@ class Class(db.Model):
     # Many-to-Many relationship with User
     participants = db.relationship('User', secondary=user_classes, back_populates='classes')
     # One-to-Many relationship with Lesson
-    lessons = db.relationship('Lesson', back_populates='class_ref')
+    lessons = db.relationship("Lesson", back_populates="class_ref")
 
 
     def get_id(self):
