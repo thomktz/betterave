@@ -4,9 +4,9 @@ from . import user_classes
 
 class User(db.Model, UserMixin):
     """
-    SQLAlchemy object for students.
+    SQLAlchemy object for users.
     
-    Since students are the users, we inherit from flask_login's UserMixin.
+    Since users are the users, we inherit from flask_login's UserMixin.
     """
     
     __tablename__ = "user"
@@ -21,7 +21,7 @@ class User(db.Model, UserMixin):
 
     # if user_type == "student":
     #     # Many-to-Many relationship with Class
-    classes = db.relationship('Class', secondary=user_classes, back_populates='students')
+    classes = db.relationship('Class', secondary=user_classes, back_populates='participants')
     
     def get_id(self):
         return str(self.user_id)  ## Besoin de cette méthode ? déjà implémentée dans UserMixin

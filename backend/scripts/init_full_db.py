@@ -118,7 +118,7 @@ first_names = [
 role = [
     "student", "student", "student_asso", "student", "student", "student", 
     "student_asso", "admin", "admin", "admin", "teacher", "teacher", 
-    "teacher", "student", "student", "student", "student_asso", "students_asso", 
+    "teacher", "student", "student", "student", "student_asso", "student_asso", 
     "teacher", "admin", "student", "student", "admin", "admin", 
     "admin", "student", "student",
 ]
@@ -144,11 +144,19 @@ def initialize_database():
                     enrolled_classes_ids=random.sample(class_ids, random.randint(3, len(class_ids))),
                 )
             else :  
+                
+                dict_user_types = {
+                    "student": "Student",
+                    "student_asso": "Student Asso",
+                    "teacher": "Teacher",
+                    "admin": "Admin"
+                }
+
                 add_user(
                     name=first_names[i],
                     surname=last_names[i],
                     profile_pic=f"photos/{first_names[i]}{last_names[i]}.jpg",
-                    level=str(random.randint(1, 3))+"A",
+                    level=dict_user_types[role[i]],
                     user_type=role[i],
                     enrolled_classes_ids=[],
                 )
