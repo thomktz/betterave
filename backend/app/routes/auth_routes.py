@@ -28,7 +28,7 @@ def login_user_route():
 
         user_type = user.user_type
         print(user_type)
-
+        
         if user_type in dict_user_types:
             return jsonify(message=f"{dict_user_types[user_type]} login successful", status="success",userType=user_type), 200
         
