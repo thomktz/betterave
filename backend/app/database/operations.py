@@ -40,7 +40,7 @@ def add_user(name: str, surname: str, profile_pic: str, level: str,user_type : s
                 new_user.classes.append(class_)
 
     if user_type=="teacher":
-        teacher_classes = Class.query.filter_by(tutor=f"{new_user.surname} {new_user.name}").all()
+        teacher_classes = Class.query.filter_by(tutor=f"{new_user.surname.upper()} {new_user.name}").all()
         new_user.classes.extend(teacher_classes)
 
     db.session.commit()

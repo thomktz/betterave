@@ -104,7 +104,7 @@ last_names = [
     "Ghosh", "Hills", "Irwin", "Jones", "Klein", "Lopez", 
     "Mason", "Nalty", "Ochoa", "Patel", "Quinn", "Reily", 
     "Smith", "Trott", "Usman", "Valdo", "White", "Xiang", 
-    "Yakub", "Zafar", "Kientz",
+    "Yakub", "Zafar", "Kientz","Chancel"
 ]
 
 first_names = [
@@ -112,7 +112,7 @@ first_names = [
     "Grace", "Hal", "Isaac", "Julia", "Karl", "Lara", 
     "Max", "Nora", "Oscar", "Paul", "Quinn", "Rob", 
     "Susan", "Tom", "Ursula", "Victor", "Wendy", "Xavier", 
-    "Yara", "Zack", "Thomas",
+    "Yara", "Zack", "Thomas","Antoine"
 ]
 
 role = [
@@ -120,7 +120,7 @@ role = [
     "student_asso", "admin", "admin", "admin", "teacher", "teacher", 
     "teacher", "student", "student", "student", "student_asso", "student_asso", 
     "teacher", "admin", "student", "student", "admin", "admin", 
-    "admin", "student", "student",
+    "admin", "student", "student","teacher"
 ]
 
 class_ids = list(set([class_["class_id"] for class_ in classes]))
@@ -133,7 +133,7 @@ def initialize_database():
             for lesson in class_["lesson_times"]:
                 add_weekly_lessons(class_["class_id"], "2023-10-01", "2023-12-31", *lesson)
             
-        for i in range(27):
+        for i in range(len(first_names)):
             if role[i]=="student":
                 add_user(
                     name=first_names[i],
@@ -144,7 +144,7 @@ def initialize_database():
                     enrolled_classes_ids=random.sample(class_ids, random.randint(3, len(class_ids))),
                 )
             else :  
-                
+
                 dict_user_types = {
                     "student": "Student",
                     "student_asso": "Student Asso",
