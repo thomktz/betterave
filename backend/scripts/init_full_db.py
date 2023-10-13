@@ -134,14 +134,24 @@ def initialize_database():
                 add_weekly_lessons(class_["class_id"], "2023-10-01", "2023-12-31", *lesson)
             
         for i in range(27):
-            add_user(
-                name=first_names[i],
-                surname=last_names[i],
-                profile_pic=f"photos/{first_names[i]}{last_names[i]}.jpg",
-                level=str(random.randint(1, 3))+"A",
-                user_type=role[i],
-                enrolled_classes_ids=random.sample(class_ids, random.randint(3, len(class_ids))),
-            )
+            if role[i]=="student":
+                add_user(
+                    name=first_names[i],
+                    surname=last_names[i],
+                    profile_pic=f"photos/{first_names[i]}{last_names[i]}.jpg",
+                    level=str(random.randint(1, 3))+"A",
+                    user_type=role[i],
+                    enrolled_classes_ids=random.sample(class_ids, random.randint(3, len(class_ids))),
+                )
+            else :  
+                add_user(
+                    name=first_names[i],
+                    surname=last_names[i],
+                    profile_pic=f"photos/{first_names[i]}{last_names[i]}.jpg",
+                    level=str(random.randint(1, 3))+"A",
+                    user_type=role[i],
+                    enrolled_classes_ids=[],
+                )
         print("Database initialized successfully!")
 
 if __name__ == "__main__":

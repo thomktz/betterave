@@ -1,5 +1,5 @@
 from extensions import db
-from . import student_classes
+from . import user_classes
 
 class Class(db.Model):
     """SQLAlchemy object for classes."""
@@ -13,7 +13,7 @@ class Class(db.Model):
     backgroundColor = db.Column(db.String, nullable=True)
     
     # Many-to-Many relationship with User
-    students = db.relationship('User', secondary=student_classes, back_populates='classes')
+    participants = db.relationship('User', secondary=user_classes, back_populates='classes')
     # One-to-Many relationship with Lesson
     lessons = db.relationship('Lesson', back_populates='class_ref')
 

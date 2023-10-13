@@ -1,6 +1,6 @@
 from extensions import db
 from flask_login import UserMixin
-from . import student_classes
+from . import user_classes
 
 class User(db.Model, UserMixin):
     """
@@ -21,7 +21,7 @@ class User(db.Model, UserMixin):
 
     # if user_type == "student":
     #     # Many-to-Many relationship with Class
-    classes = db.relationship('Class', secondary=student_classes, back_populates='students')
+    classes = db.relationship('Class', secondary=user_classes, back_populates='students')
     
     def get_id(self):
         return str(self.user_id)  ## Besoin de cette méthode ? déjà implémentée dans UserMixin

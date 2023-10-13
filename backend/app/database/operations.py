@@ -32,12 +32,16 @@ def add_user(name: str, surname: str, profile_pic: str, level: str,user_type : s
     
     # Add the user to the session first
     db.session.add(new_user)
+    if user_type=='student':
+        # Associating the user with classes
+        for class_id in enrolled_classes_ids:
+            class_ = db.session.get(Class, class_id)
+            if class_:
+                new_user.classes.append(class_)
 
-    # Associating the user with classes
-    for class_id in enrolled_classes_ids:
-        class_ = db.session.get(Class, class_id)
-        if class_:
-            new_user.classes.append(class_)
+    if user_type=="teacher":
+        teacher_classes = Class.query.filter_by(tutor=f"{new_user.surname} {new_user.name}").all()
+        new_user.classes.extend(teacher_classes)
 
     db.session.commit()
 
@@ -50,6 +54,14 @@ def get_user_by_id(user_id: int):
 def get_user_by_email(email: str):
     """Get a user by their email."""
     return User.query.filter_by(email=email).first()
+
+def get_user_by_name(name: str):
+    """Get a user by their name."""
+    return User.query.filter_by(name=name).first()
+
+def get_user_by_surname(surname: str):
+    """Get a user by their name."""
+    return User.query.filter_by(surname=surname).first()
 
 def authenticate_user(email: str, password: str) -> bool:
     """Authenticate a user using their email and password."""
@@ -87,6 +99,11 @@ def get_users_by_class_id(class_id):
     """Get all users enrolled in a class."""
     target_class = db.session.get(Class, class_id)
     return target_class.users if target_class else []
+
+def get_class_by_tutor(name_tutor : str) -> list:
+    """Get all classes given by a tutor."""
+    return Class.query.filter_by(tutor=name_tutor).all()
+
 
 ### Lesson operations ###
 
