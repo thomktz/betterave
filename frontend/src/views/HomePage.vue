@@ -3,7 +3,7 @@
     <div class="content-container">
       <!-- Left Side Columns -->
       <div class="columns-container">
-        <InfoColumn title="Next classes" :list="upcomingClasses" />
+        <ColumnNextclasses title="Next classes" :list="nextClasses" />
         <InfoColumn title="Homework" :list="homeworkList" />
         <InfoColumn title="Notifications" :list="notifications" />
       </div>
@@ -18,16 +18,17 @@
 </template>
 
 <script>
-import axios from 'axios';
 import StudentCalendar from '@/components/StudentCalendar.vue';
 import ProfilePill from '@/components/ProfilePill.vue';
 import InfoColumn from '@/components/InfoColumn.vue';
+import ColumnNextclasses from '@/components/ColumnNextclasses.vue';
 
 export default {
   components: {
     StudentCalendar,
     ProfilePill,
     InfoColumn,
+    ColumnNextclasses,
   },
   data() {
     return {
@@ -35,7 +36,7 @@ export default {
         name: '',
         email: ''
       },
-      upcomingClasses: [{ id: 1, text: "Math class" , color: "#FF5733" }, { id: 2, text: "History class" }],
+      nextClasses : [],
       homeworkList: [{ id: 1, text: "Algebra homework" }, { id: 2, text: "Essay on WW2" }],
       notifications: [{ id: 1, text: "Meeting tomorrow" }, { id: 2, text: "Homework due" }]
     };
@@ -45,6 +46,19 @@ export default {
       const response = await axios.get('http://127.0.0.1:5000/profile', { withCredentials: true });
       this.user = response.data;
       this.$emit('updateTitle', "Hello, " + this.user.name + "!");
+
+      const allClasses = await axios.get('http://127.0.0.1:5000/lessons', { withCredentials: true });
+      const currentTime = new Date();
+      this.nextClasses = allClasses.data.filter((course) => new Date(course.start) > currentTime).slice(0, 5).map(course => ({
+      id: course.id,
+      text: course.title,  
+      start: course.start,
+      end: course.end,
+      color: course.color,
+    }));
+      //this.nextClasses = nextClasses.slice(0, 5); // Limitez à 5 prochains cours
+      //this.nextClasses = nextClasses.map((course) => ({id: course.id, text: course.name,color: course.color,}))
+      
     } catch (error) {
       console.error("There was an error fetching user data:", error);
     }
