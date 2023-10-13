@@ -3,7 +3,7 @@
     <div class="content-container">
       <!-- Left Side Columns -->
       <div class="columns-container">
-        <ColumnNextclasses title="Next classes" :list="nextClasses" />
+        <InfoColumn title="Next classes" :list="nextClasses" />
         <InfoColumn title="Homework" :list="homeworkList" />
         <InfoColumn title="Notifications" :list="notifications" />
       </div>
@@ -18,17 +18,16 @@
 </template>
 
 <script>
+import axios from 'axios';
 import StudentCalendar from '@/components/StudentCalendar.vue';
 import ProfilePill from '@/components/ProfilePill.vue';
 import InfoColumn from '@/components/InfoColumn.vue';
-import ColumnNextclasses from '@/components/ColumnNextclasses.vue';
 
 export default {
   components: {
     StudentCalendar,
     ProfilePill,
     InfoColumn,
-    ColumnNextclasses,
   },
   data() {
     return {
@@ -56,8 +55,6 @@ export default {
       end: course.end,
       color: course.color,
     }));
-      //this.nextClasses = nextClasses.slice(0, 5); // Limitez à 5 prochains cours
-      //this.nextClasses = nextClasses.map((course) => ({id: course.id, text: course.name,color: course.color,}))
       
     } catch (error) {
       console.error("There was an error fetching user data:", error);
