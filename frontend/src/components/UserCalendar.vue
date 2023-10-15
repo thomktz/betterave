@@ -13,7 +13,7 @@
   import interactionPlugin from '@fullcalendar/interaction';
   
   export default {
-    name: 'StudentCalendar',
+    name: 'UserCalendar',
     components: {
       FullCalendar
     },

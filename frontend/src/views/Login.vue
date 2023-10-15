@@ -58,16 +58,14 @@ export default {
           withCredentials: true
         });
         if (response.data.status === "success") {
-          // Redirect user to home page
+          console.log("Login successful!");
           this.$router.push({ name: 'homepage' });
-        } else {
-          console.error("Login failed:", response.data.message);
+          } else {
+            console.error("Login failed:", response.data.message);
+          }
+        } catch (error) {
+          console.error("There was an error logging in:", error);
         }
-      } catch (error) {
-        console.error("There was an error logging in:", error);
-        this.showSnackbar = true;
-
-      }
     }
   }
 }

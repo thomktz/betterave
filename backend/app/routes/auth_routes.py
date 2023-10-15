@@ -1,20 +1,28 @@
 from . import bp
 from flask import request, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
-from app.database.operations import check_password
-from app.models.student import Student
+from app.operations.user_operations import check_password, get_user_by_email
+
 
 @bp.route("/login", methods=["POST"])
 def login_user_route():
     if current_user.is_authenticated:
         return jsonify(message="User already logged in", status="success"), 200
     data = request.get_json()
-    email = data["email"]
-    password = data["password"]
-    student = Student.query.filter_by(email=email).first()
-    if student and check_password(student.hashed_password, password):
-        login_user(student)
-        return jsonify(message="Login successful", status="success"), 200
+    email = data['email']
+    password = data['password']
+    user = get_user_by_email(email)
+
+    if user and check_password(user.hashed_password, password):
+        print("Authentified")
+        login_user(user)
+
+
+        user_type = user.user_type
+        print(user_type)
+        
+        return jsonify(message=str(user.user_type).capitalize() + " login successful", status="success"), 200
+        
     else:
         return jsonify(message="Login unsuccessful. Please check email and password", status="error"), 401
     

@@ -7,7 +7,7 @@
             <h1>Class details</h1>
           </div>
           <p><strong>ECTS Credits:</strong> {{ classDetails.ects_credits }}</p>
-          <p><strong>Tutor:</strong> {{ classDetails.tutor }}</p>
+          <p><strong>Tutor:</strong> {{ classDetails.teacher }}</p>
           <p><a :href="classDetails.ensae_link" target="_blank">View ENSAE Link</a></p>
           <!-- Other information related to class -->
         </div>
@@ -19,7 +19,7 @@
     
         <!-- Right Container -->
         <div class="info-container">
-            <Chat :classId="classId" :studentId="studentId"></Chat>
+            <Chat :classId="classId" :userId="userId"></Chat>
         </div>
       </div>
     </v-container>
@@ -37,8 +37,8 @@
       return {
         classDetails: {},
         classId: this.$route.params.classId,
-        studentId: NaN,
-        studentAuthorised: false
+        userId: NaN,
+        userAuthorised: false
       };
     },
     async mounted() {
@@ -46,8 +46,8 @@
       try {
         const response = await axios.get(`http://127.0.0.1:5000/class/${classId}`, { withCredentials: true });
         this.classDetails = response.data;
-        this.studentId = this.classDetails.studentId;
-        this.studentAuthorised = this.classDetails.studentAuthorised;
+        this.userId = this.classDetails.user_id;
+        this.userAuthorised = this.classDetails.user_authorised;
         this.$emit('updateTitle', this.classDetails.name);
       } catch (error) {
         console.error("Error fetching class details:", error);
