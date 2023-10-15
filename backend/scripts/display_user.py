@@ -1,37 +1,38 @@
 from main import app
 from extensions import db
-from app.database.operations import get_lessons_by_user
-from backend.app.models.user import User
-from app.models.class_ import Class
+from app.operations.user_operations import get_user_by_id
+from app.operations.student_operations import get_all_students, get_student_lessons
 
 
-def list_users():
-    users = user.query.all()
-    for user in users:
-        print(f"ID: {user.user_id} - Name: {user.name} {user.surname}")
 
-def get_classes_for_user(user_id):
-    user = db.session.get(user, user_id)
-    if not user:
-        print("User not found!")
+def list_students():
+    students = get_all_students()
+    print("Students:")
+    for student in students:
+        print(f"ID: {student.user_id} - Name: {student.name} {student.surname}")
+
+def get_classes_for_student(user_id):
+    student = get_user_by_id(user_id)
+    if not student:
+        print("Student not found!")
         return
 
-    print(f"Classes for {user.name} {user.surname}:")
-    for class_ in user.classes:
+    print(f"Classes for {student.name} {student.surname}:")
+    for class_ in student.enrolled_classes:
         print(f" - {class_.name}")
         
         
 def get_calendar(user_id):
-    lessons = get_lessons_by_user(user_id)
+    lessons = get_student_lessons(user_id)
     print(f"Lessons for User {user_id}:")
-    for lesson in lessons:
-        print(f" - {lesson.class_ref.name} - {lesson.start_time} - {lesson.end_time}")
+    for lesson in sorted(lessons):
+        print(f" - {lesson.course.name} - {lesson.start_time} - {lesson.end_time}")
     
 
 if __name__ == "__main__":
     with app.app_context():
-        list_users()
+        list_students()
         user_id = int(input("Enter the ID of the User to view their classes: "))
-        get_classes_for_user(user_id)
+        get_classes_for_student(user_id)
         get_calendar(user_id)
 

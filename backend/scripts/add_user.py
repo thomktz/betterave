@@ -2,7 +2,7 @@
 
 from main import app
 from extensions import db
-from app.database.operations import add_user, get_user_by_id
+from backend.app.operations.user_operations import add_user, get_user_by_id
 
 def add_new_user():
     print("---- Add a new user ----")

@@ -3,13 +3,10 @@ from datetime import datetime
 from . import bp
 from flask import jsonify, request
 from flask_login import login_required, current_user
-<<<<<<< HEAD
-from app.database.operations import get_lessons_by_user
-=======
-from app.database.operations import get_lessons_by_student, get_all_students, is_student_in_class, get_class_messages, add_class_message
+from app.operations.class_operations import get_class_by_id
+from app.operations.message_operations import get_class_messages, add_class_message
+from app.operations.student_operations import get_student_lessons, get_all_students, is_student_in_class
 from app.models.class_ import Class
-from app.models.message import Message
->>>>>>> origin/main
 
 @bp.route("/profile", methods=["GET"])
 @login_required
@@ -25,16 +22,17 @@ def profile_route():
 @bp.route("/lessons", methods=["GET"])
 @login_required
 def get_lessons_route():
-    lessons = get_lessons_by_user(current_user.user_id)
+    lessons = get_student_lessons(current_user.user_id)
     formatted_lessons = [
         {
-            "id": str(lesson.lesson_id),
-            "class_id": str(lesson.class_id),
+            "id": lesson.lesson_id,
+            "class_id": lesson.class_id,
             "start": datetime.combine(lesson.date, lesson.start_time).isoformat(),
             "end": datetime.combine(lesson.date, lesson.end_time).isoformat(),
-            "title": lesson.class_ref.name,
-            "color": lesson.class_ref.backgroundColor,
+            "title": lesson.course.name,
+            "color": lesson.course.backgroundColor,
             "room": lesson.room,
+            "teacher_id": lesson.teacher_id,
         }
         for lesson in lessons
     ]
@@ -46,10 +44,10 @@ def all_students_route():
     students = get_all_students()
     formatted_students = [
         {
-            'id' : student.student_id,
+            'id' : student.user_id,
             'name': student.name,
             "surname": student.surname,
-            'level' : student.level,
+            'level' : str(student.level),
             'profile_pic': student.profile_pic
         }
         for student in students
@@ -59,18 +57,18 @@ def all_students_route():
 @bp.route("/class/<int:class_id>", methods=["GET"])
 @login_required
 def get_class_detail(class_id):
-    print("current user", current_user.student_id)
-    class_instance = Class.query.get(class_id)
+    class_instance = get_class_by_id(class_id)
     if class_instance:
-        # serialize and send data
         return jsonify({
             "name": class_instance.name,
             "ects_credits": class_instance.ects_credits,
             "ensae_link": class_instance.ensae_link,
-            "tutor": class_instance.tutor,
+            "teacher": class_instance.default_teacher.name + " " + class_instance.default_teacher.surname,
             "backgroundColor": class_instance.backgroundColor,
-            "studentId": current_user.student_id,
-            "studentAuthorised": is_student_in_class(current_user, class_id)
+            "user_id": current_user.user_id,
+            "user_authorised": is_student_in_class(current_user, class_id)
+            # TODO: Also check if user is a teacher and is authorized too
+            # -> is_student_in_class(...) or is_teacher_in_class(...)
         }), 200
     else:
         return jsonify(message="Class not found", status="error"), 404
@@ -93,6 +91,6 @@ def post_message(class_id):
         return jsonify(message="Unauthorized. User not part of the class.", status="error"), 403
     
     data = request.get_json()
-    msg = add_class_message(data['content'], class_id, current_user.student_id)
+    msg = add_class_message(data['content'], class_id, current_user.user_id)
     return jsonify(msg.as_dict()), 201
 

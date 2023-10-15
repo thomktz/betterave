@@ -4,13 +4,13 @@
       <div 
         v-for="message in messages" 
         :key="message.id" 
-        :class="message.student_id === studentId ? 'msg right-msg' : 'msg left-msg'"
+        :class="message.user_id === userId ? 'msg right-msg' : 'msg left-msg'"
         @mouseover="showDate(message)" 
         @mouseleave="hideDate()"
       >
-        <img :src="'/' + message.student_profile_pic" :alt="message.student_name" class="msg-img" />
+        <img :src="'/' + message.user_profile_pic" :alt="message.user_name" class="msg-img" />
         <div class="whole-message">
-          <div class="msg-name">{{ message.student_name }} {{ message.student_surname }}</div>
+          <div class="msg-name">{{ message.user_name }} {{ message.user_surname }}</div>
           <div class="msg-text">{{ message.content }}</div>
           <div class="msg-date" v-show="hoveredMessageId === message.id">{{ formatDate(message.timestamp) }}</div>
         </div>
@@ -34,7 +34,7 @@
         type: String,
         required: true,
       },
-      studentId: {
+      userId: {
         type: Number,
         required: true,
       },

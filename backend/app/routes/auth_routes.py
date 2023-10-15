@@ -1,50 +1,28 @@
 from . import bp
 from flask import request, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
-from app.database.operations import check_password
-from app.models.user import User
+from app.operations.user_operations import check_password, get_user_by_email
 
 
-<<<<<<< HEAD
-@bp.route('/login', methods=['POST'])
-
-=======
 @bp.route("/login", methods=["POST"])
->>>>>>> origin/main
 def login_user_route():
     if current_user.is_authenticated:
         return jsonify(message="User already logged in", status="success"), 200
     data = request.get_json()
-<<<<<<< HEAD
     email = data['email']
     password = data['password']
-    user = User.query.filter_by(email=email).first()
+    user = get_user_by_email(email)
 
     if user and check_password(user.hashed_password, password):
         print("Authentified")
         login_user(user)
 
-        dict_user_types = {
-            "student": "Student",
-            "student_asso": "Student Asso",
-            "teacher": "Teacher",
-            "admin": "Admin"
-        }
 
         user_type = user.user_type
         print(user_type)
         
-        if user_type in dict_user_types:
-            return jsonify(message=f"{dict_user_types[user_type]} login successful", status="success",userType=user_type), 200
+        return jsonify(message=str(user.user_type).capitalize() + " login successful", status="success"), 200
         
-=======
-    email = data["email"]
-    password = data["password"]
-    student = Student.query.filter_by(email=email).first()
-    if student and check_password(student.hashed_password, password):
-        login_user(student)
-        return jsonify(message="Login successful", status="success"), 200
->>>>>>> origin/main
     else:
         return jsonify(message="Login unsuccessful. Please check email and password", status="error"), 401
     

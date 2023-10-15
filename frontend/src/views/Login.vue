@@ -58,22 +58,8 @@ export default {
           withCredentials: true
         });
         if (response.data.status === "success") {
-          const redirectDictionary = {
-            "student":"studentDashboard",
-            "student_asso":"studentassoDashboard",
-            "teacher":"teacherDashboard",
-            "admin":"adminDashboard"
-          };
-
-          const userType = response.data.userType;
-
-          if (userType in redirectDictionary) {
-            const routeName = redirectDictionary[userType]
-            this.$router.push({ name:routeName });
-
-            // Redirect user to home page
-            // this.$router.push({ name: 'homepage' });
-          }
+          console.log("Login successful!");
+          this.$router.push({ name: 'homepage' });
           } else {
             console.error("Login failed:", response.data.message);
           }
