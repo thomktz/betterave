@@ -3,7 +3,7 @@
     <h2>{{ title }}</h2>
     <ul>
       <li v-for="item in list" :key="item.id">
-        <div :style="getEventStyle(item)" class="event-item">{{ item.text }}</div>
+        <div :style="getEventStyle(item)" class="event-item">{{ item.text, item.start }}</div>
       </li>
     </ul>
   </div>

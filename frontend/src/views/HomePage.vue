@@ -3,7 +3,7 @@
     <div class="content-container">
       <!-- Left Side Columns -->
       <div class="columns-container">
-        <InfoColumn title="Next classes" :list="nextClasses" />
+        <ColumnNextclasses title="Next classes" :list="nextClasses" />
         <InfoColumn title="Homework" :list="homeworkList" />
         <InfoColumn title="Notifications" :list="notifications" />
       </div>
@@ -22,12 +22,14 @@ import axios from 'axios';
 import StudentCalendar from '@/components/StudentCalendar.vue';
 import ProfilePill from '@/components/ProfilePill.vue';
 import InfoColumn from '@/components/InfoColumn.vue';
+import ColumnNextclasses from '@/components/ColumnNextclasses.vue';
 
 export default {
   components: {
     StudentCalendar,
     ProfilePill,
     InfoColumn,
+    ColumnNextclasses,
   },
   data() {
     return {
@@ -48,7 +50,7 @@ export default {
 
       const allClasses = await axios.get('http://127.0.0.1:5000/lessons', { withCredentials: true });
       const currentTime = new Date();
-      this.nextClasses = allClasses.data.filter((course) => new Date(course.start) > currentTime).slice(0, 5).map(course => ({
+      this.nextClasses = allClasses.data.filter((course) => new Date(course.start) > currentTime).slice(0, 6).map(course => ({
       id: course.id,
       text: course.title,  
       start: course.start,
