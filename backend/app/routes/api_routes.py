@@ -47,7 +47,7 @@ def all_students_route():
             'id' : student.user_id,
             'name': student.name,
             "surname": student.surname,
-            'level' : str(student.level),
+            'level' : student.level.value,
             'profile_pic': student.profile_pic
         }
         for student in students

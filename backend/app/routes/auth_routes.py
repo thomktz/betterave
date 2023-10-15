@@ -14,14 +14,8 @@ def login_user_route():
     user = get_user_by_email(email)
 
     if user and check_password(user.hashed_password, password):
-        print("Authentified")
-        login_user(user)
-
-
-        user_type = user.user_type
-        print(user_type)
-        
-        return jsonify(message=str(user.user_type).capitalize() + " login successful", status="success"), 200
+        login_user(user)        
+        return jsonify(message=user.user_type.value.capitalize() + " login successful", status="success"), 200
         
     else:
         return jsonify(message="Login unsuccessful. Please check email and password", status="error"), 401
