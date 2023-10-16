@@ -84,7 +84,8 @@
   .nextclasses-column {
     flex: 1.5;
     padding: 20px;
-    background-color: white;
+    background-color: var(--secondary-color);
+    color: var(--primary-text-color);
     border-radius: 10px;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
     margin: 0 10px;
@@ -129,8 +130,8 @@
 }
 
 .event-content {
-    margin-top: 10px; /* Spacing between header and content */
-    font-size: 0.8rem; /* Adjust size as needed */
+    margin-top: 10px;
+    font-size: 0.8rem;
 }
 
   
@@ -142,7 +143,7 @@
     position: relative;
     margin-top: 12px;
     margin-bottom: -5px;
-    background-color: transparent; /* remove the background color */
+    background-color: transparent;
 }
 
 .date-indicator::after {
