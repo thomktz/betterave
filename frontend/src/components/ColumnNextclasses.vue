@@ -2,31 +2,54 @@
     <div class="nextclasses-column">
       <h2>{{ title }}</h2>
       <ul>
-        <li v-for="(item, index) in list" :key="item.id">
-          <div class="date-indicator" v-if="isFirstClassOfDay(list, index)">
+        <li v-for="(item, index) in nextClasses" :key="item.id">
+          <div class="date-indicator" v-if="isFirstClassOfDay(nextClasses, index)">
             {{ formatDate(item.start) }}
           </div>
-          <div :style="getEventStyle(item)" class="event-item">
-            <div class="event-time">{{ formatEventTime(item) }} - {{ item.text }}</div>
-          </div>
+          <div :style="getEventStyle(item)" class="event-item" @click="goToClass(item.id)">
+            <div class="event-header">
+                <div class="event-start-time">{{ formatEventTime(item) }}</div>
+                <div class="event-room">Room {{ item.room }}</div>
+            </div>
+            <div class="event-content">{{ item.text }}</div>
+        </div>
         </li>
       </ul>
     </div>
   </template>
   
   <script>
+  import axios from 'axios';
   export default {
     props: {
       title: {
         type: String,
         required: true
       },
-      list: {
-        type: Array,
-        default: () => []
-      }
+    },
+    data () {
+      return {
+        nextClasses: [],
+        classesToDisplay: 20,
+      };
+    },
+    async mounted () {
+      const allClasses = await axios.get('http://127.0.0.1:5000/lessons', { withCredentials: true });
+      const currentTime = new Date();
+      this.nextClasses = allClasses.data.filter((course) => new Date(course.start) > currentTime).slice(0, this.classesToDisplay).map(course => ({
+        id: course.id,
+        text: course.title,  
+        start: course.start,
+        end: course.end,
+        room: course.room,
+        color: course.color,
+      }));
+      console.log(this.nextClasses);
     },
     methods: {
+      goToClass(classId) {
+        this.$router.push(`/class/${classId}`);
+      },
       getEventStyle(item) {
         return {
           backgroundColor: item.color || '#4868bf' // Si la couleur n'est pas fournie, utilise une couleur par défaut (#4868bf)
@@ -52,8 +75,7 @@
         const eventDate = new Date(date);
         const options = { weekday: 'long', month: 'long', day: 'numeric' };
         return eventDate.toLocaleDateString('en-US', options);
-      }
-      
+      },
     }
   };
   </script>
@@ -66,6 +88,7 @@
     border-radius: 10px;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
     margin: 0 10px;
+    overflow-y: auto;
   }
   
   h2 {
@@ -85,26 +108,49 @@
   }
   
   .event-item {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
     padding: 10px;
     border-radius: 10px;
     color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-top: 10px;
-  }
-  
-  .event-time {
-    font-size: 0.75rem; /* Texte plus petit pour l'heure */
-  }
+    cursor: pointer;
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between; /* Pushes start time and room to opposite ends */
+    width: 100%;
+    font-size: 0.7rem
+}
+
+.event-start-time, .event-room {
+    margin: 0; /* Remove any default margins for consistency */
+}
+
+.event-content {
+    margin-top: 10px; /* Spacing between header and content */
+    font-size: 0.8rem; /* Adjust size as needed */
+}
+
   
   .date-indicator {
-    text-align: center;
-    background-color: #ece7e7;
-    padding: 5px;
-    border-radius: 20px;
-    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    padding: 0;
     font-size: 0.8rem;
-  }
+    position: relative;
+    margin-top: 12px;
+    margin-bottom: -5px;
+    background-color: transparent; /* remove the background color */
+}
+
+.date-indicator::after {
+    content: "";
+    flex-grow: 1; /* allows the line to take up remaining space */
+    height: 1px;
+    background-color: #b0b0b0; /* color of the line */
+    margin-left: 10px; /* space between the date and the line */
+}
   </style>
   
