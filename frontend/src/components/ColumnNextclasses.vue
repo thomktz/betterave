@@ -6,7 +6,7 @@
           <div class="date-indicator" v-if="isFirstClassOfDay(nextClasses, index)">
             {{ formatDate(item.start) }}
           </div>
-          <div :style="getEventStyle(item)" class="event-item" @click="goToClass(item.id)">
+          <div :style="getEventStyle(item)" class="event-item" @click="goToClass(item.class_id)">
             <div class="event-header">
                 <div class="event-start-time">{{ formatEventTime(item) }}</div>
                 <div class="event-room">Room {{ item.room }}</div>
@@ -36,13 +36,14 @@
     async mounted () {
       const allClasses = await axios.get('http://127.0.0.1:5000/lessons', { withCredentials: true });
       const currentTime = new Date();
-      this.nextClasses = allClasses.data.filter((course) => new Date(course.start) > currentTime).slice(0, this.classesToDisplay).map(course => ({
-        id: course.id,
-        text: course.title,  
-        start: course.start,
-        end: course.end,
-        room: course.room,
-        color: course.color,
+      this.nextClasses = allClasses.data.filter((lesson) => new Date(lesson.start) > currentTime).slice(0, this.classesToDisplay).map(lesson => ({
+        id: lesson.id,
+        class_id: lesson.class_id,
+        text: lesson.title,  
+        start: lesson.start,
+        end: lesson.end,
+        room: lesson.room,
+        color: lesson.color,
       }));
       console.log(this.nextClasses);
     },
