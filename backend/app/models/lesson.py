@@ -1,20 +1,22 @@
 from extensions import db
 
 class Lesson(db.Model):
-    """SQLAlchemy object for lessons."""
+    """SQLAlchemy object representing a specific lesson within a class."""
     
-    __tablename__ = "lessons"
+    __tablename__ = "lesson"
     lesson_id = db.Column(db.Integer, primary_key=True)
-    class_id = db.Column(db.Integer, db.ForeignKey('classes.class_id'))
-    date = db.Column(db.Date)
-    start_time = db.Column(db.Time)
-    end_time = db.Column(db.Time)
-    homework = db.Column(db.String)
-    room = db.Column(db.String)
-    tutor = db.Column(db.String, nullable=True)
+    class_id = db.Column(db.Integer, db.ForeignKey('class.class_id'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    start_time = db.Column(db.Time, nullable=False)
+    end_time = db.Column(db.Time, nullable=False)
+    homework = db.Column(db.String, nullable=True)
+    room = db.Column(db.String, nullable=True)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=True)
 
-    # Relationship to the Class model
-    class_ref = db.relationship("Class", back_populates="lessons")
+    # Relationships
+    students = db.relationship('User', secondary="attendance", back_populates='registered_lessons')
+    course = db.relationship('Class', back_populates='lessons')
+    teacher = db.relationship('User', foreign_keys=[teacher_id])
     
     # Ordering methods
     def __lt__(self, other):

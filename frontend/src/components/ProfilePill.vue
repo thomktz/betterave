@@ -1,11 +1,13 @@
 <template>
 <div class="profile-pill" @mouseover="showDropdown = true" @mouseleave="showDropdown = false">
     <div class="email-with-icon">
-    <img src="/default-profile.png" alt="Profile Icon" class="profile-icon" />
+    <img :src="'/' + userProfilePic" alt="Profile Icon" class="profile-icon" />
     <span>{{ userEmail }}</span>
     </div>
     <div v-if="showDropdown" class="dropdown-content">
-    <button @click="logout">Logout</button>
+      <router-link to="/" class="dropdown-link">Home</router-link>
+      <router-link to="/photochart" class="dropdown-link">Trombinoscope</router-link>
+      <button @click="logout">Logout</button>
     </div>
 </div>
 </template>
@@ -16,6 +18,10 @@
   export default {
     props: {
       userEmail: {
+        type: String,
+        required: true
+      },
+      userProfilePic: {
         type: String,
         required: true
       }
@@ -49,6 +55,7 @@
   cursor: pointer;
   position: relative;
   transition: background-color 0.3s; /* smooth hover transition */
+  margin-right: 20px;
 }
 
 .profile-pill:hover {
@@ -73,6 +80,7 @@
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
   border-radius: 8px; /* added border-radius for a modern touch */
+  width: 80%;
 }
 
 .dropdown-content button {
@@ -88,6 +96,18 @@
 
 .dropdown-content button:hover {
   background-color: #555; /* slightly lighter on hover for the button */
+}
+
+.dropdown-link {
+  display: block;
+  padding: 10px 20px;
+  color: #ffffff; /* light text color */
+  transition: background-color 0.3s; /* smooth hover transition */
+  text-decoration: none; /* remove underline */
+}
+
+.dropdown-link:hover {
+  background-color: #555; /* slightly lighter on hover */
 }
 
 .email-with-icon {

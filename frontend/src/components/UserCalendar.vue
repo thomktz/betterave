@@ -1,5 +1,3 @@
-<!-- LessonCalendar.vue -->
-
 <template>
     <div>
       <FullCalendar :options="calendarOptions" />
@@ -8,14 +6,14 @@
   
   <script>
   import axios from 'axios';
-  import FullCalendar from '@fullcalendar/vue3'
-  import dayGridPlugin from '@fullcalendar/daygrid'; // for day view
-  import timeGridPlugin from '@fullcalendar/timegrid'; // for week view
-  import listPlugin from '@fullcalendar/list'; // for list view
+  import FullCalendar from '@fullcalendar/vue3';
+  import dayGridPlugin from '@fullcalendar/daygrid';
+  import timeGridPlugin from '@fullcalendar/timegrid';
+  import listPlugin from '@fullcalendar/list';
   import interactionPlugin from '@fullcalendar/interaction';
   
   export default {
-    name: 'StudentCalendar',
+    name: 'UserCalendar',
     components: {
       FullCalendar
     },
@@ -37,6 +35,27 @@
             right: 'dayGridDay,timeGridWeek,listWeek'
           },
           eventTextColor: '#000000',
+          nowIndicator: true, 
+          eventDidMount: function(info) {
+            // Insert the room info after the times
+            const timeTextNode = info.el.querySelector('.fc-event-time');
+            if (timeTextNode) {
+              const roomSpan = document.createElement('span');
+              roomSpan.textContent = `${info.event.extendedProps.room}`;
+              roomSpan.style.marginLeft = '30px';
+              timeTextNode.appendChild(roomSpan);
+            }
+          },
+          eventClick: (info) => {
+            const classId = info.event.extendedProps.class_id;
+            this.$router.push(`/class/${classId}`);
+          },
+          eventMouseEnter: function(info) {
+            info.el.style.cursor = 'pointer';
+          },
+          eventMouseLeave: function(info) {
+            info.el.style.cursor = '';
+          }
         },
       };
     },
