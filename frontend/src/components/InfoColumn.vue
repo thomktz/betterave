@@ -35,7 +35,10 @@
   .info-column {
     flex: 1;
     padding: 20px;
-    background-color: white;
+
+    background-color: var(--secondary-color);
+    color: var(--primary-text-color);
+
     border-radius: 10px;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
     margin: 0 10px;

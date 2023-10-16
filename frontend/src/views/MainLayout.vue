@@ -1,7 +1,7 @@
 <template>
   <div>
     <header class="header">
-      <!-- Grouped Logos -->
+
       <div class="logos-block">
         <!-- Betterave Logo with Link to Home page -->
         <router-link to="/">
@@ -15,7 +15,12 @@
       </div>
       
       <h1>{{ headerTitle }}</h1>
-      <ProfilePill :userEmail="user.email" :userProfilePic="user.profile_pic" />
+
+      <div class="right-section">
+        <ProfilePill :userEmail="user.email" :userProfilePic="user.profile_pic" />
+        <DarkModeToggle @toggle="toggleDarkMode" :darkMode="darkMode" />
+      </div>
+
     </header>
     <router-view @updateTitle="setTitle" />
   </div>
@@ -27,10 +32,12 @@
 import axios from 'axios';
 import { ref } from 'vue';
 import ProfilePill from '@/components/ProfilePill.vue';
+import DarkModeToggle from '@/components/DarkModeToggle.vue';
 
 export default {
   components: {
-    ProfilePill
+    ProfilePill,
+    DarkModeToggle,
   },
   data() {
     return {
@@ -39,10 +46,18 @@ export default {
         email: '',
         profile_pic: '',
       },
-      headerTitle: ref("Welcome to Betterave!")
+      headerTitle: ref("Welcome to Betterave!"),
+      darkMode: false
     };
   },
   async mounted() {
+    const storedPreference = localStorage.getItem('darkMode');
+    if (storedPreference !== null) {
+      this.darkMode = storedPreference === 'true';
+    } else {
+      this.darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    document.documentElement.setAttribute('data-dark-mode', this.darkMode);
     try {
       const response = await axios.get('http://127.0.0.1:5000/profile', { withCredentials: true });
       this.user = response.data;
@@ -53,6 +68,11 @@ export default {
   methods: {
     setTitle(newTitle) {
       this.headerTitle = newTitle;
+    },
+    toggleDarkMode() {
+      this.darkMode = !this.darkMode;
+      document.documentElement.setAttribute('data-dark-mode', this.darkMode);
+      localStorage.setItem('darkMode', this.darkMode); 
     }
   }
 };
@@ -64,7 +84,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  background-color: #f5f5f5; /* Background color for the square */
+  background-color: var(--foreground-color);
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* subtle shadow for modern effect */
 }
 
@@ -83,6 +103,13 @@ export default {
 .logos-block {
   display: flex;
   align-items: center; /* This aligns children vertically in the middle */
+}
+
+.right-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: 20px;
 }
 
 h1 {

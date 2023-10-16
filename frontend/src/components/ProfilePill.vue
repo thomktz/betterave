@@ -55,7 +55,6 @@
   cursor: pointer;
   position: relative;
   transition: background-color 0.3s; /* smooth hover transition */
-  margin-right: 20px;
 }
 
 .profile-pill:hover {
