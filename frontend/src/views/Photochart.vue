@@ -94,8 +94,8 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   appearance: none;
-  background-color: #f2f2f2;
-  color: #333;
+  background-color: var(--secondary-color);
+  color: var(--primary-text-color);
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

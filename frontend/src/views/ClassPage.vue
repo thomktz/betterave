@@ -66,7 +66,8 @@
   }
   
   .info-container {
-    background-color: #f5f5f5;
+    background-color: var(--secondary-color);
+    color: var(--primary-text-color);
     border-radius: 10px;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
     width: calc(33.333% - 30px); /* Adjusting for the space between containers */
