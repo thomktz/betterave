@@ -54,3 +54,94 @@ import re
 # print(soup.text)
 
 
+
+# Ouvrir le fichier HTML
+with open('../data/edt.html', 'r', encoding='utf-8') as file:
+    html_content = file.read()
+
+# Parser le contenu HTML avec BeautifulSoup
+soup = BeautifulSoup(html_content, 'html.parser')
+
+# Find the elements containing the relevant information
+dates = soup.find_all('span', class_='fc-list-heading-main')
+events = soup.find_all("tr", class_="fc-list-item")
+
+# Initialize a list to store event data
+event_data = []
+
+# Iterate through the events and extract the information
+for date in dates:
+    day = date.text
+
+    for event in events:
+        time = event.find("td", class_="fc-list-item-time").get_text(strip=True)
+        title = event.find("td", class_="fc-list-item-title").find("a")
+
+        # Split the class title using a comma
+        lesson_info = re.split(r',\s*', title.get_text())
+
+        #Extract class info
+        words_name = lesson_info[0].split()
+        name = ' '.join(words_name[:-1]) # Join all words except the last one to get the name
+
+        #Extract lesson info
+        time_parts = time.split(" - ") # Extract day and start/end times from the time string
+        start_time = time_parts[0]
+        end_time = time_parts[1]
+        lesson_type = re.search(r'(\w+)(?=\s*,\s*)', title.get_text()).group(1)
+        teacher = lesson_info[-2]
+        room = lesson_info[-1]
+        event_info = (day, start_time, end_time, lesson_type, teacher, room)
+
+        # Create an event dictionary
+        event_dict = {
+            "class_id": 1,
+            "name": name,
+            "ects": 1,
+            # "room": "room",
+            "lesson_info": [event_info],
+            "backgroundColor": "#dbb1bc",
+            # "teachers": "teachers",
+            "link":"link",
+        }
+
+        event_data.append(event_dict)
+
+
+
+
+
+def replace_unicode_escapes(obj):
+    """
+    Replace unicode escapes in json, for instance replace \u00e9 by é
+    """
+    if isinstance(obj, str):
+        return obj.encode('utf-8').decode('unicode_escape')
+    elif isinstance(obj, list):
+        return [replace_unicode_escapes(item) for item in obj]
+    elif isinstance(obj, dict):
+        return {key: replace_unicode_escapes(value) for key, value in obj.items()}
+    return obj
+
+
+## Combine lessons in one class
+# Create a dictionary to store the combined entries
+combined_data = {}
+
+for entry in event_data:
+    name = entry["name"]
+    if name not in combined_data:
+        combined_data[name] = entry
+        combined_data[name]["lesson_info"] = [entry["lesson_info"]]
+    else:
+        combined_data[name]["lesson_info"].append(entry["lesson_info"])
+
+# Convert the dictionary back to a list of JSON objects
+result = list(combined_data.values())
+
+# Print the result
+import json
+json_data = json.dumps(result, indent=4)
+json_data = replace_unicode_escapes(json_data) # Replace Unicode escape sequences in the JSON data
+print(json_data)
+
