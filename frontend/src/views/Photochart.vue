@@ -8,10 +8,12 @@
     </div>
 
     <div class="trombinoscope">
-      <div v-for="student in filteredStudents" :key="student.id" class="student">
-        <img :src="student.profile_pic" :alt="student.name" />
-        <p>{{ student.name }} {{ student.surname }}</p>
-      </div>
+        <div v-for="student in filteredStudents" :key="student.id" class="student">
+            <router-link :to="'/student-details/' + student.id"> <!-- Note the use of :to to bind a dynamic route -->
+    <img :src="student.profile_pic" :alt="student.name" />
+    <p>{{ student.name }} {{ student.surname }}</p>
+  </router-link>
+</div>
     </div>
     </v-spacer>
   </template>
@@ -55,6 +57,7 @@
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 150px);
+  padding: 20px;
 }
 
 .custom-select {
@@ -72,7 +75,8 @@
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   grid-auto-rows: 250px; /* Set fixed row height */
   gap: 20px;
-  align-content: flex-start; /* Prevents grid items from stretching if there are only a few rows */
+  align-content: flex-start;
+  padding-bottom: 30px; 
 }
 
 .custom-select::after { 
@@ -99,19 +103,60 @@
 .student {
   text-align: center;
   border: 1px solid #e0e0e0;
-  border-radius: 5px;
+  border-radius: 40px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;
-  padding: 10px;
-  overflow: hidden;
-}
-img {
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-top: 10px;
+  padding: 0;  /* No padding so the image can take up the full space */
+  position: relative;  /* Set to relative so absolute positioning of children is based on this container */
+  overflow: hidden;  /* Keep the image and gradient inside the box */
 }
 
+.student::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;  /* This determines the height of the gradient, adjust if necessary */
+  background: linear-gradient(transparent, rgba(0, 0, 0, 1));
+  pointer-events: none; 
+}
+
+.student:hover img {
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.student:hover::after {
+  opacity: 0;  /* fade out gradient */
+}
+
+.student:hover p {
+  opacity: 0;  /* fade out name */
+}
+
+.student::after, .student p {
+  transition: opacity 0.3s;
+}
+
+img {
+  width: 100%;  /* Full width of parent */
+  height: 100%;  /* Full height of parent */
+  object-fit: cover;
+  display: block;  /* Remove any unwanted space below the image */
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+p {
+  position: absolute;  /* Position it on top of the gradient */
+  bottom: 10px;  /* From the bottom of the .student container */
+  left: 50%;
+  transform: translateX(-50%);  /* Center it horizontally */
+  margin: 0;  /* Remove default margins */
+  color: #fff;
+  font-weight: bold;  /* Optional: Make the name stand out more */
+  z-index: 2;
+}
   </style>
     

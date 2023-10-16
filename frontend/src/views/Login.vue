@@ -26,7 +26,7 @@
             <v-text-field label="Email" v-model="email" prepend-icon="mdi-email" type="text"></v-text-field>
             <v-text-field label="Password" v-model="password" prepend-icon="mdi-lock" type="password" @keyup.enter="login"></v-text-field>
           </v-card-text>
-          <v-card-actions>
+          <v-card-actions class="login-button">
             <v-btn rounded block class="centered-button" @click="login">
               Login
             </v-btn>
@@ -58,16 +58,14 @@ export default {
           withCredentials: true
         });
         if (response.data.status === "success") {
-          // Redirect user to home page
+          console.log("Login successful!");
           this.$router.push({ name: 'homepage' });
-        } else {
-          console.error("Login failed:", response.data.message);
+          } else {
+            console.error("Login failed:", response.data.message);
+          }
+        } catch (error) {
+          console.error("There was an error logging in:", error);
         }
-      } catch (error) {
-        console.error("There was an error logging in:", error);
-        this.showSnackbar = true;
-
-      }
     }
   }
 }
@@ -99,8 +97,22 @@ export default {
   display: block;
   margin-left: auto;
   margin-right: auto;
-
 }
+
+.login-button {
+  padding: 0.5rem 2rem;
+}
+
+.centered-button {
+    background: linear-gradient(90deg, #80808084 50%, #4CAF50 50%);
+    background-size: 200% 100%;
+    transition: background-position 0.5s ease;
+}
+
+.centered-button:hover {
+    background-position: -100% 0;
+}
+
 
 .login-col {
   margin-bottom: 100px;
