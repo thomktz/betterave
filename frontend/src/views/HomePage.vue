@@ -3,7 +3,7 @@
     <div class="content-container">
       <!-- Left Side Columns -->
       <div class="columns-container">
-        <InfoColumn title="Next classes" :list="upcomingClasses" />
+        <ColumnNextclasses title="Next classes" />
         <InfoColumn title="Homework" :list="homeworkList" />
         <InfoColumn title="Notifications" :list="notifications" />
       </div>
@@ -22,12 +22,14 @@ import axios from 'axios';
 import UserCalendar from '@/components/UserCalendar.vue';
 import ProfilePill from '@/components/ProfilePill.vue';
 import InfoColumn from '@/components/InfoColumn.vue';
+import ColumnNextclasses from '@/components/ColumnNextclasses.vue';
 
 export default {
   components: {
     UserCalendar,
     ProfilePill,
     InfoColumn,
+    ColumnNextclasses,
   },
   data() {
     return {
@@ -35,7 +37,6 @@ export default {
         name: '',
         email: ''
       },
-      upcomingClasses: [{ id: 1, text: "Math class" , color: "#FF5733" }, { id: 2, text: "History class" }],
       homeworkList: [{ id: 1, text: "Algebra homework" }, { id: 2, text: "Essay on WW2" }],
       notifications: [{ id: 1, text: "Meeting tomorrow" }, { id: 2, text: "Homework due" }]
     };
