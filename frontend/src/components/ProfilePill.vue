@@ -80,6 +80,8 @@
   z-index: 1;
   border-radius: 8px; /* added border-radius for a modern touch */
   width: 80%;
+  z-index: 9999; /* ensure the dropdown is on top of other elements */
+
 }
 
 .dropdown-content button {
