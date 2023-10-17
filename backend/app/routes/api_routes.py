@@ -99,7 +99,6 @@ def post_message(class_id):
 @login_required
 def add_event_route():
     data = request.get_json()
-    
     # TODO: Check required fields in data
     event_id = add_event(
         name=data.get('name'),
