@@ -17,6 +17,12 @@ class UserLevel(Enum):
     NA = "N/A" # Not applicable, for teachers, assos and admins
 
 
+association_subscriptions = db.Table(
+    'association_subscriptions',
+    db.Column('subscriber_id', db.Integer, db.ForeignKey('user.user_id')),
+    db.Column('asso_id', db.Integer, db.ForeignKey('user.user_id'))
+)
+
 class User(db.Model, UserMixin):
     """SQLAlchemy object representing a user with different roles and levels."""
     
@@ -38,6 +44,15 @@ class User(db.Model, UserMixin):
     enrolled_classes = db.relationship('Class', secondary='enrollment', back_populates='students')
     registered_lessons = db.relationship('Lesson', secondary='attendance', back_populates='students')
     messages = db.relationship('Message', back_populates='user')
+    subscriptions = db.relationship(
+        'User', 
+        secondary=association_subscriptions,
+        primaryjoin=user_id==association_subscriptions.c.subscriber_id,
+        secondaryjoin=user_id==association_subscriptions.c.asso_id,
+        backref=db.backref('subscribers', lazy='dynamic'),
+        lazy='dynamic'
+    )
+    attended_events = db.relationship('Event', secondary='event_attendance', back_populates='attending_users')
     
     def get_user_type(self):
         return self.user_type

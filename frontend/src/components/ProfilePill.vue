@@ -7,6 +7,7 @@
     <div v-if="showDropdown" class="dropdown-content">
       <router-link to="/" class="dropdown-link">Home</router-link>
       <router-link to="/photochart" class="dropdown-link">Trombinoscope</router-link>
+      <router-link to="/assolist" class="dropdown-link">Associations</router-link>
       <button @click="logout">Logout</button>
     </div>
 </div>

@@ -23,6 +23,5 @@ class Class(db.Model):
         backref="authorized_classes"
     )
 
-
     def get_id(self):
         return str(self.class_id)

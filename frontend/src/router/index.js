@@ -4,6 +4,7 @@ import HomePage from '../views/HomePage.vue'
 import Photochart from '../views/Photochart.vue'
 import ClassPage from '../views/ClassPage.vue'
 import MainLayout from '../views/MainLayout.vue'
+import AssoList from '../views/AssoList.vue';
 import axios from 'axios';
 
 const routes = [
@@ -25,6 +26,11 @@ const routes = [
         path: '/photochart',
         name: 'Photochart',
         component: Photochart,
+      },
+      {
+        path: '/assolist',
+        name: 'asso-list',
+        component: AssoList,
       }
     ]
   },
