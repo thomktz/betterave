@@ -1,9 +1,18 @@
-# betterave
 *Projet Infrastructures et systèmes logiciels*
 
+## **Better**ave: Pamplemousse 2.0
+- Calendar management
+- Class groupchats
+- Homework
+- Association notification and events
+- Trombinoscope
+  
+<img width="1728" alt="image" src="https://github.com/thomktz/betterave/assets/60552083/ce64adce-a47b-4d20-8f25-34d51f73d60b">
 
 
-## Setup
+
+
+## Setup for development
 
 - Clone the repository.
 
