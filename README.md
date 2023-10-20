@@ -29,7 +29,7 @@ You can now run scripts using
 `python -m scripts.add_student`
 etc.
 
-- Run the frontend: python main.py
+- Run the flask backend: python main.py
 
 **Frontend**
 - Install Node.js
