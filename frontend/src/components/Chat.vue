@@ -68,7 +68,7 @@
       },
       async fetchClassMessages() {
         try {
-          const response = await axios.get(`http://127.0.0.1:5000/classes/${this.classId}/messages`, { withCredentials: true });
+          const response = await axios.get(`/classes/${this.classId}/messages`, { withCredentials: true });
           
           if (response.data && Array.isArray(response.data)) {
             this.messages = response.data;
@@ -82,7 +82,7 @@
       async sendMessage() {
         if (!this.newMessage.trim()) return;  // Don't send empty messages
         try {
-          const response = await axios.post(`http://127.0.0.1:5000/classes/${this.classId}/messages`, 
+          const response = await axios.post(`/classes/${this.classId}/messages`, 
             { content: this.newMessage }, 
             { withCredentials: true }
           );

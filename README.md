@@ -6,7 +6,7 @@
 ## Setup
 
 - Clone the repository.
-
+- Generate the `.env`s by running `python config_ip.py`. This needs to be done on every new IP you want to host the app on.
 
 **Backend**  
 - From there, go into the `backend` folder on the terminal (`cd backend`)

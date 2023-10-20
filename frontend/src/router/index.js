@@ -55,7 +55,7 @@ router.beforeEach(async (to, from, next) => {
 
   // Otherwise, check if the user is authenticated.
   try {
-    const response = await axios.get('http://127.0.0.1:5000/check-auth', {
+    const response = await axios.get('/check-auth', {
       withCredentials: true,
     });
     if (response.data.status === 'authenticated') {

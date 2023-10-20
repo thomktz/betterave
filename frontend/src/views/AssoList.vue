@@ -34,7 +34,7 @@
     async mounted() {
       this.$emit('updateTitle', "Association subscriptions");
       try {
-        const response = await axios.get('http://127.0.0.1:5000/assos', { withCredentials: true });
+        const response = await axios.get('/assos', { withCredentials: true });
         this.assos = response.data;
       } catch (error) {
         console.error("There was an error fetching associations data:", error);
@@ -45,9 +45,9 @@
         asso.subscribed = !asso.subscribed;
         try {
           if (asso.subscribed) {
-            await axios.post(`http://127.0.0.1:5000/assos/${asso.id}/subscribe`, {}, { withCredentials: true });
+            await axios.post(`/assos/${asso.id}/subscribe`, {}, { withCredentials: true });
           } else {
-            await axios.delete(`http://127.0.0.1:5000/assos/${asso.id}/unsubscribe`, { withCredentials: true });
+            await axios.delete(`/assos/${asso.id}/unsubscribe`, { withCredentials: true });
           }
         } catch (error) {
           console.error("There was an error toggling subscription:", error);

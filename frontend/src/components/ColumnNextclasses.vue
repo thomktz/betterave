@@ -34,7 +34,7 @@
       };
     },
     async mounted () {
-      const allClasses = await axios.get('http://127.0.0.1:5000/lessons', { withCredentials: true });
+      const allClasses = await axios.get('/lessons', { withCredentials: true });
       const currentTime = new Date();
       this.nextClasses = allClasses.data.filter((lesson) => new Date(lesson.start) > currentTime).slice(0, this.classesToDisplay).map(lesson => ({
         id: lesson.id,

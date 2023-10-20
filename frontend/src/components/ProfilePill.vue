@@ -35,7 +35,7 @@
     methods: {
       async logout() {
         try {
-          await axios.post('http://127.0.0.1:5000/logout', {}, { withCredentials: true });
+          await axios.post('/logout', {}, { withCredentials: true });
           this.$router.push({ name: 'Login' });
         } catch (error) {
           console.error("There was an error logging out:", error);

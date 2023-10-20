@@ -43,7 +43,7 @@ export default {
   },
   async mounted() {
     try {
-      const response = await axios.get('http://127.0.0.1:5000/profile', { withCredentials: true });
+      const response = await axios.get('/profile', { withCredentials: true });
       this.user = response.data;
       this.$emit('updateTitle', "Hello, " + this.user.name + "!");
     } catch (error) {

@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 from extensions import db, bcrypt, login_manager
@@ -6,6 +7,8 @@ from extensions import db, bcrypt, login_manager
 from app.routes import bp as auth_bp
 from app.routes.api_routes import *
 from app.routes.auth_routes import *
+
+load_dotenv()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -23,9 +26,11 @@ def create_app():
         REMEMBER_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Strict",
     )
+    
+    local_ip = os.getenv("LOCAL_IP", "127.0.0.1")
 
     CORS(app, supports_credentials=True, resources={r"/*": {
-        "origins": "http://127.0.0.1:8080",
+        "origins": f"http://{local_ip}:8080",
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
         "expose_headers": ["Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"],
@@ -40,7 +45,5 @@ def create_app():
 
     with app.app_context():
         db.create_all()
-
-    
-
-    return app
+        
+    return app, local_ip

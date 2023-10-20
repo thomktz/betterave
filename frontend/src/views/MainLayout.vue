@@ -59,7 +59,7 @@ export default {
     }
     document.documentElement.setAttribute('data-dark-mode', this.darkMode);
     try {
-      const response = await axios.get('http://127.0.0.1:5000/profile', { withCredentials: true });
+      const response = await axios.get('/profile', { withCredentials: true });
       this.user = response.data;
     } catch (error) {
       console.error("There was an error fetching user data:", error);
