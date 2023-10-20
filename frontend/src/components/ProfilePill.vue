@@ -7,6 +7,7 @@
     <div v-if="showDropdown" class="dropdown-content">
       <router-link to="/" class="dropdown-link">Home</router-link>
       <router-link to="/photochart" class="dropdown-link">Trombinoscope</router-link>
+      <router-link to="/assolist" class="dropdown-link">Associations</router-link>
       <button @click="logout">Logout</button>
     </div>
 </div>
@@ -34,7 +35,7 @@
     methods: {
       async logout() {
         try {
-          await axios.post('http://127.0.0.1:5000/logout', {}, { withCredentials: true });
+          await axios.post('/logout', {}, { withCredentials: true });
           this.$router.push({ name: 'Login' });
         } catch (error) {
           console.error("There was an error logging out:", error);

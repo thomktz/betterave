@@ -40,7 +40,7 @@
     async mounted() {
       this.$emit('updateTitle', "Trombinoscope"); // Update the title in the header
       try {
-        const response = await axios.get('http://127.0.0.1:5000/photochart', { withCredentials: true });
+        const response = await axios.get('/photochart', { withCredentials: true });
         this.students = response.data;
       } catch (error) {
         console.error("There was an error fetching student data:", error);

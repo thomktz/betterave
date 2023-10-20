@@ -61,7 +61,7 @@
     },
     async mounted() {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/lessons', { withCredentials: true });
+        const response = await axios.get('/lessons', { withCredentials: true });
         this.calendarOptions.events = response.data;
       } catch (error) {
         console.error("There was an error fetching lessons:", error);

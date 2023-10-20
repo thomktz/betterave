@@ -44,7 +44,7 @@
     async mounted() {
       const classId = this.$route.params.classId;
       try {
-        const response = await axios.get(`http://127.0.0.1:5000/class/${classId}`, { withCredentials: true });
+        const response = await axios.get(`/class/${classId}`, { withCredentials: true });
         this.classDetails = response.data;
         this.userId = this.classDetails.user_id;
         this.userAuthorised = this.classDetails.user_authorised;
