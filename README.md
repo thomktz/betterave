@@ -1,9 +1,18 @@
-# betterave
 *Projet Infrastructures et systèmes logiciels*
 
+## **Better**ave: Pamplemousse 2.0
+- Calendar management
+- Class groupchats
+- Homework
+- Association notification and events
+- Trombinoscope
+  
+<img width="1728" alt="image" src="https://github.com/thomktz/betterave/assets/60552083/ce64adce-a47b-4d20-8f25-34d51f73d60b">
 
 
-## Setup
+
+
+## Setup for development
 
 - Clone the repository.
 - Generate the `.env`s by running `python config_ip.py`. This needs to be done on every new IP you want to host the app on.
@@ -20,7 +29,7 @@ You can now run scripts using
 `python -m scripts.add_student`
 etc.
 
-- Run the frontend: python main.py
+- Run the flask backend: python main.py
 
 **Frontend**
 - Install Node.js
