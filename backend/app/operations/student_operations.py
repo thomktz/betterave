@@ -44,7 +44,7 @@ def get_student_lessons(user_id: int):
     if not student:
         return []
 
-    return student.lessons
+    return student.registered_lessons
 
 def get_student_future_lessons(user_id: int, current_time):
     """Get future lessons for a student."""
@@ -53,7 +53,7 @@ def get_student_future_lessons(user_id: int, current_time):
         return []
 
     # Retrieve all lessons for the student
-    all_lessons = student.lessons
+    all_lessons = student.registered_lessons
 
     # Filter lessons to get only future lessons
     future_lessons = [lesson for lesson in all_lessons if lesson.date >= current_time.date()]
