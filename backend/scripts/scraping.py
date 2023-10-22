@@ -1,16 +1,85 @@
-import urllib3
-import bs4
 import requests
 from urllib import request
 from bs4 import BeautifulSoup
 import re
+from datetime import datetime
+import json
+from unidecode import unidecode
+import random
 
 
-def get_dict_courses(url):
+# Courses url
+URL_1A = "https://www.ensae.fr/formation/cycle-ingenieur/premiere-annee-du-cycle-ingenieur"
+URL_2A = "https://www.ensae.fr/formation/cycle-ingenieur/deuxieme-annee"
+URL_3A = "https://www.ensae.fr/formation/cycle-ingenieur/troisieme-annee/catalogue-des-cours-de-troisieme-annee-du-cycle-ingenieur"
+
+# Data paths
+PATH_OCTOBER = '../data/edt_october.html'
+PATH_NOV = '../data/edt_november.html'
+PATH_DEC = '../data/edt_december.html'
+
+
+# Classes names that need to be mapped
+MAPPING = {"Sport - S1": "Sport",
+           "Introduction à l'informatique - 1A-Eco":"Introduction à l’informatique",
+            "Algorithmes et programmation":"Algorithmes et programmation / Python",
+            "Bases de données":"Introduction aux bases de données", 
+            "Estimation non paramétrique ":"Estimation non paramétrique", 
+            "Theory of Industrial Organization ":"Theory of Industrial Organization", 
+            # "Anglais 2A - S1":"Anglais", 
+            # "Instruments Financiers 3A":"Financial instruments",
+            "Théorie des probabilités - 2AD": "Théorie des probabilités", 
+            # "Anglais 1A - S1":"Anglais", 
+            "Experiments in Economics and Social Sciences ":"Experiments in Economics and Social Sciences",
+            "Financial Econometrics ":"Financial Econometrics", 
+            "Blockchain: Bitcoin and Smart-Contracts ":"Blockchain: Bitcoin and Smart-Contracts", 
+            "Catastrophic Risks":"Catastrophic Risks, Cyber Risk and Insurance Markets", 
+            "Python pour la data-science ": "Python pour la data science",
+            # "Financial Instruments 2A":"Financial instruments", 
+            "Macroeconometrics: Advanced Time-Series Analysis ": "Macroeconometrics: Advanced Time-Series Analysis",
+            "Économétrie 1":"Econométrie 1",
+            "Séminaire d'économie":"Séminaire d’économie",
+            "Ethics and responsibility in data science":"Ethics and responsibility in data science- group 1",
+            "Ethics and responsibility in data science- group 2 ":"Ethics and responsibility in data science- group 2",
+            "Machine learning for Portfolio Management and Trading ":"Machine learning for Portfolio Management and Trading"
+            }
+
+# Classes in calendar that are either not classes, either not for 1a, 2a, 3a
+CLASSES_TO_REMOVE = ['Réservation salles ENSAE','Blocage salles soutenances','Projet data science et sciences sociales - S1',
+                     "Théorie microéconomique appliquée  à l'assurance", 'Introduction to time series econometrics',
+                     'Mathématiques et apprentissage statistique pour économistes MS', 'Energy Transition M1MIE – X', 
+                     'Advanced Microeconomics: game theory and applications', 'Suivi des mémoires SQD ',
+                     'Introduction à la finance mathématique - MS', 'Econométrie 3A-CI/MS', 'Information and Expectations in Macroeconomics ',
+                     'Microéconomie 3A-CI/MS', 'Risk Theory - 3A/MS/M2', "Initiation à l'économie", 'Réservation salles X',
+                     'Statistique mathématique - CI/SFA', 'Statistique mathématique - MS','Statistical learning theory',
+                     'Asset Pricing: Theoretical Foundations', 'Macroéconomie 3A-CI/MS', 'Introduction à l’apprentissage statistique - CI/MS', 
+                     'Dynamic optimization and reinforcement learning', 'Time Series  3A-CI/MS', 'Financial time series ', 
+                     'Banking and Financial Intermediation', 'Corporate Finance Theory', "Machine Learning avec Python",
+                     'Compétences professionnelles 2 : L’entretien de recrutement', 'Natural Language processing from pre-neural to transformers',
+                     'Conférences professionnelles Economic Policies and Dynamics', 'Evolutionary Game Theory',
+                     "Stochastic Calculus - Long course - SFA"
+                     ]
+
+# Remove classes that are in fact special events
+EVENTS_TO_REMOVE = ["Conférences d'introduction aux enjeux sociaux contemporains",
+                    'Forum ENSAE - Conférence Insee',
+                    "Atelier préparation stage d'application",
+                    'Amphi de présentation relations internationales', 
+                    'Amphi de présentation stage 1A',
+                    'Forum Trium', 
+                    'Présentation relations internationales',
+                    'Méthodes pour la rédaction d’une candidature',
+                    'Forum ASTER',
+                    'Business Data Challenge'
+                    ]
+
+
+def get_dict_courses(url, level):
     """Get class_ids and classes' names from ensae.fr
 
     Args:
-        url (_type_): url for scraping
+        url (str): url for scraping
+        level (str) : level of classes scraped
     """
     response = requests.get(url)
     courses_dict = {}
@@ -32,20 +101,12 @@ def get_dict_courses(url):
                 numbers = re.findall(r'\d+', course_id)[0] #some ids contain str - remove str
 
                 #stock courses in dict
-                courses_dict[course_name] = numbers
+                courses_dict[course_name] = [numbers, level]
 
     else:
         print('Failed to retrieve the webpage')
     
     return(courses_dict)
-
-#courses url
-url_1a = "https://www.ensae.fr/formation/cycle-ingenieur/premiere-annee-du-cycle-ingenieur"
-url_2a = "https://www.ensae.fr/formation/cycle-ingenieur/deuxieme-annee"
-url_3a = "https://www.ensae.fr/formation/cycle-ingenieur/troisieme-annee/catalogue-des-cours-de-troisieme-annee-du-cycle-ingenieur"
-
-courses_ensae_dict = {key: value for d in (get_dict_courses(url_1a), get_dict_courses(url_2a), get_dict_courses(url_3a)) for key, value in d.items()}
-
 
 
 def transform_date_french_to_iso(date_french):
@@ -74,7 +135,6 @@ def transform_date_french_to_iso(date_french):
     return formatted_date
 
 
-from datetime import datetime
 def transform_time(original_time):
     try:
         # Parse the original time using the original format
@@ -86,16 +146,14 @@ def transform_time(original_time):
         return new_time_format
     except ValueError:
         # Handle the case where the input time format is invalid
-        return "Invalid input time format"
+        raise ValueError("Invalid input type format")
 
 
-
-
-def scrap_events_data(path='../data/edt_october.html'):
+def scrap_events_data(path):
     """Scrap classes schedule
 
     Args:
-        path (str, optional): classes schedule as an html. Defaults to 'edt.html'.
+        path (str): classes schedule as an html.
     """
     with open(path, 'r', encoding='utf-8') as file:
         html_content = file.read()
@@ -137,11 +195,14 @@ def scrap_events_data(path='../data/edt_october.html'):
 
             lesson_type = lesson_info[0].split()[-1]
             if not(lesson_type.startswith('Cours')) and not(lesson_type.startswith('TP')) and not(lesson_type.startswith('TD')):
-                lesson_type = "TBD"
+                lesson_type = "Cours"
+
             if lesson_info[-2].isupper():
-                teacher = lesson_info[-2]
+                prenom = random.choice(["Monsieur", "Madame"])
+                teacher = [prenom, lesson_info[-2].capitalize()][::-1]
+                teacher[1] = unidecode(teacher[1])
             else:
-                teacher = "TBD"
+                teacher = ["Martin", "Monsieur"]
 
             room = lesson_info[-1]
             date_iso = transform_date_french_to_iso(date)
@@ -156,22 +217,23 @@ def scrap_events_data(path='../data/edt_october.html'):
                 "ects": "TBD",
                 "lesson_info": [event_info],
                 "backgroundColor": background_color,
-                # "link":"link",
-                "teacher_name":"TBD"
+                "teacher_name":"TBD",
+                "level":"TBD"
             }
+
+            # Assign first teacher to global teacher for now
+            event_dict["teacher_name"] = event_info[4]
 
             event_data.append(event_dict)
 
     return(event_data)
-
-event_data = scrap_events_data()
 
 
 def combine_lessons(event_data):
     """Combine lessons info within a class
 
     Args:
-        event_data (_type_): list of dict with entries by classes
+        event_data (list of dict): list of dict with entries by classes
     """
     combined_data = {} # Create a dictionary to store the combined entries
 
@@ -184,94 +246,61 @@ def combine_lessons(event_data):
             combined_data[name]["lesson_info"].append(entry["lesson_info"][0])
 
     result = list(combined_data.values()) # Convert the dictionary back to a list of JSON objects
-    return(result)
-
-event_data_by_classes = combine_lessons(event_data)
+    return result
 
 
-#classes that have different names in event_data and online
-mapping = {"Sport - S1": "Sport",
-           "Introduction à l'informatique - 1A-Eco":"Introduction à l’informatique",
-            "Algorithmes et programmation":"Algorithmes et programmation / Python",
-            "Bases de données":"Introduction aux bases de données", 
-            "Estimation non paramétrique ":"Estimation non paramétrique", 
-            "Theory of Industrial Organization ":"Theory of Industrial Organization", 
-            "Anglais 2A - S1":"Anglais", 
-            "Instruments Financiers 3A":"Financial instruments",
-            "Théorie des probabilités - 2AD": "Théorie des probabilités", 
-            "Anglais 1A - S1":"Anglais", 
-            "Experiments in Economics and Social Sciences ":"Experiments in Economics and Social Sciences",
-            "Financial Econometrics ":"Financial Econometrics", 
-            "Blockchain: Bitcoin and Smart-Contracts ":"Blockchain: Bitcoin and Smart-Contracts", 
-            "Catastrophic Risks":"Catastrophic Risks, Cyber Risk and Insurance Markets", 
-            "Python pour la data-science ": "Python pour la data science",
-            "Stochastic Calculus - Long course - SFA":"Stochastic Calculus", 
-            "Financial Instruments 2A":"Financial instruments", 
-            "Macroeconometrics: Advanced Time-Series Analysis ": "Macroeconometrics: Advanced Time-Series Analysis",
-            "Économétrie 1":"Econométrie 1"
-            }
-
-#Classes in calendar that are either not classes, either not for 1a, 2a, 3a
-classes_to_remove = ['Réservation salles ENSAE','Blocage salles soutenances','Projet data science et sciences sociales - S1',
-                     "Théorie microéconomique appliquée  à l'assurance", 'Introduction to time series econometrics',
-                     'Mathématiques et apprentissage statistique pour économistes MS', 'Energy Transition M1MIE – X', 
-                     'Advanced Microeconomics: game theory and applications', 'Suivi des mémoires SQD ',
-                     'Introduction à la finance mathématique - MS', 'Econométrie 3A-CI/MS', 'Information and Expectations in Macroeconomics ',
-                     'Microéconomie 3A-CI/MS', 'Risk Theory - 3A/MS/M2', "Initiation à l'économie", 'Réservation salles X',
-                     'Statistique mathématique - CI/SFA', 'Statistique mathématique - MS','Statistical learning theory',
-                     'Asset Pricing: Theoretical Foundations', 'Macroéconomie 3A-CI/MS', 'Introduction à l’apprentissage statistique - CI/MS', 
-                     'Dynamic optimization and reinforcement learning', 'Time Series  3A-CI/MS', 'Financial time series ', 
-                     'Banking and Financial Intermediation', 'Corporate Finance Theory'
-                     ]
-
-#Remove classes that are not really classes from event_data
-events_to_remove = ["Conférences d'introduction aux enjeux sociaux contemporains",
-          'Forum ENSAE - Conférence Insee',
-          "Atelier préparation stage d'application",
-          'Amphi de présentation relations internationales', 
-          'Amphi de présentation stage 1A',
-          'Forum Trium', 
-          'Présentation relations internationales'
-          ]
-
-
-#Create a special events json
-special_events = [item for item in event_data_by_classes if item['name'] in events_to_remove]
-
-#Remove useless classes from event_data
-event_data_by_classes_filtered = [item for item in event_data_by_classes if item['name'] not in classes_to_remove]
-event_data_by_classes_filtered = [item for item in event_data_by_classes_filtered if item['name'] not in events_to_remove]
-
-
-def match_id_ects(event_data):
+def match_id_ects(event_data, MAPPING=MAPPING):
     """Match id and ects to a class
 
     Args:
-        event_data (_type_): list of dict with entries by classes
+        event_data (list of dict): list of dict with entries by classes
     """
     classes_unclassified = []
+    courses_ensae_dict = {key: value for d in (get_dict_courses(URL_1A, "1A"), get_dict_courses(URL_2A, "2A"), get_dict_courses(URL_3A, "3A")) for key, value in d.items()}
 
     # Match classes for class_id, ects and link with scraping from ensae.fr
     for entry in event_data:
-        if (entry["name"] in mapping): #if different name, we match both
+        if (entry["name"] in MAPPING): #if different name, we match both
             new_name = entry["name"]
-            entry["name"] = mapping[new_name]
+            entry["name"] = MAPPING[new_name]
+        
+        # Exceptions
+        if entry["name"]=="Anglais 2A - S1":
+            entry["class_id"]=5797
+            entry["ects"]=2.0
+            entry["level"]="2A"
+        if entry["name"]=="Anglais 1A - S1":
+            entry["class_id"]=5792
+            entry["ects"]=2.0
+            entry["level"]="1A"
+        if entry["name"]=="Instruments Financiers 3A":
+            entry["class_id"]=1088
+            entry["ects"]=0.0
+            entry["level"]="3A"
+        if entry["name"]=="Financial Instruments 2A":
+            entry["class_id"]=71
+            entry["ects"]=2.5
+            entry["level"]="2A"
+        
+        for class_name, class_id_level in courses_ensae_dict.items():
+            class_id = class_id_level[0]
+            level = class_id_level[1]
 
-        for class_name, class_id in courses_ensae_dict.items():
             if (entry["name"].lower() == class_name.lower()):
-
                 link_class = "https://www.ensae.fr/courses/" + class_id
                 entry["class_id"] = int(class_id)
                 # entry["link"] = link_class
 
-                # #Get ECTS
+                #Get level
+                entry["level"] = level
+
+                #Get ECTS
                 ensae_soup = BeautifulSoup(requests.get(link_class).text, 'html.parser')
 
                 ects_element = ensae_soup.find('b', string='Crédits ECTS :')
                 if ects_element:
                     ects_value = ects_element.find_next('br').next_sibling.strip()
                     entry["ects"] = float(ects_value)
-                    # print("ECTS Value:", ects_value)
                 else:
                     print("ECTS information not found.")
 
@@ -281,16 +310,19 @@ def match_id_ects(event_data):
                     if teacher_element_2:
                         teacher_value = teacher_element_2.find_next('a').text
                         entry["teacher_name"] = teacher_value.strip().split()
-                    # print("Teacher Value:", teacher_value)
-                # else:
-                #     print("Teacher information not found for class" + class_name)
+                        entry["teacher_name"][0] = entry["teacher_name"][0].capitalize()
 
         if entry["class_id"]=="TBD":
             classes_unclassified.append(entry["name"])
 
-    return(event_data, classes_unclassified)
+        # Exceptions bc of len(name)
+        if entry["teacher_name"]==["Zerbib", "Olivier", "David"]:
+            entry["teacher_name"]=["Zerbib","Olivier"]
+        
+        # Remove accents or ï to avoid pbs
+        entry["teacher_name"][0] = unidecode(entry["teacher_name"][0])
 
-final_classes_data, classes_unclassified = match_id_ects(event_data_by_classes_filtered)
+    return(event_data, classes_unclassified)
 
 
 def replace_unicode_escapes(obj):
@@ -306,14 +338,37 @@ def replace_unicode_escapes(obj):
     return obj
 
 
-# Print the result
-import json
-json_data = json.dumps(final_classes_data, indent=4)
-json_data = replace_unicode_escapes(json_data) # Replace Unicode escape sequences in the JSON data
-# print(json_data)
+if __name__ == "__main__":
+    # Scrap data
+    event_data_oct = scrap_events_data(PATH_OCTOBER)
+    event_data_nov = scrap_events_data(PATH_NOV)
+    event_data_dec = scrap_events_data(PATH_DEC)
 
-file_name = "classes.json"
-with open("../data/" + file_name, 'w') as json_file:
-    json_file.write(json_data)
+    # Concatenate html
+    event_data = event_data_oct + event_data_nov + event_data_dec
+    event_data_by_classes = combine_lessons(event_data)
+        
+    # Create a special events json
+    special_events = [item for item in event_data_by_classes if item['name'] in EVENTS_TO_REMOVE]
 
+    # Remove useless classes from event_data
+    event_data_by_classes_filtered = [item for item in event_data_by_classes if item['name'] not in CLASSES_TO_REMOVE]
+    event_data_by_classes_filtered = [item for item in event_data_by_classes_filtered if item['name'] not in EVENTS_TO_REMOVE]
+
+    # Get result
+    final_classes_data, classes_unclassified = match_id_ects(event_data_by_classes_filtered)
+    # print(classes_unclassified)
+
+    # Save result
+    json_data = json.dumps(final_classes_data, indent=4)
+    json_data = replace_unicode_escapes(json_data) # Replace Unicode escape sequences in the JSON data
+    file_name = "classes.json"
+    with open("../data/" + file_name, 'w') as json_file:
+        json_file.write(json_data)
+    
+    json_data_special_events = json.dumps(special_events, indent=4)
+    json_data_special_events = replace_unicode_escapes(json_data_special_events)
+    file_name_2 = "special_events.json"
+    with open("../data/" + file_name_2, 'w') as json_file:
+        json_file.write(json_data_special_events)
 
