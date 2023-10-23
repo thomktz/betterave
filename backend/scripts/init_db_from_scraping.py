@@ -85,7 +85,6 @@ def initialize_database():
                 )
             for (date, start_time, end_time, lesson_type, teacher, room) in class_dict["lesson_info"]:
                 if teacher not in teacher_list: # Prevent from creating a new user fr a teacher already seen
-                    print(teacher)
                     teacher_list.append(teacher)
                     name, surname = teacher
                     teacher_ids.append(
