@@ -74,7 +74,7 @@ def initialize_database():
         for class_dict in classes:
             if class_dict["teacher_name"] not in teacher_list: # Prevent from creating a new user fr a teacher already seen
                 teacher_list.append(class_dict["teacher_name"])
-                surname, name = class_dict["teacher_name"]
+                name, surname = class_dict["teacher_name"]
                 teacher_ids.append(
                     add_user(
                         name=name,

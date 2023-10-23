@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 import re
 from datetime import datetime
 import json
-from unidecode import unidecode
 import random
 
 
@@ -199,10 +198,9 @@ def scrap_events_data(path):
 
             if lesson_info[-2].isupper():
                 prenom = random.choice(["Monsieur", "Madame"])
-                teacher = [prenom, lesson_info[-2].capitalize()][::-1]
-                teacher[1] = unidecode(teacher[1])
+                teacher = [prenom, lesson_info[-2].capitalize()]
             else:
-                teacher = ["Martin", "Monsieur"]
+                teacher = ["Monsieur", "Martin"]
 
             room = lesson_info[-1]
             date_iso = transform_date_french_to_iso(date)
@@ -311,17 +309,15 @@ def match_id_ects(event_data, MAPPING=MAPPING):
                         teacher_value = teacher_element_2.find_next('a').text
                         entry["teacher_name"] = teacher_value.strip().split()
                         entry["teacher_name"][0] = entry["teacher_name"][0].capitalize()
+                        entry["teacher_name"] = entry["teacher_name"][::-1]
 
         if entry["class_id"]=="TBD":
             classes_unclassified.append(entry["name"])
 
         # Exceptions bc of len(name)
-        if entry["teacher_name"]==["Zerbib", "Olivier", "David"]:
-            entry["teacher_name"]=["Zerbib","Olivier"]
-        
-        # Remove accents or ï to avoid pbs
-        entry["teacher_name"][0] = unidecode(entry["teacher_name"][0])
-
+        if entry["teacher_name"]==['David', 'Olivier', 'Zerbib']:
+            entry["teacher_name"]=['Olivier', 'Zerbib']
+            
     return(event_data, classes_unclassified)
 
 
