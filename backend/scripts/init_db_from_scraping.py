@@ -45,12 +45,17 @@ student_names = [
     ("Clothilde", "Voisin"), 
 ]
 
+assos = [
+    ["EJE", "https://www.linkedin.com/company/ensae-junior-etudes/"],
+    ["Tribu", "https://www.linkedin.com/company/tribu-ensae/"],
+]
 
 def initialize_database():
     with app.app_context():
         db.create_all()
         
         student_ids = []
+        asso_ids = []
         teacher_ids = []
         class_ids = []
         lesson_ids = []
@@ -68,7 +73,21 @@ def initialize_database():
                 )
             )
         
-        # 2 - Add teachers
+        # 2 - Add associations
+        print("Adding associations...")
+        for asso in assos:
+            asso_ids.append(
+                add_user(
+                    name=asso[0],
+                    surname="",
+                    profile_pic=f"photos/{asso[0].lower()}.jpg",
+                    user_type="asso",
+                    email_override=f"{asso[0].lower()}@ensae.fr",
+                    linkedin=asso[1],
+                )
+            )
+        
+        # 3 - Add teachers
         print("Adding teachers...")
         teacher_list = []
         for class_dict in classes:
@@ -96,7 +115,7 @@ def initialize_database():
                         )
                     )
         
-        # 3 - Add classes
+        # 4 - Add classes
         print("Adding classes...")
         for class_dict in classes:
             class_ids.append(
@@ -109,21 +128,21 @@ def initialize_database():
                 )
             )
         
-        # 4 - Authorize teachers for classes
+        # 5 - Authorize teachers for classes
         print("Authorizing teachers for classes...")
         for class_dict in classes:
             authorize_teacher_for_class(get_user_by_name(*class_dict["teacher_name"]).user_id, class_dict["class_id"])
             for (date, start_time, end_time, lesson_type, teacher, room) in class_dict["lesson_info"]:
                 authorize_teacher_for_class(get_user_by_name(*teacher).user_id, class_dict["class_id"])
                 
-        # 5 - Enroll students in classes
+        # 6 - Enroll students in classes
         print("Enrolling students in classes...")
         for student_id in student_ids:
             for class_id in class_ids:
                 if random.random() < 0.1:
                     enroll_student_in_class(student_id, class_id)
         
-        # 6 & 7 - Add lessons AND assign students to lessons
+        # 7 & 8 - Add lessons AND assign students to lessons
         print("Adding lessons and assigning students to lessons...")
         for class_dict in classes:
             class_id = class_dict["class_id"]
