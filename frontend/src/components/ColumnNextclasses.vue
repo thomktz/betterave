@@ -114,7 +114,7 @@
     flex-direction: column; /* Stack children vertically */
     padding: 10px;
     border-radius: 10px;
-    color: white;
+    color: rgb(0, 0, 0);
     margin-top: 10px;
     cursor: pointer;
 }
