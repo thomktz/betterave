@@ -40,7 +40,7 @@
     async mounted() {
       this.$emit('updateTitle', "Trombinoscope"); // Update the title in the header
       try {
-        const response = await axios.get('http://127.0.0.1:5000/photochart', { withCredentials: true });
+        const response = await axios.get('/photochart', { withCredentials: true });
         this.students = response.data;
       } catch (error) {
         console.error("There was an error fetching student data:", error);
@@ -94,8 +94,8 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   appearance: none;
-  background-color: #f2f2f2;
-  color: #333;
+  background-color: var(--secondary-color);
+  color: var(--primary-text-color);
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

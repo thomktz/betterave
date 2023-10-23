@@ -68,7 +68,7 @@
       },
       async fetchClassMessages() {
         try {
-          const response = await axios.get(`http://127.0.0.1:5000/classes/${this.classId}/messages`, { withCredentials: true });
+          const response = await axios.get(`/classes/${this.classId}/messages`, { withCredentials: true });
           
           if (response.data && Array.isArray(response.data)) {
             this.messages = response.data;
@@ -82,7 +82,7 @@
       async sendMessage() {
         if (!this.newMessage.trim()) return;  // Don't send empty messages
         try {
-          const response = await axios.post(`http://127.0.0.1:5000/classes/${this.classId}/messages`, 
+          const response = await axios.post(`/classes/${this.classId}/messages`, 
             { content: this.newMessage }, 
             { withCredentials: true }
           );
@@ -113,7 +113,8 @@
   flex: 1;
   overflow-y: auto;
   padding: 10px;
-  background-color: #f5f5f5;
+  background-color: var(--secondary-color);
+  color: var(--primary-text-color);
 }
 
 .msger-chat::-webkit-scrollbar {
@@ -161,7 +162,7 @@
   align-items: center;
   margin-bottom: 5px;
   font-size: 0.8em;
-  color: #4e4e4e;
+  color: var(--secondary-text-color);
 }
 
 .msg-text {
@@ -172,7 +173,7 @@
 }
 
 .left-msg .msg-text {
-  background: #cdcdcd;
+  background: var(--text-bubble-color);
   border-bottom-left-radius: 0;
 }
 .left-msg .msg-name {
@@ -198,7 +199,7 @@
   display: flex;
   padding: 10px;
   border-top: 1px solid #ddd;
-  background: #eee;
+  background: var(--primary-color);
 }
 
 .msger-inputarea * {
@@ -210,7 +211,7 @@
 
 .msger-input {
   flex: 1;
-  background: #ddd;
+  background: var(--text-bubble-color );
 }
 
 .msger-send-btn {
@@ -228,13 +229,13 @@
 
 .msg-date {
   position: absolute;
-  bottom: -18px; /* Adjust as needed to position the date appropriately below the message */
+  bottom: -18px;
   left: 0;
   right: 0;
   white-space: nowrap;
   margin-top: 0; /* No margin needed since we're positioning it absolutely */
   font-size: 0.7em;
-  color: rgb(113, 113, 113);
+  color: var(--secondary-text-color);
   visibility: hidden;
   opacity: 0;
   transition: opacity 0.3s, visibility 0.3s;

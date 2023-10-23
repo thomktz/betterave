@@ -61,7 +61,7 @@
     },
     async mounted() {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/lessons', { withCredentials: true });
+        const response = await axios.get('/lessons', { withCredentials: true });
         this.calendarOptions.events = response.data;
       } catch (error) {
         console.error("There was an error fetching lessons:", error);
@@ -73,20 +73,10 @@
   </script>
   
 <style scoped>
-  div {
-  width: 100%;
-  }
-  .tooltip .tooltip-inner {
-  background-color: #fff;
-  color: #333;
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-}
-
-.tooltip .tooltip-arrow {
-  border-color: #ccc;
+div {
+width: 100%;
+background-color: var(--secondary-color);
+color: var(--primary-text-color);
 }
 </style>
   

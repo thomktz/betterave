@@ -4,6 +4,7 @@ import HomePage from '../views/HomePage.vue'
 import Photochart from '../views/Photochart.vue'
 import ClassPage from '../views/ClassPage.vue'
 import MainLayout from '../views/MainLayout.vue'
+import AssoList from '../views/AssoList.vue';
 import axios from 'axios';
 
 const routes = [
@@ -25,6 +26,11 @@ const routes = [
         path: '/photochart',
         name: 'Photochart',
         component: Photochart,
+      },
+      {
+        path: '/assolist',
+        name: 'asso-list',
+        component: AssoList,
       }
     ]
   },
@@ -49,7 +55,7 @@ router.beforeEach(async (to, from, next) => {
 
   // Otherwise, check if the user is authenticated.
   try {
-    const response = await axios.get('http://127.0.0.1:5000/check-auth', {
+    const response = await axios.get('/check-auth', {
       withCredentials: true,
     });
     if (response.data.status === 'authenticated') {

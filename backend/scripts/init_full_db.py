@@ -48,6 +48,11 @@ teacher_names = [
     ("Philippe", "Février"), 
 ]
 
+assos = [
+    ["EJE", "https://www.linkedin.com/company/ensae-junior-etudes/"],
+    ["Tribu", "https://www.linkedin.com/company/tribu-ensae/"],
+]
+
 def add_weekly_lessons(class_id, start_date, end_date, day_of_week, start_time, end_time, homework=None, room=None, teacher_id=None):
     # Convert day_of_week string to an integer (0=Monday, 6=Sunday)
     days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
@@ -146,6 +151,7 @@ def initialize_database():
         db.create_all()
         
         student_ids = []
+        asso_ids = []
         teacher_ids = []
         class_ids = []
         lesson_ids = []
@@ -163,7 +169,21 @@ def initialize_database():
                 )
             )
         
-        # 2 - Add teachers
+        # 2 - Add associations
+        print("Adding associations...")
+        for asso in assos:
+            asso_ids.append(
+                add_user(
+                    name=asso[0],
+                    surname="",
+                    profile_pic=f"photos/{asso[0].lower()}.jpg",
+                    user_type="asso",
+                    email_override=f"{asso[0].lower()}@ensae.fr",
+                    linkedin=asso[1],
+                )
+            )
+        
+        # 3 - Add teachers
         print("Adding teachers...")
         for (name, surname) in teacher_names:
             teacher_ids.append(
@@ -175,7 +195,7 @@ def initialize_database():
                 )
             )
         
-        # 3 - Add classes
+        # 4 - Add classes
         print("Adding classes...")
         for class_dict in classes:
             class_ids.append(
@@ -188,20 +208,20 @@ def initialize_database():
                 )
             )
         
-        # 4 - Authorize teachers for classes
+        # 5 - Authorize teachers for classes
         print("Authorizing teachers for classes...")
         for class_dict in classes:
             for teacher in class_dict["teachers"]:
                 authorize_teacher_for_class(get_user_by_name(*teacher).user_id, class_dict["class_id"])
                 
-        # 5 - Enroll students in classes
+        # 6 - Enroll students in classes
         print("Enrolling students in classes...")
         for student_id in student_ids:
             for class_id in class_ids:
                 if random.random() < 0.7:
                     enroll_student_in_class(student_id, class_id)
         
-        # 6 & 7 - Add lessons AND assign students to lessons
+        # 7 & 8 - Add lessons AND assign students to lessons
         print("Adding lessons and assigning students to lessons...")
         for class_dict in classes:
             class_ = get_class_by_id(class_dict["class_id"])
