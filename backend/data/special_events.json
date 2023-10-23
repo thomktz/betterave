@@ -1,0 +1,308 @@
+[
+    {
+        "class_id": "TBD",
+        "name": "Conférences d'introduction aux enjeux sociaux contemporains",
+        "ects": "TBD",
+        "lesson_info": [
+            [
+                "2023-10-03",
+                "17:00:00",
+                "18:30:00",
+                "Cours",
+                [
+                    "Madame",
+                    "Ollion"
+                ],
+                "salle Amphi200"
+            ],
+            [
+                "2023-10-10",
+                "17:00:00",
+                "18:30:00",
+                "Cours",
+                [
+                    "Madame",
+                    "Ollion"
+                ],
+                "salle Amphi200"
+            ],
+            [
+                "2023-10-17",
+                "17:00:00",
+                "18:30:00",
+                "Cours",
+                [
+                    "Madame",
+                    "Ollion"
+                ],
+                "salle Amphi200"
+            ],
+            [
+                "2023-11-21",
+                "17:00:00",
+                "18:30:00",
+                "Cours",
+                [
+                    "Monsieur",
+                    "Martin"
+                ],
+                "salle Amphi200"
+            ],
+            [
+                "2023-12-05",
+                "17:00:00",
+                "18:30:00",
+                "Cours",
+                [
+                    "Monsieur",
+                    "Martin"
+                ],
+                "salle Amphi200"
+            ],
+            [
+                "2023-12-12",
+                "17:00:00",
+                "18:30:00",
+                "Cours",
+                [
+                    "Monsieur",
+                    "Martin"
+                ],
+                "salle Amphi200"
+            ]
+        ],
+        "backgroundColor": "#FF88FF",
+        "teacher_name": [
+            "Madame",
+            "Ollion"
+        ],
+        "level": "TBD"
+    },
+    {
+        "class_id": "TBD",
+        "name": "Forum ENSAE - Conférence Insee",
+        "ects": "TBD",
+        "lesson_info": [
+            [
+                "2023-10-03",
+                "18:30:00",
+                "20:00:00",
+                "Cours",
+                [
+                    "Monsieur",
+                    "Martin"
+                ],
+                "salle Amphi250"
+            ]
+        ],
+        "backgroundColor": "#FF0000",
+        "teacher_name": [
+            "Monsieur",
+            "Martin"
+        ],
+        "level": "TBD"
+    },
+    {
+        "class_id": "TBD",
+        "name": "Atelier préparation stage d'application",
+        "ects": "TBD",
+        "lesson_info": [
+            [
+                "2023-10-09",
+                "12:00:00",
+                "13:30:00",
+                "Cours",
+                [
+                    "Madame",
+                    "Andreoletti-cheng"
+                ],
+                "salle Amphi200"
+            ]
+        ],
+        "backgroundColor": "#808080",
+        "teacher_name": [
+            "Madame",
+            "Andreoletti-cheng"
+        ],
+        "level": "TBD"
+    },
+    {
+        "class_id": "TBD",
+        "name": "Amphi de présentation relations internationales",
+        "ects": "TBD",
+        "lesson_info": [
+            [
+                "2023-10-12",
+                "12:00:00",
+                "13:00:00",
+                "Cours",
+                [
+                    "Madame",
+                    "Castro"
+                ],
+                "salle Amphi200"
+            ],
+            [
+                "2023-10-12",
+                "13:00:00",
+                "14:30:00",
+                "Cours",
+                [
+                    "Monsieur",
+                    "Woods"
+                ],
+                "salle Amphi200"
+            ]
+        ],
+        "backgroundColor": "#4169E1",
+        "teacher_name": [
+            "Madame",
+            "Castro"
+        ],
+        "level": "TBD"
+    },
+    {
+        "class_id": "TBD",
+        "name": "Amphi de présentation stage 1A",
+        "ects": "TBD",
+        "lesson_info": [
+            [
+                "2023-10-13",
+                "17:00:00",
+                "18:30:00",
+                "Cours",
+                [
+                    "Madame",
+                    "Andreoletti-cheng"
+                ],
+                "salle Amphi200"
+            ]
+        ],
+        "backgroundColor": "#96618D",
+        "teacher_name": [
+            "Madame",
+            "Andreoletti-cheng"
+        ],
+        "level": "TBD"
+    },
+    {
+        "class_id": "TBD",
+        "name": "Forum Trium",
+        "ects": "TBD",
+        "lesson_info": [
+            [
+                "2023-10-18",
+                "08:30:00",
+                "19:45:00",
+                "Cours",
+                [
+                    "Monsieur",
+                    "Martin"
+                ],
+                "salle ?"
+            ]
+        ],
+        "backgroundColor": "#BDB76B",
+        "teacher_name": [
+            "Monsieur",
+            "Martin"
+        ],
+        "level": "TBD"
+    },
+    {
+        "class_id": "TBD",
+        "name": "Présentation relations internationales",
+        "ects": "TBD",
+        "lesson_info": [
+            [
+                "2023-10-26",
+                "12:00:00",
+                "13:30:00",
+                "Cours",
+                [
+                    "Madame",
+                    "Diff. enseignants"
+                ],
+                "salle Amphi250"
+            ]
+        ],
+        "backgroundColor": "#F0E68C",
+        "teacher_name": [
+            "Madame",
+            "Diff. enseignants"
+        ],
+        "level": "TBD"
+    },
+    {
+        "class_id": "TBD",
+        "name": "Méthodes pour la rédaction d’une candidature",
+        "ects": "TBD",
+        "lesson_info": [
+            [
+                "2023-11-14",
+                "17:00:00",
+                "18:30:00",
+                "Cours",
+                [
+                    "Monsieur",
+                    "Woods"
+                ],
+                "salle Amphi250"
+            ]
+        ],
+        "backgroundColor": "#44FFFF",
+        "teacher_name": [
+            "Monsieur",
+            "Woods"
+        ],
+        "level": "TBD"
+    },
+    {
+        "class_id": "TBD",
+        "name": "Forum ASTER",
+        "ects": "TBD",
+        "lesson_info": [
+            [
+                "2023-12-07",
+                "13:30:00",
+                "17:30:00",
+                "Cours",
+                [
+                    "Monsieur",
+                    "Martin"
+                ],
+                "salle Télécom Paris"
+            ]
+        ],
+        "backgroundColor": "#7FFFD4",
+        "teacher_name": [
+            "Monsieur",
+            "Martin"
+        ],
+        "level": "TBD"
+    },
+    {
+        "class_id": "TBD",
+        "name": "Business Data Challenge",
+        "ects": "TBD",
+        "lesson_info": [
+            [
+                "2023-12-13",
+                "09:00:00",
+                "12:00:00",
+                "Cours",
+                [
+                    "Madame",
+                    "Visser"
+                ],
+                "salle 2020"
+            ]
+        ],
+        "backgroundColor": "#556B2F",
+        "teacher_name": [
+            "Madame",
+            "Visser"
+        ],
+        "level": "TBD"
+    }
+]

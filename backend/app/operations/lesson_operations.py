@@ -75,9 +75,8 @@ def get_lessons_by_class_id(class_id: int) -> list[Lesson]:
 
 def get_lessons_by_student_id(user_id: int) -> list[Lesson]:
     """Get all lessons a particular student is part of."""
-    # This requires the ORM to have a reverse relationship set up.
     student = get_user_by_id(user_id)
-    return student.lessons
+    return student.registered_lessons
 
 def assign_students_to_lesson(lesson_id, students: list):
     """Assign a list of students to a lesson."""

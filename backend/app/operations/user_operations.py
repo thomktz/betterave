@@ -150,4 +150,7 @@ def get_user_profile_pic(user_id: int)->str:
 
 def get_user_by_name(name, surname):
     # Use ilike for case-insensitive search
-    return User.query.filter(and_(User.name.ilike(name), User.surname.ilike(surname))).first()
+    user = User.query.filter(and_(User.name.ilike(name), User.surname.ilike(surname))).first()
+    if user:
+        return user
+    raise ValueError(f"User {name} {surname} not found")
