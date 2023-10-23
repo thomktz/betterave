@@ -83,6 +83,19 @@ def initialize_database():
                         user_type="teacher",
                     )
                 )
+            for (date, start_time, end_time, lesson_type, teacher, room) in class_dict["lesson_info"]:
+                if teacher not in teacher_list: # Prevent from creating a new user fr a teacher already seen
+                    print(teacher)
+                    teacher_list.append(teacher)
+                    name, surname = teacher
+                    teacher_ids.append(
+                        add_user(
+                            name=name,
+                            surname=surname,
+                            profile_pic=f"photos/{name.lower()}_{surname.lower()}.jpg",
+                            user_type="teacher",
+                        )
+                    )
         
         # 3 - Add classes
         print("Adding classes...")
@@ -101,6 +114,8 @@ def initialize_database():
         print("Authorizing teachers for classes...")
         for class_dict in classes:
             authorize_teacher_for_class(get_user_by_name(*class_dict["teacher_name"]).user_id, class_dict["class_id"])
+            for (date, start_time, end_time, lesson_type, teacher, room) in class_dict["lesson_info"]:
+                authorize_teacher_for_class(get_user_by_name(*teacher).user_id, class_dict["class_id"])
                 
         # 5 - Enroll students in classes
         print("Enrolling students in classes...")
@@ -116,7 +131,7 @@ def initialize_database():
             class_ = get_class_by_id(class_id)
             enrolled_students = class_.students
             for (date, start_time, end_time, lesson_type, teacher, room) in class_dict["lesson_info"]:
-                teacher_id = get_user_by_name(*class_dict["teacher_name"]).user_id
+                teacher_id = get_user_by_name(*teacher).user_id
 
                 homework=None
                 students = enrolled_students
