@@ -50,12 +50,17 @@ assos = [
     ["Tribu", "https://www.linkedin.com/company/tribu-ensae/"],
 ]
 
+admins = [
+    ("admin", "admin"),
+]
+
 def initialize_database():
     with app.app_context():
         db.create_all()
         
         student_ids = []
         asso_ids = []
+        admin_ids = []
         teacher_ids = []
         class_ids = []
         lesson_ids = []
@@ -87,13 +92,29 @@ def initialize_database():
                 )
             )
         
-        # 3 - Add teachers
+        # 3 - Add admins
+        print("Adding admins...")
+        for admin_name, password in admins:
+            admin_ids.append(
+                add_user(
+                    name=admin_name,
+                    surname="",
+                    profile_pic=f"photos/{admin_name.lower()}.jpg",
+                    user_type="admin",
+                    email_override=f"{admin_name.lower()}@ensae.fr",
+                    password_override=password,
+                )
+            )
+            
+        
+        # 4 - Add teachers
         print("Adding teachers...")
-        teacher_list = []
+        teacher_set = set()
         for class_dict in classes:
-            if class_dict["teacher_name"] not in teacher_list: # Prevent from creating a new user for a teacher already seen
-                teacher_list.append(class_dict["teacher_name"])
-                name, surname = class_dict["teacher_name"]
+            teacher_name = tuple(class_dict["teacher_name"])
+            if teacher_name not in teacher_set: # Prevent from creating a new user for a teacher already seen
+                teacher_set.add(teacher_name)
+                name, surname = teacher_name
                 teacher_ids.append(
                     add_user(
                         name=name,
@@ -103,9 +124,10 @@ def initialize_database():
                     )
                 )
             for (date, start_time, end_time, lesson_type, teacher, room) in class_dict["lesson_info"]:
-                if teacher not in teacher_list: # Prevent from creating a new user for a teacher already seen
-                    teacher_list.append(teacher)
-                    name, surname = teacher
+                teacher_name = tuple(teacher)
+                if teacher_name not in teacher_set: # Prevent from creating a new user for a teacher already seen
+                    teacher_set.add(teacher_name)
+                    name, surname = teacher_name
                     teacher_ids.append(
                         add_user(
                             name=name,
@@ -115,7 +137,7 @@ def initialize_database():
                         )
                     )
         
-        # 4 - Add classes
+        # 5 - Add classes
         print("Adding classes...")
         for class_dict in classes:
             class_ids.append(
@@ -128,21 +150,21 @@ def initialize_database():
                 )
             )
         
-        # 5 - Authorize teachers for classes
+        # 6 - Authorize teachers for classes
         print("Authorizing teachers for classes...")
         for class_dict in classes:
             authorize_teacher_for_class(get_user_by_name(*class_dict["teacher_name"]).user_id, class_dict["class_id"])
             for (date, start_time, end_time, lesson_type, teacher, room) in class_dict["lesson_info"]:
                 authorize_teacher_for_class(get_user_by_name(*teacher).user_id, class_dict["class_id"])
                 
-        # 6 - Enroll students in classes
+        # 7 - Enroll students in classes
         print("Enrolling students in classes...")
         for student_id in student_ids:
             for class_id in class_ids:
                 if random.random() < 0.1:
                     enroll_student_in_class(student_id, class_id)
         
-        # 7 & 8 - Add lessons AND assign students to lessons
+        # 8 & 9 - Add lessons AND assign students to lessons
         print("Adding lessons and assigning students to lessons...")
         for class_dict in classes:
             class_id = class_dict["class_id"]

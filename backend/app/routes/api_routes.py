@@ -1,5 +1,6 @@
 
 from datetime import datetime
+from functools import wraps
 from . import bp
 from flask import jsonify, request
 from flask_login import login_required, current_user
@@ -8,7 +9,29 @@ from app.operations.message_operations import get_class_messages, add_class_mess
 from app.operations.student_operations import get_student_lessons, get_all_students, is_student_in_class
 from app.operations.asso_operations import subscribe_to_asso, unsubscribe_from_asso, get_all_assos
 from app.operations.event_operations import add_event
+from app.operations.user_operations import get_all_users, delete_user
 from app.models.class_ import Class
+
+def type_required(*user_types_required):
+    """Decorator to check if the current user is authenticated and has the required user type."""
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            print("Checking user type")
+            if not current_user.is_authenticated:
+                return jsonify({'message': 'Authentication is required'}), 401
+
+            if not hasattr(current_user, 'user_type'):
+                return jsonify({'message': 'Unable to determine user type'}), 500
+
+            if current_user.user_type.value not in user_types_required:
+                allowed_types = ', '.join(user_types_required)
+                return jsonify({'message': f'You must be one of the following types to perform this action: {allowed_types}'}), 403
+            print("User type is correct")
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
 
 @bp.route("/profile", methods=["GET"])
 @login_required
@@ -98,6 +121,7 @@ def post_message(class_id):
 
 @bp.route("/events", methods=["POST"])
 @login_required
+@type_required("asso", "teacher", "admin")
 def add_event_route():
     data = request.get_json()
     # TODO: Check required fields in data
@@ -151,3 +175,31 @@ def get_all_assos_route():
     ]
     return jsonify(formatted_assos), 200
 
+@bp.route('/users', methods=['GET'])
+@login_required
+@type_required("admin")
+def get_users_route():
+    users = get_all_users()
+    formatted_users = [
+        {
+            'id': user.user_id,
+            'name': user.name,
+            'surname': user.surname,
+            'email': user.email,
+            "level": user.level.value,
+            'user_type': user.user_type.value,
+            'profile_pic': user.profile_pic,
+        }
+        for user in users
+    ]
+    return jsonify(formatted_users), 200
+
+@bp.route('/users/<int:user_id>', methods=['DELETE'])
+@login_required
+@type_required("admin")
+def delete_user_route(user_id):
+    success = delete_user(user_id)
+    if success:
+        return jsonify({'message': 'User deleted successfully'}), 200
+    else:
+        return jsonify({'message': 'User not found or error deleting the user'}), 404

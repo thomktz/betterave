@@ -62,9 +62,11 @@ export default {
           this.$router.push({ name: 'homepage' });
           } else {
             console.error("Login failed:", response.data.message);
+            this.showSnackbar = true;
           }
         } catch (error) {
           console.error("There was an error logging in:", error);
+          this.showSnackbar = true;
         }
     }
   }

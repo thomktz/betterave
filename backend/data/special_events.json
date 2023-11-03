@@ -10,7 +10,7 @@
                 "18:30:00",
                 "Cours",
                 [
-                    "Madame",
+                    "Prof",
                     "Ollion"
                 ],
                 "salle Amphi200"
@@ -21,7 +21,7 @@
                 "18:30:00",
                 "Cours",
                 [
-                    "Madame",
+                    "Prof",
                     "Ollion"
                 ],
                 "salle Amphi200"
@@ -32,7 +32,7 @@
                 "18:30:00",
                 "Cours",
                 [
-                    "Madame",
+                    "Prof",
                     "Ollion"
                 ],
                 "salle Amphi200"
@@ -43,7 +43,7 @@
                 "18:30:00",
                 "Cours",
                 [
-                    "Monsieur",
+                    "Prof",
                     "Martin"
                 ],
                 "salle Amphi200"
@@ -54,7 +54,7 @@
                 "18:30:00",
                 "Cours",
                 [
-                    "Monsieur",
+                    "Prof",
                     "Martin"
                 ],
                 "salle Amphi200"
@@ -65,7 +65,7 @@
                 "18:30:00",
                 "Cours",
                 [
-                    "Monsieur",
+                    "Prof",
                     "Martin"
                 ],
                 "salle Amphi200"
@@ -73,7 +73,7 @@
         ],
         "backgroundColor": "#FF88FF",
         "teacher_name": [
-            "Madame",
+            "Prof",
             "Ollion"
         ],
         "level": "TBD"
@@ -89,7 +89,7 @@
                 "20:00:00",
                 "Cours",
                 [
-                    "Monsieur",
+                    "Prof",
                     "Martin"
                 ],
                 "salle Amphi250"
@@ -97,7 +97,7 @@
         ],
         "backgroundColor": "#FF0000",
         "teacher_name": [
-            "Monsieur",
+            "Prof",
             "Martin"
         ],
         "level": "TBD"
@@ -113,7 +113,7 @@
                 "13:30:00",
                 "Cours",
                 [
-                    "Madame",
+                    "Prof",
                     "Andreoletti-cheng"
                 ],
                 "salle Amphi200"
@@ -121,7 +121,7 @@
         ],
         "backgroundColor": "#808080",
         "teacher_name": [
-            "Madame",
+            "Prof",
             "Andreoletti-cheng"
         ],
         "level": "TBD"
@@ -137,7 +137,7 @@
                 "13:00:00",
                 "Cours",
                 [
-                    "Madame",
+                    "Prof",
                     "Castro"
                 ],
                 "salle Amphi200"
@@ -148,7 +148,7 @@
                 "14:30:00",
                 "Cours",
                 [
-                    "Monsieur",
+                    "Prof",
                     "Woods"
                 ],
                 "salle Amphi200"
@@ -156,7 +156,7 @@
         ],
         "backgroundColor": "#4169E1",
         "teacher_name": [
-            "Madame",
+            "Prof",
             "Castro"
         ],
         "level": "TBD"
@@ -172,7 +172,7 @@
                 "18:30:00",
                 "Cours",
                 [
-                    "Madame",
+                    "Prof",
                     "Andreoletti-cheng"
                 ],
                 "salle Amphi200"
@@ -180,7 +180,7 @@
         ],
         "backgroundColor": "#96618D",
         "teacher_name": [
-            "Madame",
+            "Prof",
             "Andreoletti-cheng"
         ],
         "level": "TBD"
@@ -196,7 +196,7 @@
                 "19:45:00",
                 "Cours",
                 [
-                    "Monsieur",
+                    "Prof",
                     "Martin"
                 ],
                 "salle ?"
@@ -204,7 +204,7 @@
         ],
         "backgroundColor": "#BDB76B",
         "teacher_name": [
-            "Monsieur",
+            "Prof",
             "Martin"
         ],
         "level": "TBD"
@@ -220,7 +220,7 @@
                 "13:30:00",
                 "Cours",
                 [
-                    "Madame",
+                    "Prof",
                     "Diff. enseignants"
                 ],
                 "salle Amphi250"
@@ -228,7 +228,7 @@
         ],
         "backgroundColor": "#F0E68C",
         "teacher_name": [
-            "Madame",
+            "Prof",
             "Diff. enseignants"
         ],
         "level": "TBD"
@@ -244,7 +244,7 @@
                 "18:30:00",
                 "Cours",
                 [
-                    "Monsieur",
+                    "Prof",
                     "Woods"
                 ],
                 "salle Amphi250"
@@ -252,7 +252,7 @@
         ],
         "backgroundColor": "#44FFFF",
         "teacher_name": [
-            "Monsieur",
+            "Prof",
             "Woods"
         ],
         "level": "TBD"
@@ -268,7 +268,7 @@
                 "17:30:00",
                 "Cours",
                 [
-                    "Monsieur",
+                    "Prof",
                     "Martin"
                 ],
                 "salle Télécom Paris"
@@ -276,7 +276,7 @@
         ],
         "backgroundColor": "#7FFFD4",
         "teacher_name": [
-            "Monsieur",
+            "Prof",
             "Martin"
         ],
         "level": "TBD"
@@ -292,7 +292,7 @@
                 "12:00:00",
                 "Cours",
                 [
-                    "Madame",
+                    "Prof",
                     "Visser"
                 ],
                 "salle 2020"
@@ -300,7 +300,7 @@
         ],
         "backgroundColor": "#556B2F",
         "teacher_name": [
-            "Madame",
+            "Prof",
             "Visser"
         ],
         "level": "TBD"

@@ -197,10 +197,10 @@ def scrap_events_data(path):
                 lesson_type = "Cours"
 
             if lesson_info[-2].isupper():
-                prenom = random.choice(["Monsieur", "Madame"])
+                prenom = "Prof"
                 teacher = [prenom, lesson_info[-2].capitalize()]
             else:
-                teacher = ["Monsieur", "Martin"]
+                teacher = ["Prof", "Martin"]
 
             room = lesson_info[-1]
             date_iso = transform_date_french_to_iso(date)

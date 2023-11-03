@@ -1,7 +1,6 @@
 <template>
-    <div>
-
-    </div>
+    <v-container class="fill-height" fluid>
+    </v-container>
 </template>
 
 <script>
@@ -14,6 +13,6 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style>
 
 </style>

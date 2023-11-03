@@ -33,6 +33,7 @@ def add_user(
     user_type: str, 
     level: str = "N/A", 
     email_override: str = None,
+    password_override: str = None,
     linkedin: str = None,
     website: str = None,
     
@@ -60,6 +61,8 @@ def add_user(
         else:
             email = f"{name.lower()}.{surname.replace(' ', '-').lower()}@ensae.fr"
             password = f"{name[0].lower()}{surname.replace(' ', '-').lower()}"
+        if password_override:
+            password = password_override
         hashed_password = hash_password(password)
         new_user = User(
             email=email,
