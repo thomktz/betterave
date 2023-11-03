@@ -29,6 +29,10 @@ def logout_user_route():
     return jsonify(message="Logged out successfully", status="success"), 200
 
 @bp.route("/check-auth", methods=["GET"])
-@login_required
 def check_authentication():
-    return jsonify(message="User is authenticated", status="authenticated"), 200
+    if current_user.is_authenticated:
+        # Return the user's role along with the authentication status
+        return jsonify({"status": "authenticated", "role": current_user.user_type.value}), 200
+    else:
+        # Return a non-authenticated status for unauthenticated users
+        return jsonify({"status": "unauthenticated", "role": None}), 401  # 401 Unauthorized

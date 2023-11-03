@@ -9,11 +9,9 @@
 
     <div class="trombinoscope">
         <div v-for="student in filteredStudents" :key="student.id" class="student">
-            <router-link :to="'/student-details/' + student.id"> <!-- Note the use of :to to bind a dynamic route -->
-    <img :src="student.profile_pic" :alt="student.name" />
-    <p>{{ student.name }} {{ student.surname }}</p>
-  </router-link>
-</div>
+          <img :src="student.profile_pic" :alt="student.name" />
+          <p>{{ student.name }} {{ student.surname }}</p>
+        </div>
     </div>
     </v-spacer>
   </template>

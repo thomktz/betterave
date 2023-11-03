@@ -6,8 +6,8 @@ from app.models.user import UserType, UserLevel
 
 
 # Constants
-ASSO_NAME = "EJE"
-ASSO_EMAIL = "eje@ensae.fr"
+ASSO_NAME = "EFI"
+ASSO_EMAIL = "efi@ensae.fr"
 USER_NAME = ("Alice", "Smith")
 
 # Fixtures
@@ -20,7 +20,7 @@ def setup_user(test_client):
 @pytest.fixture
 def setup_asso(test_client):
     """Creates an Asso and returns its ID."""
-    asso_id = user_operations.add_user(ASSO_NAME, "", "asso_pic_url", UserType.ASSO, UserLevel.NA, email_override=ASSO_EMAIL, website="https://eje.ensae.fr")
+    asso_id = user_operations.add_user(ASSO_NAME, "", "asso_pic_url", UserType.ASSO, UserLevel.NA, email_override=ASSO_EMAIL, website="https://efi.ensae.fr")
     return asso_id
     
 # Tests

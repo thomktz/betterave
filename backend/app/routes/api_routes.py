@@ -17,6 +17,7 @@ def profile_route():
         email=current_user.email,
         name=current_user.name,
         profile_pic=current_user.profile_pic,
+        user_type=current_user.user_type.value,
         status="success",
     ), 200
 

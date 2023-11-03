@@ -17,7 +17,7 @@
       <h1>{{ headerTitle }}</h1>
 
       <div class="right-section">
-        <ProfilePill :userEmail="user.email" :userProfilePic="user.profile_pic" />
+        <ProfilePill :userEmail="user.email" :userProfilePic="user.profile_pic" :userType="user.user_type" />
         <DarkModeToggle @toggle="toggleDarkMode" :darkMode="darkMode" />
       </div>
 
@@ -45,6 +45,7 @@ export default {
         name: '',
         email: '',
         profile_pic: '',
+        user_type: ''
       },
       headerTitle: ref("Welcome to Betterave!"),
       darkMode: false

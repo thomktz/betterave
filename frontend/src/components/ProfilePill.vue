@@ -8,6 +8,7 @@
       <router-link to="/" class="dropdown-link">Home</router-link>
       <router-link to="/photochart" class="dropdown-link">Trombinoscope</router-link>
       <router-link to="/assolist" class="dropdown-link">Associations</router-link>
+      <button v-if="userType !== 'student'" @click="goToControls">Controls</button>
       <button @click="logout">Logout</button>
     </div>
 </div>
@@ -25,6 +26,10 @@
       userProfilePic: {
         type: String,
         required: true
+      },
+      userType: {
+        type: String,
+        required: true
       }
     },
     data() {
@@ -40,7 +45,26 @@
         } catch (error) {
           console.error("There was an error logging out:", error);
         }
-      }
+      },
+      goToControls() {
+        switch(this.userType) {
+          case 'student':
+            // For students, maybe do nothing or show a message
+            break;
+          case 'asso':
+            this.$router.push({ name: 'asso-controls' });
+            break;
+          case 'teacher':
+            this.$router.push({ name: 'teacher-controls' });
+            break;
+          case 'admin':
+            this.$router.push({ name: 'admin-controls' });
+            break;
+          default:
+            console.error("Unknown user type");
+            break;
+        }
+      },
     }
   }
   </script>

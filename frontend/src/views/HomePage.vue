@@ -20,14 +20,12 @@
 <script>
 import axios from 'axios';
 import UserCalendar from '@/components/UserCalendar.vue';
-import ProfilePill from '@/components/ProfilePill.vue';
 import InfoColumn from '@/components/InfoColumn.vue';
 import ColumnNextclasses from '@/components/ColumnNextclasses.vue';
 
 export default {
   components: {
     UserCalendar,
-    ProfilePill,
     InfoColumn,
     ColumnNextclasses,
   },
