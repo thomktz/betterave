@@ -18,7 +18,7 @@ def generate_back_env_contents(ip_address):
     return f"LOCAL_IP={ip_address}\n"
 
 def generate_front_env_contents(ip_address):
-    return f"VUE_APP_LOCAL_IP={ip_address}\n"
+    return f"VUE_APP_BACKEND_URL=http://{ip_address}:5000\n"
 
 if __name__ == "__main__":
     ip_address = get_local_ip()

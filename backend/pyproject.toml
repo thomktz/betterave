@@ -5,10 +5,9 @@ description = "Backend for Betterave - Pamplemousse alternative"
 authors = ["ENSAE students"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "betterave_backend"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.13"
 sqlalchemy = "^2.0.21"
 bcrypt = "^4.0.1"
 pytest = "^7.4.2"
@@ -23,6 +22,7 @@ bs4 = "^0.0.1"
 requests = "^2.31.0"
 unidecode = "^1.3.7"
 python-dotenv = "^1.0.0"
+pandas = "^2.1.2"
 
 [build-system]
 requires = ["poetry-core"]

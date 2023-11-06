@@ -27,10 +27,11 @@ def create_app():
         SESSION_COOKIE_SAMESITE="Strict",
     )
     
-    local_ip = os.getenv("LOCAL_IP", "127.0.0.1")
-
+    CORS_ORIGINS = os.getenv('CORS_ORIGINS', "http://localhost:8080")
+    PORT = int(os.getenv('PORT', 5000))
+    
     CORS(app, supports_credentials=True, resources={r"/*": {
-        "origins": f"http://{local_ip}:8080",
+        "origins": CORS_ORIGINS,
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
         "expose_headers": ["Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"],
@@ -46,4 +47,4 @@ def create_app():
     with app.app_context():
         db.create_all()
         
-    return app, local_ip
+    return app, PORT

@@ -61,6 +61,11 @@ admins = [
 
 def initialize_database():
     with app.app_context():
+        # Drop all tables
+        db.session.remove()
+        db.drop_all()
+        
+        # Create all tables
         db.create_all()
         
         student_ids = []
