@@ -7,4 +7,3 @@ test.db
 
 # Local dev settings
 .pre-commit-config.yaml
-.env
