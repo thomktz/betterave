@@ -5,29 +5,29 @@ class Lesson(db.Model):
     
     __tablename__ = "lesson"
     lesson_id = db.Column(db.Integer, primary_key=True)
-    class_id = db.Column(db.Integer, db.ForeignKey('class.class_id'), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey('class_group.group_id'), nullable=False)
+    
     date = db.Column(db.Date, nullable=False)
     start_time = db.Column(db.Time, nullable=False)
     end_time = db.Column(db.Time, nullable=False)
     homework = db.Column(db.String, nullable=True)
     room = db.Column(db.String, nullable=True)
     teacher_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=True)
-
+    
     # Relationships
-    students = db.relationship('User', secondary="attendance", back_populates='registered_lessons')
-    course = db.relationship('Class', back_populates='lessons')
+    # References 'class_group' instead of 'class'
+    class_group = db.relationship('ClassGroup', back_populates='lessons')
     teacher = db.relationship('User', foreign_keys=[teacher_id])
     
-    # Ordering methods
+    # Ordering methods for comparing lessons
     def __lt__(self, other):
+        # Compare first by date, then by start time
         if not isinstance(other, Lesson):
             return NotImplemented
-        if self.date != other.date:
-            return self.date < other.date
-        return self.start_time < other.start_time
+        return (self.date, self.start_time) < (other.date, other.start_time)
 
     def __eq__(self, other):
+        # Equal if both date and start time are the same
         if not isinstance(other, Lesson):
             return NotImplemented
         return self.date == other.date and self.start_time == other.start_time
-

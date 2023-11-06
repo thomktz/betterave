@@ -2,23 +2,23 @@ from datetime import datetime
 from extensions import db
 
 class Message(db.Model):
-    """SQLAlchemy object for messages associated with a class."""
+    """SQLAlchemy object for messages associated with a ClassGroup."""
     
     __tablename__ = "message"
     message_id = db.Column(db.Integer, primary_key=True)
-    class_id = db.Column(db.Integer, db.ForeignKey('class.class_id'), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey('class_group.group_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationships
-    class_ref = db.relationship('Class', back_populates='messages')
+    group_ref = db.relationship('ClassGroup', back_populates='messages')
     user = db.relationship('User', back_populates='messages')
 
     def as_dict(self):
         return {
             "message_id": self.message_id,
-            "class_id": self.class_id,
+            "group_id": self.group_id,
             "user_id": self.user_id,
             "content": self.content,
             "timestamp": self.timestamp.isoformat(),

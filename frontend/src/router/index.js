@@ -8,6 +8,7 @@ import AssoList from '../views/AssoList.vue';
 import AssoControls from '../views/controls/AssoControls.vue'
 import TeacherControls from '../views/controls/TeacherControls.vue'
 import AdminControls from '../views/controls/AdminControls.vue'
+import EditClasses from '../views/controls/EditClasses.vue'
 import axios from 'axios';
 
 const routes = [
@@ -52,6 +53,12 @@ const routes = [
         name: 'admin-controls',
         component: AdminControls,
         meta: { requiresAuth: true, role: 'admin' }
+      },
+      {
+        path: '/controls/admin/:student_id',
+        name: 'EditClasses',
+        component: EditClasses,
+        props: true
       },
     ]
   },

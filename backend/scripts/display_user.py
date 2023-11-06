@@ -18,15 +18,15 @@ def get_classes_for_student(user_id):
         return
 
     print(f"Classes for {student.name} {student.surname}:")
-    for class_ in student.enrolled_classes:
-        print(f" - {class_.name}")
+    for group in student.groups:
+        print(f" - {group.class_ref.name} {group.name}")
         
         
 def get_calendar(user_id):
     lessons = get_student_lessons(user_id)
     print(f"Lessons for User {user_id}:")
     for lesson in sorted(lessons):
-        print(f" - {lesson.course.name} - {lesson.start_time} - {lesson.end_time}")
+        print(f" - {lesson.class_group.class_ref.name} - {lesson.class_group.name} - {lesson.date} - {lesson.end_time}")
     
 
 if __name__ == "__main__":

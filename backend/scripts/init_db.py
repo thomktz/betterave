@@ -1,13 +1,17 @@
 import random
 import datetime
 import json
+import numpy as np
 from main import app
 from extensions import db
 from app.operations.user_operations import add_user, get_user_by_name
-from app.operations.class_operations import add_class, authorize_teacher_for_class, get_class_by_id
-from app.operations.student_operations import enroll_student_in_class
-from app.operations.lesson_operations import add_lesson, assign_students_to_lesson
+from app.operations.class_operations import add_class, get_classes_from_level
+from app.operations.lesson_operations import add_lesson
+from app.operations.class_group_operations import add_class_group, enroll_student_in_group, get_group_by_name
+from app.operations.student_operations import get_students_from_level
+from app.models.user import UserLevel
 
+CLASSES_PER_STUDENT = 10
 
 with open('data/classes.json', 'r') as fichier_json:
     classes = json.load(fichier_json)
@@ -112,7 +116,7 @@ def initialize_database():
         teacher_set = set()
         for class_dict in classes:
             teacher_name = tuple(class_dict["teacher_name"])
-            if teacher_name not in teacher_set: # Prevent from creating a new user for a teacher already seen
+            if teacher_name not in teacher_set:
                 teacher_set.add(teacher_name)
                 name, surname = teacher_name
                 teacher_ids.append(
@@ -125,7 +129,7 @@ def initialize_database():
                 )
             for (date, start_time, end_time, lesson_type, teacher, room) in class_dict["lesson_info"]:
                 teacher_name = tuple(teacher)
-                if teacher_name not in teacher_set: # Prevent from creating a new user for a teacher already seen
+                if teacher_name not in teacher_set: 
                     teacher_set.add(teacher_name)
                     name, surname = teacher_name
                     teacher_ids.append(
@@ -138,7 +142,7 @@ def initialize_database():
                     )
         
         # 5 - Add classes
-        print("Adding classes...")
+        print("Adding classes and class groups...")
         for class_dict in classes:
             class_ids.append(
                 add_class(
@@ -147,39 +151,60 @@ def initialize_database():
                     ects_credits=class_dict["ects"],
                     default_teacher_id=get_user_by_name(*class_dict["teacher_name"]).user_id,
                     backgroundColor=class_dict["backgroundColor"],
+                    level=class_dict["level"],
                 )
             )
+            # Add main class group
+            add_class_group(
+                name="Cours",
+                class_id=class_dict["class_id"],
+                is_main_group=True,
+            )
+            
+            # 6 - Add secondary class groups
+            lesson_types = set(["Cours"])
+            for lesson in class_dict["lesson_info"]:
+                date, start_time, end_time, lesson_type, teacher, room = lesson
+                if lesson_type not in lesson_types:
+                    lesson_types.add(lesson_type)
+                    add_class_group(
+                        name=lesson_type,
+                        class_id=class_dict["class_id"],
+                        is_main_group=False,
+                    )
+                    
         
-        # 6 - Authorize teachers for classes
-        print("Authorizing teachers for classes...")
-        for class_dict in classes:
-            authorize_teacher_for_class(get_user_by_name(*class_dict["teacher_name"]).user_id, class_dict["class_id"])
-            for (date, start_time, end_time, lesson_type, teacher, room) in class_dict["lesson_info"]:
-                authorize_teacher_for_class(get_user_by_name(*teacher).user_id, class_dict["class_id"])
-                
-        # 7 - Enroll students in classes
-        print("Enrolling students in classes...")
-        for student_id in student_ids:
-            for class_id in class_ids:
-                if random.random() < 0.1:
-                    enroll_student_in_class(student_id, class_id)
+        # 7 - Enroll students in groups
+        for level in UserLevel:
+            students = get_students_from_level(level)
+            level_classes = get_classes_from_level(level)
+            for student in students:
+                picked_classes = np.random.choice(level_classes, size=CLASSES_PER_STUDENT, replace=False)
+                for class_ in picked_classes:
+                    enroll_student_in_group(student, class_.main_group())
+                    
+                    # If there are multiple groups, enroll the student in a tutorial group too
+                    secondary_groups = class_.secondary_groups()
+                    if len(secondary_groups) > 0:
+                        enroll_student_in_group(student, np.random.choice(secondary_groups))
+                        
         
-        # 8 & 9 - Add lessons AND assign students to lessons
-        print("Adding lessons and assigning students to lessons...")
+        # 8 - Add lessons
+        print("Adding lessons to class groups...")
         for class_dict in classes:
-            class_id = class_dict["class_id"]
-            class_ = get_class_by_id(class_id)
-            enrolled_students = class_.students
-            for (date, start_time, end_time, lesson_type, teacher, room) in class_dict["lesson_info"]:
-                teacher_id = get_user_by_name(*teacher).user_id
-
-                homework=None
-                students = enrolled_students
-
-                lesson_id = add_lesson(class_id, date, start_time, end_time, homework, room, teacher_id)
-                assign_students_to_lesson(lesson_id, students)
-                lesson_ids.append(lesson_id)
-                
+            for lesson in class_dict["lesson_info"]:
+                date, start_time, end_time, lesson_type, teacher, room = lesson
+                group_id = get_group_by_name(class_dict["class_id"], lesson_type).group_id
+                lesson_ids.append(
+                    add_lesson(
+                        group_id=group_id,
+                        date=date,
+                        start_time=start_time,
+                        end_time=end_time,
+                        room=room,
+                        teacher_id=get_user_by_name(*teacher).user_id,
+                    )
+                )           
 
 if __name__ == "__main__":
     initialize_database()

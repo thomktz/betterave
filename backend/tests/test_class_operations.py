@@ -1,62 +1,76 @@
 import pytest
-from backend.app.operations import class_operations
+from app.operations import class_operations
 from app.models.user import UserType, UserLevel
-from backend.app.operations.user_operations import add_user
+from app.operations.user_operations import add_user
 
 # Constants
-TEACHER_NAME = ("John", "Doe")
-CLASS_NAMES = ["Econometrics", "Statistics", "Microeconomics", "Machine Learning"]
-ECTS_VALUES = [2, 2.5, 3, 4]
-BACKGROUND_COLOR = "#FFFFFF"
+CLASS_NAME = "Data Science"
+ECTS_CREDITS = 5
+LEVEL = "1A"
+BACKGROUND_COLOR = "#123456"
 
 @pytest.fixture
 def setup_teacher(test_client):
-    """Creates a teacher and returns their ID."""
-    return add_user(TEACHER_NAME[0], TEACHER_NAME[1], "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
+    """Creates a user and returns their ID."""
+    student_id = add_user("John", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
+    return student_id
 
 @pytest.fixture
 def setup_class(test_client, setup_teacher):
-    """Creates a class and returns its ID."""
-    class_id = 101
-    return class_operations.add_class(class_id, CLASS_NAMES[0], ECTS_VALUES[0], setup_teacher, BACKGROUND_COLOR)
+    """Fixture to create a class and return its instance."""
+    class_id = class_operations.add_class(
+        class_id=0,
+        name=CLASS_NAME,
+        ects_credits=ECTS_CREDITS,
+        default_teacher_id=setup_teacher,
+        level=LEVEL,
+        backgroundColor=BACKGROUND_COLOR
+    )
+    return class_operations.get_class_by_id(class_id)
 
-def test_add_and_get_class(test_client, setup_teacher):
-    """Test adding and retrieving a class."""
-    class_id = class_operations.add_class(101, CLASS_NAMES[1], ECTS_VALUES[1], setup_teacher, BACKGROUND_COLOR)
-    retrieved_class = class_operations.get_class_by_id(class_id)
-    assert retrieved_class.name == CLASS_NAMES[1]
+def test_add_class(setup_teacher):
+    """Test adding a class."""
+    class_id = class_operations.add_class(
+        class_id=1,
+        name=CLASS_NAME,
+        ects_credits=ECTS_CREDITS,
+        default_teacher_id=setup_teacher,
+        level=LEVEL,
+        backgroundColor=BACKGROUND_COLOR
+    )
+    assert class_id != -1
+    new_class = class_operations.get_class_by_id(class_id)
+    assert new_class is not None
+    assert new_class.name == CLASS_NAME
 
-def test_modify_class(test_client, setup_class):
+def test_modify_class(setup_class):
     """Test modifying class information."""
-    success = class_operations.modify_class(setup_class, {"name": CLASS_NAMES[2]})
-    modified_class = class_operations.get_class_by_id(setup_class)
-    assert success
-    assert modified_class.name == CLASS_NAMES[2]
+    new_name = "Advanced Data Science"
+    success = class_operations.modify_class(
+        setup_class.class_id,
+        {"name": new_name}
+    )
+    assert success is True
+    modified_class = class_operations.get_class_by_id(setup_class.class_id)
+    assert modified_class.name == new_name
 
-def test_remove_class(test_client, setup_class):
+def test_remove_class(setup_class):
     """Test removing a class."""
-    success = class_operations.remove_class(setup_class)
-    deleted_class = class_operations.get_class_by_id(setup_class)
-    assert success
+    success = class_operations.remove_class(setup_class.class_id)
+    assert success is True
+    deleted_class = class_operations.get_class_by_id(setup_class.class_id)
     assert deleted_class is None
 
-def test_authorize_and_deauthorize_teacher_for_class(test_client, setup_class, setup_teacher):
-    """Test authorizing and deauthorizing a teacher for a class."""
-    # Authorize teacher for the class
-    authorize_success = class_operations.authorize_teacher_for_class(setup_teacher, setup_class)
-    teachers = class_operations.get_authorized_teachers_for_class(setup_class)
-    assert authorize_success
-    assert len(teachers) == 1
-    assert teachers[0].name == TEACHER_NAME[0]
-    
-    # Deauthorize teacher from the class
-    deauthorize_success = class_operations.deauthorize_teacher_for_class(setup_teacher, setup_class)
-    teachers_after_deauthorization = class_operations.get_authorized_teachers_for_class(setup_class)
-    assert deauthorize_success
-    assert len(teachers_after_deauthorization) == 0
+def test_get_class_by_id(setup_class):
+    """Test retrieving a class by its ID."""
+    result_class = class_operations.get_class_by_id(setup_class.class_id)
+    assert result_class is not None
+    assert result_class.class_id == setup_class.class_id
+    assert result_class.name == setup_class.name
 
-def test_get_all_classes(test_client, setup_teacher):
+
+def test_get_all_classes(setup_class):
     """Test retrieving all classes."""
-    class_ids = [class_operations.add_class(101 + i, CLASS_NAMES[i], ECTS_VALUES[i % len(ECTS_VALUES)], setup_teacher, BACKGROUND_COLOR) for i in range(len(CLASS_NAMES))]
-    classes = class_operations.get_all_classes()
-    assert len(classes) == len(CLASS_NAMES)
+    all_classes = class_operations.get_all_classes()
+    assert len(all_classes) > 0
+    assert setup_class in all_classes

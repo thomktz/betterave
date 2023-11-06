@@ -1,80 +1,59 @@
 from extensions import db
-from app.models import User, Class
-from app.models.user import UserType
+from app.decorators import with_instance
+from app.models import User, ClassGroup, Class, Lesson
+from app.models.user import UserType, UserLevel
+from sqlalchemy import func
 
-def enroll_student_in_class(user_id: int, class_id: int):
-    """Enroll a student in a class."""
-    student = db.session.get(User, user_id)
-    if not student:
-        return False
-    
-    class_instance = db.session.get(Class, class_id)
-    if not class_instance:
-        return False
+@with_instance(User)
+def get_student_groups(user: User):
+    """Get all class groups a student is enrolled in."""
+    return user.enrolled_groups
 
-    student.enrolled_classes.append(class_instance)
-    db.session.commit()
-    return True
+@with_instance(User)
+def get_student_lessons(user: User, sort: bool = True) -> list[Lesson]:
+    """Get all lessons associated with a student through class groups."""
+    # Collect lessons from all groups where the student is enrolled
+    lessons = []
+    for group in user.groups:
+        lessons.extend(group.lessons)
 
-def remove_student_from_class(user_id: int, class_id: int):
-    """Remove a student from a class."""
-    student = db.session.get(User, user_id)
-    if not student:
-        return False
-    
-    class_instance = db.session.get(Class, class_id)
-    if not class_instance:
-        return False
+    return sorted(lessons) if sort else lessons
 
-    student.enrolled_classes.remove(class_instance)
-    db.session.commit()
-    return True
+@with_instance(User)
+def get_student_future_lessons(user: User, current_time, sort: bool = True) -> list[Lesson]:
+    """Get future lessons for a student through class groups."""
+    # Retrieve all lessons for the student from their groups
+    future_lessons = []
+    for group in user.groups:
+        group_lessons = [lesson for lesson in group.lessons if lesson.date >= current_time.date()]
+        future_lessons.extend(group_lessons)
 
-def get_student_classes(user_id: int):
-    """Get all classes a student is enrolled in."""
-    student = db.session.get(User, user_id)
-    if not student:
-        return []
-
-    return student.enrolled_classes
-
-def get_student_lessons(user_id: int):
-    """Get all lessons associated with a student."""
-    student = db.session.get(User, user_id)
-    if not student:
-        return []
-
-    return student.registered_lessons
-
-def get_student_future_lessons(user_id: int, current_time):
-    """Get future lessons for a student."""
-    student = db.session.get(User, user_id)
-    if not student:
-        return []
-
-    # Retrieve all lessons for the student
-    all_lessons = student.registered_lessons
-
-    # Filter lessons to get only future lessons
-    future_lessons = [lesson for lesson in all_lessons if lesson.date >= current_time.date()]
-
-    return future_lessons
-
-def get_student_lessons(user_id: int):
-    """Get lessons that a student is registered to."""
-    student = db.session.get(User, user_id)
-    if not student:
-        return []
-
-    return sorted(student.registered_lessons)
+    return sorted(future_lessons) if sort else future_lessons
 
 def get_all_students():
     """Return all student users in the database."""
-    return User.query.filter_by(user_type=UserType("student")).all()
+    # Assuming UserType is an enum and "student" is one of its members
+    return User.query.filter(User.user_type == UserType.STUDENT).all()
 
-def is_student_in_class(student: User, class_id: int):
-    """Check if a student is in a specific class."""
-    class_instance = Class.query.get(class_id)
-    if not class_instance:
-        return False
-    return student in class_instance.students
+def get_students_from_level(level: UserLevel):
+    """Return all student users from a specific level."""
+    return User.query.filter(User.user_type == UserType.STUDENT, User.level == level).all()
+
+@with_instance([User, ClassGroup])
+def is_student_in_group(student: User, group: ClassGroup):
+    """Check if a student is in a specific class group."""
+    return student in group.students
+
+@with_instance([User, Class])
+def is_student_in_class(student: User, class_: Class) -> bool:
+    """
+    Check if a student is in the main group of a specific class.
+    
+    Args:
+        student_id (int): The ID of the student.
+        class_id (int): The ID of the class.
+    
+    Returns:
+        bool: True if the student is in the main group of the class, False otherwise.
+    """
+    return student in class_.main_group().students

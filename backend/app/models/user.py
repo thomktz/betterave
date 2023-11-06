@@ -41,18 +41,16 @@ class User(db.Model, UserMixin):
     website = db.Column(db.String, nullable=True)
 
     # Relationships
-    enrolled_classes = db.relationship('Class', secondary='enrollment', back_populates='students')
-    registered_lessons = db.relationship('Lesson', secondary='attendance', back_populates='students')
+    groups = db.relationship('ClassGroup', secondary="group_enrollment", back_populates='students')
     messages = db.relationship('Message', back_populates='user')
+    attended_events = db.relationship('Event', secondary='event_attendance', back_populates='attending_users')
     subscriptions = db.relationship(
         'User', 
         secondary=association_subscriptions,
-        primaryjoin=user_id==association_subscriptions.c.subscriber_id,
-        secondaryjoin=user_id==association_subscriptions.c.asso_id,
-        backref=db.backref('subscribers', lazy='dynamic'),
-        lazy='dynamic'
+        primaryjoin=(user_id == association_subscriptions.c.subscriber_id),
+        secondaryjoin=(user_id == association_subscriptions.c.asso_id),
+        backref=db.backref('subscribers', lazy='dynamic')
     )
-    attended_events = db.relationship('Event', secondary='event_attendance', back_populates='attending_users')
     
     def get_user_type(self):
         return self.user_type
