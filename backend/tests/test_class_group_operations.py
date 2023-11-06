@@ -10,7 +10,7 @@ from app.operations.class_group_operations import (
 from app.operations.user_operations import add_user, delete_user
 from app.operations.class_operations import add_class
 from app.models.class_group import ClassGroup
-from app.models.user import UserType, UserLevel
+from app.models import UserType, UserLevel
 
 # Constants for the test
 GROUP_NAME = "Test Group"
@@ -24,8 +24,8 @@ BACKGROUND_COLOR = "#123456"
 @pytest.fixture
 def setup_teacher(test_client):
     """Creates a user and returns their ID."""
-    student_id = add_user("John", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
-    return student_id
+    teacher_id = add_user("John", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
+    return teacher_id
 
 @pytest.fixture
 def setup_class(test_client, setup_teacher):

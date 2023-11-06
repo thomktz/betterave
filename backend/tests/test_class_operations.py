@@ -1,6 +1,6 @@
 import pytest
 from app.operations import class_operations
-from app.models.user import UserType, UserLevel
+from app.models import UserType, UserLevel
 from app.operations.user_operations import add_user
 
 # Constants

@@ -11,4 +11,3 @@ class ClassGroup(db.Model):
     students = db.relationship('User', secondary='group_enrollment', back_populates='groups')
     lessons = db.relationship('Lesson', back_populates='class_group')
     messages = db.relationship('Message', back_populates='group_ref', lazy='dynamic')
-

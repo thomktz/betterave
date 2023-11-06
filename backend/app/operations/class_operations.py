@@ -1,7 +1,6 @@
 from sqlalchemy.exc import SQLAlchemyError
 from extensions import db
-from app.models.class_ import Class
-from app.models.user import UserLevel
+from app.models import UserLevel, Class
 from app.decorators import with_instance
 
 def add_class(class_id, name, ects_credits, default_teacher_id, level, backgroundColor, **kwargs) -> int:

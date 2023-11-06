@@ -1,5 +1,5 @@
 from extensions import db
-from app.models.user import UserLevel
+from app.models.enums import UserLevel
 
 class Class(db.Model):
     """SQLAlchemy object representing an ENSAE course."""
@@ -17,6 +17,7 @@ class Class(db.Model):
     
     # Relationship to link ClassGroup
     groups = db.relationship('ClassGroup', back_populates='class_ref', lazy='dynamic')
+    user_groups = db.relationship('UserClassGroup', back_populates='class_', lazy='dynamic')
 
     def main_group(self):
         """Retrieve the main group for this class."""

@@ -5,11 +5,12 @@ import numpy as np
 from main import app
 from extensions import db
 from app.operations.user_operations import add_user, get_user_by_name
+from app.operations.student_operations import get_students_from_level
 from app.operations.class_operations import add_class, get_classes_from_level
 from app.operations.lesson_operations import add_lesson
 from app.operations.class_group_operations import add_class_group, enroll_student_in_group, get_group_by_name
-from app.operations.student_operations import get_students_from_level
-from app.models.user import UserLevel
+from app.operations.user_class_group_operations import add_user_class_group
+from app.models import UserLevel
 
 CLASSES_PER_STUDENT = 10
 
@@ -181,12 +182,25 @@ def initialize_database():
             for student in students:
                 picked_classes = np.random.choice(level_classes, size=CLASSES_PER_STUDENT, replace=False)
                 for class_ in picked_classes:
-                    enroll_student_in_group(student, class_.main_group())
+                    primary_group = class_.main_group()
+                    secondary_group = None
                     
-                    # If there are multiple groups, enroll the student in a tutorial group too
+                    # Enroll the student in the groups
+                    enroll_student_in_group(student.user_id, primary_group.group_id)
+                    
+                    # Check for secondary groups and select one if they exist
                     secondary_groups = class_.secondary_groups()
-                    if len(secondary_groups) > 0:
-                        enroll_student_in_group(student, np.random.choice(secondary_groups))
+                    if secondary_groups:
+                        secondary_group = np.random.choice(secondary_groups)
+                        enroll_student_in_group(student.user_id, secondary_group.group_id)
+                    
+                    # Create a UserClassGroup entry
+                    add_user_class_group(
+                        user_id=student.user_id,
+                        class_id=class_.class_id,
+                        primary_class_group_id=primary_group.group_id,
+                        secondary_class_group_id=secondary_group.group_id if secondary_group else None
+                    )
                         
         
         # 8 - Add lessons

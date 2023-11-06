@@ -42,7 +42,7 @@ def type_required(*user_types_required):
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            print("Checking user type")
+            print("Current user in type_required is", current_user)
             if not current_user.is_authenticated:
                 return jsonify({'message': 'Authentication is required'}), 401
 

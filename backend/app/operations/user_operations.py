@@ -8,7 +8,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import and_
 from extensions import db, bcrypt
 from app.decorators import with_instance
-from app.models.user import UserLevel, UserType, User
+from app.models import UserLevel, UserType, User
 
 
 

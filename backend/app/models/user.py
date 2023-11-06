@@ -1,20 +1,6 @@
-from enum import Enum
-
-from extensions import db
 from flask_login import UserMixin
-
-
-class UserType(Enum):
-    STUDENT = "student"
-    ASSO = "asso" # Shared account between association members
-    TEACHER = "teacher"
-    ADMIN = "admin"
-
-class UserLevel(Enum):
-    _1A = "1A"
-    _2A = "2A"
-    _3A = "3A"
-    NA = "N/A" # Not applicable, for teachers, assos and admins
+from extensions import db
+from app.models.enums import UserLevel, UserType
 
 
 association_subscriptions = db.Table(
@@ -42,6 +28,7 @@ class User(db.Model, UserMixin):
 
     # Relationships
     groups = db.relationship('ClassGroup', secondary="group_enrollment", back_populates='students')
+    class_groups = db.relationship('UserClassGroup', back_populates='user', lazy='dynamic')
     messages = db.relationship('Message', back_populates='user')
     attended_events = db.relationship('Event', secondary='event_attendance', back_populates='attending_users')
     subscriptions = db.relationship(

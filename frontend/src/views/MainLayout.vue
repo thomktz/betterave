@@ -59,6 +59,7 @@ export default {
       this.darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     document.documentElement.setAttribute('data-dark-mode', this.darkMode);
+    this.$vuetify.theme.name = this.darkMode ? 'dark' : 'light';
     try {
       const response = await axios.get('/profile', { withCredentials: true });
       this.user = response.data;
@@ -74,6 +75,9 @@ export default {
       this.darkMode = !this.darkMode;
       document.documentElement.setAttribute('data-dark-mode', this.darkMode);
       localStorage.setItem('darkMode', this.darkMode); 
+
+      // Update the Vuetify theme
+      this.$vuetify.theme.name = this.darkMode ? 'dark' : 'light';
     }
   }
 };

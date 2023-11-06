@@ -1,6 +1,6 @@
 import pytest
 from backend.app.operations import lesson_operations, user_operations
-from app.models.user import UserType, UserLevel
+from app.models import UserType, UserLevel
 from datetime import date, time
 from app.operations.class_operations import add_class
 from app.operations.class_group_operations import add_class_group, delete_class_group

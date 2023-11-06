@@ -58,7 +58,7 @@ const routes = [
         path: '/controls/admin/:student_id',
         name: 'EditClasses',
         component: EditClasses,
-        props: true
+        meta: { requiresAuth: true, role: 'admin' }
       },
     ]
   },

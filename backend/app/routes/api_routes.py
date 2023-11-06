@@ -4,6 +4,7 @@ from functools import wraps
 from . import bp
 from flask import jsonify, request
 from flask_login import login_required, current_user
+from app.models import ClassGroup
 from app.decorators import type_required
 from app.operations.class_operations import get_class_by_id
 from app.operations.message_operations import get_class_messages, add_class_message
@@ -11,11 +12,12 @@ from app.operations.student_operations import get_student_lessons, get_all_stude
 from app.operations.asso_operations import subscribe_to_asso, unsubscribe_from_asso, get_all_assos
 from app.operations.event_operations import add_event
 from app.operations.user_operations import get_all_users, delete_user, add_user, get_user_by_id, modify_user
-
+from app.operations.user_class_group_operations import get_ucg_by_user_and_class, modify_user_class_group
 
 @bp.route("/profile", methods=["GET"])
 @login_required
 def profile_route():
+    print("Getting profile for user", current_user.name, current_user.surname)
     return jsonify(
         email=current_user.email,
         name=current_user.name,
@@ -27,6 +29,7 @@ def profile_route():
 @bp.route("/lessons", methods=["GET"])
 @login_required
 def get_lessons_route():
+    print("Getting lessons for user", current_user.name, current_user.surname)
     lessons = get_student_lessons(current_user)
     formatted_lessons = [
         {
@@ -48,6 +51,7 @@ def get_lessons_route():
 @bp.route("/photochart", methods=["GET"])
 @login_required
 def all_students_route():
+    print("Getting all students")
     students = get_all_students()
     formatted_students = [
         {
@@ -64,6 +68,7 @@ def all_students_route():
 @bp.route("/class/<int:class_id>", methods=["GET"])
 @login_required
 def get_class_detail(class_id):
+    print("Getting class detail for class", class_id)
     class_instance = get_class_by_id(class_id)
     if class_instance:
         return jsonify({
@@ -158,9 +163,9 @@ def get_all_assos_route():
     return jsonify(formatted_assos), 200
 
 @bp.route("/users", methods=["GET"])
-@login_required
 @type_required("admin")
 def get_users_route():
+    print("Getting all users, from user", current_user.name, current_user.surname)
     users = get_all_users()
     formatted_users = [
         {
@@ -177,7 +182,6 @@ def get_users_route():
     return jsonify(formatted_users), 200
 
 @bp.route("/users/<int:user_id>", methods=["DELETE"])
-@login_required
 @type_required("admin")
 def delete_user_route(user_id):
     success = delete_user(user_id)
@@ -187,7 +191,6 @@ def delete_user_route(user_id):
         return jsonify({"message": "User not found or error deleting the user"}), 404
     
 @bp.route("/users", methods=["POST"])
-@login_required
 @type_required("admin")
 def create_user_route():
     user_data = request.get_json()
@@ -218,7 +221,6 @@ def create_user_route():
     }), 201
 
 @bp.route("/users/<int:user_id>", methods=["PUT"])
-@login_required
 @type_required("admin")
 def update_user_route(user_id):
     user_data = request.get_json()
@@ -239,18 +241,46 @@ def update_user_route(user_id):
     }), 200
     
 @bp.route("/users/<int:user_id>", methods=["GET"])
-@login_required
 @type_required("admin")
 def get_user_route(user_id):
     user = get_user_by_id(user_id)
+    print("Getting info on user", user.name, user.surname, "from user", current_user.name, current_user.surname)
     if not user:
-        return jsonify({"message": "User not found"}), 404
-    classes = []
-    for class_ in get_cl
-        
+        return jsonify({"message": "User not found"}), 404    
+    
     return jsonify({
         "id": user.user_id,
         "name": user.name,
         "surname": user.surname,
-        "classes": 
+        "classes": [
+            {
+                "class_id": class_group.class_id,
+                "class_name": class_group.class_.name,
+                "primary_class_group_id": class_group.primary_class_group_id,
+                "secondary_class_group_id": class_group.secondary_class_group_id,
+                "secondary_class_group_name": class_group.secondary_class_group.name if class_group.secondary_class_group else "",
+                "all_groups": [group.name for group in class_group.class_.groups if not group.is_main_group]
+            }
+            for class_group in user.class_groups
+        ]
     }), 200
+    
+@bp.route("/user_class_groups/<int:user_id>/<int:class_id>", methods=["PUT"])
+@type_required("admin")
+def update_user_class_group_by_name(user_id, class_id):
+    data = request.json
+    secondary_class_group_name = data.get('secondary_class_group_name')
+    
+    secondary_class_group = ClassGroup.query.filter_by(class_id=class_id, name=secondary_class_group_name).first()
+    if not secondary_class_group:
+        return jsonify({'message': 'Group not found'}), 404
+    secondary_class_group_id = secondary_class_group.group_id
+
+    user_class_group = get_ucg_by_user_and_class(user_id=user_id, class_id=class_id)
+    if not user_class_group:
+        return jsonify({'message': 'UserClassGroup not found'}), 404
+    
+    if modify_user_class_group(user_class_group, {"secondary_class_group_id": secondary_class_group_id}):
+        return jsonify({"message": "UserClassGroup updated successfully"}), 200
+
+    return jsonify({'message': 'UserClassGroup updated successfully'}), 200

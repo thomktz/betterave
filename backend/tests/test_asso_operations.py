@@ -2,7 +2,7 @@ import pytest
 from backend.app.operations import user_operations
 from app.operations.asso_operations import subscribe_to_asso, unsubscribe_from_asso, get_all_assos
 from app.operations.user_operations import get_user_by_id
-from app.models.user import UserType, UserLevel
+from app.models import UserType, UserLevel
 
 
 # Constants

@@ -1,7 +1,6 @@
 from extensions import db
 from app.decorators import with_instance
-from app.models import User, ClassGroup, Class, Lesson
-from app.models.user import UserType, UserLevel
+from app.models import User, ClassGroup, Class, Lesson, UserType, UserLevel
 from sqlalchemy import func
 
 @with_instance(User)

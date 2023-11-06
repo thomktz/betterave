@@ -10,29 +10,33 @@ def list_students():
     print("Students:")
     for student in students:
         print(f"ID: {student.user_id} - Name: {student.name} {student.surname}")
-
-def get_classes_for_student(user_id):
+        
+def get_user_details(user_id):
     student = get_user_by_id(user_id)
     if not student:
         print("Student not found!")
         return
 
-    print(f"Classes for {student.name} {student.surname}:")
+    print(f"Details for {student.name} {student.surname}:\n")
+
+    # List of ClassGroups
+    print("# LIST OF ClassGroups:")
     for group in student.groups:
-        print(f" - {group.class_ref.name} {group.name}")
-        
-        
-def get_calendar(user_id):
-    lessons = get_student_lessons(user_id)
-    print(f"Lessons for User {user_id}:")
-    for lesson in sorted(lessons):
-        print(f" - {lesson.class_group.class_ref.name} - {lesson.class_group.name} - {lesson.date} - {lesson.end_time}")
-    
+        class_name = group.class_ref.name if group.class_ref else "No Class"
+        print(f"- {class_name} {group.name}")
+
+    print("\n# LIST OF UserClassGroups")
+    # List of UserClassGroups
+    for ucg in student.class_groups:
+        class_name = ucg.class_.name if ucg.class_ else "No Class"
+        primary_group_name = ucg.primary_class_group.name if ucg.primary_class_group else "No Primary Group"
+        secondary_group_name = ucg.secondary_class_group.name if ucg.secondary_class_group else "No Secondary Group"
+        print(f"- Class: {class_name}, Primary Group: {primary_group_name}, Secondary Group: {secondary_group_name}")
+
 
 if __name__ == "__main__":
     with app.app_context():
         list_students()
         user_id = int(input("Enter the ID of the User to view their classes: "))
-        get_classes_for_student(user_id)
-        get_calendar(user_id)
+        get_user_details(user_id)
 
