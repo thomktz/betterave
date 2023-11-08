@@ -13,7 +13,7 @@ services:
       - ./backend:/app
     ports: 
       - 5000:5000
-    command: poetry run gunicorn "create_app:create_app()" --bind 0.0.0.0:5000
+    # command: poetry run gunicorn "create_app:create_app()" --bind 0.0.0.0:5000
 
   frontend:
     build: ./frontend

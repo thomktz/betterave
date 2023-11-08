@@ -17,6 +17,6 @@ RUN poetry install --no-dev
 # Expose port 5000 to be accessible from the outside
 EXPOSE 5000
 
-# Run the init_db script to initialize the database
-# and then start the Flask application
 RUN poetry run python -m scripts.init_db
+CMD poetry run python main.py
+
