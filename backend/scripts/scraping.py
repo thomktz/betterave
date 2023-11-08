@@ -13,9 +13,9 @@ URL_2A = "https://www.ensae.fr/formation/cycle-ingenieur/deuxieme-annee"
 URL_3A = "https://www.ensae.fr/formation/cycle-ingenieur/troisieme-annee/catalogue-des-cours-de-troisieme-annee-du-cycle-ingenieur"
 
 # Data paths
-PATH_OCTOBER = '../data/edt_october.html'
-PATH_NOV = '../data/edt_november.html'
-PATH_DEC = '../data/edt_december.html'
+PATH_OCTOBER = 'data/edt_october.html'
+PATH_NOV = 'data/edt_november.html'
+PATH_DEC = 'data/edt_december.html'
 
 
 # Classes names that need to be mapped
@@ -193,8 +193,6 @@ def scrap_events_data(path):
             end_time = time_parts[1]
 
             lesson_type = lesson_info[0].split()[-1]
-            if not(lesson_type.startswith('Cours')) and not(lesson_type.startswith('TP')) and not(lesson_type.startswith('TD')):
-                lesson_type = "Cours"
 
             if lesson_info[-2].isupper():
                 prenom = "Prof"
@@ -359,12 +357,12 @@ if __name__ == "__main__":
     json_data = json.dumps(final_classes_data, indent=4)
     json_data = replace_unicode_escapes(json_data) # Replace Unicode escape sequences in the JSON data
     file_name = "classes.json"
-    with open("../data/" + file_name, 'w') as json_file:
+    with open("data/" + file_name, 'w') as json_file:
         json_file.write(json_data)
     
     json_data_special_events = json.dumps(special_events, indent=4)
     json_data_special_events = replace_unicode_escapes(json_data_special_events)
     file_name_2 = "special_events.json"
-    with open("../data/" + file_name_2, 'w') as json_file:
+    with open("data/" + file_name_2, 'w') as json_file:
         json_file.write(json_data_special_events)
 

@@ -1,16 +1,11 @@
 from extensions import db
+from app.decorators import with_instance
 from app.models.user import User, UserType
-from app.operations.user_operations import get_user_by_id
 from sqlalchemy.exc import SQLAlchemyError
 
-def subscribe_to_asso(user_id: int, asso_id: int) -> bool:
+@with_instance([User, User])
+def subscribe_to_asso(user: User, asso: User) -> bool:
     try:
-        user = get_user_by_id(user_id)
-        asso = get_user_by_id(asso_id)
-        
-        if not user or not asso:
-            return False
-
         # If already subscribed, no need to proceed
         if asso in user.subscriptions:
             return True
@@ -18,20 +13,14 @@ def subscribe_to_asso(user_id: int, asso_id: int) -> bool:
         user.subscriptions.append(asso)
         db.session.commit()
         return True
-
     except SQLAlchemyError as e:
         db.session.rollback()
         print(f"Error subscribing user to asso: {str(e)}")
         return False
 
-def unsubscribe_from_asso(user_id: int, asso_id: int) -> bool:
+@with_instance([User, User])
+def unsubscribe_from_asso(user: User, asso: User) -> bool:
     try:
-        user = get_user_by_id(user_id)
-        asso = get_user_by_id(asso_id)
-        
-        if not user or not asso:
-            return False
-
         # If not subscribed, no need to proceed
         if asso not in user.subscriptions:
             return True
@@ -39,7 +28,6 @@ def unsubscribe_from_asso(user_id: int, asso_id: int) -> bool:
         user.subscriptions.remove(asso)
         db.session.commit()
         return True
-
     except SQLAlchemyError as e:
         db.session.rollback()
         print(f"Error unsubscribing user from asso: {str(e)}")

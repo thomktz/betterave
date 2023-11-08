@@ -1,6 +1,6 @@
 import pytest
-from backend.app.operations import user_operations
-from app.models.user import UserLevel, UserType
+from app.models import UserLevel, UserType
+from app.operations import user_operations
 
 PIC_URL = "pic_url"    
 

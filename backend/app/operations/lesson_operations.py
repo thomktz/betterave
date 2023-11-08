@@ -1,21 +1,28 @@
 from datetime import datetime
 from sqlalchemy.exc import SQLAlchemyError
 from extensions import db
-from app.models import Lesson
+from app.decorators import with_instance
+from app.models import Lesson, ClassGroup, Class, User
 from app.operations.user_operations import get_user_by_id
 
-def add_lesson(class_id, date, start_time, end_time, homework=None, room=None, teacher_id=None):
+def add_lesson(group_id, date, start_time, end_time, homework=None, room=None, teacher_id=None):
     """Add a lesson to the database."""
     try:
+        # Validate and convert date and time if provided as strings
         if isinstance(date, str):
             date = datetime.strptime(date, "%Y-%m-%d").date()
         if isinstance(start_time, str):
             start_time = datetime.strptime(start_time, "%H:%M:%S").time()
         if isinstance(end_time, str):
             end_time = datetime.strptime(end_time, "%H:%M:%S").time()
-        
+
+    except ValueError as e:
+        print(f"Error in date or time conversion: {str(e)}")
+        return -1
+
+    try:
         new_lesson = Lesson(
-            class_id=class_id,
+            group_id=group_id,
             date=date,
             start_time=start_time,
             end_time=end_time,
@@ -31,31 +38,28 @@ def add_lesson(class_id, date, start_time, end_time, homework=None, room=None, t
         print(f"Error adding lesson: {str(e)}")
         return -1
 
-def modify_lesson(lesson_id, new_data: dict) -> bool:
+
+@with_instance(Lesson)
+def modify_lesson(lesson: Lesson, new_data: dict) -> bool:
     """Modify lesson information in the database."""
     try:
-        lesson = get_lesson_by_id(lesson_id)
-        if lesson:
-            for key, value in new_data.items():
-                if hasattr(lesson, key):
-                    setattr(lesson, key, value)
-            db.session.commit()
-            return True
-        return False
+        for key, value in new_data.items():
+            if hasattr(lesson, key):
+                setattr(lesson, key, value)
+        db.session.commit()
+        return True
     except SQLAlchemyError as e:
         db.session.rollback()
         print(f"Error modifying lesson: {str(e)}")
         return False
 
-def remove_lesson(lesson_id: int) -> bool:
+@with_instance(Lesson)
+def remove_lesson(lesson: Lesson) -> bool:
     """Remove a lesson from the database."""
     try:
-        lesson = get_lesson_by_id(lesson_id)
-        if lesson:
-            db.session.delete(lesson)
-            db.session.commit()
-            return True
-        return False
+        db.session.delete(lesson)
+        db.session.commit()
+        return True
     except SQLAlchemyError as e:
         db.session.rollback()
         print(f"Error deleting lesson: {str(e)}")
@@ -69,39 +73,10 @@ def get_all_lessons() -> list[Lesson]:
     """Return all lessons in the database."""
     return Lesson.query.all()
 
-def get_lessons_by_class_id(class_id: int) -> list[Lesson]:
-    """Get all lessons for a particular class."""
-    return Lesson.query.filter_by(class_id=class_id).all()
-
-def get_lessons_by_student_id(user_id: int) -> list[Lesson]:
-    """Get all lessons a particular student is part of."""
-    student = get_user_by_id(user_id)
-    return student.registered_lessons
-
-def assign_students_to_lesson(lesson_id, students: list):
-    """Assign a list of students to a lesson."""
-    try:
-        lesson = get_lesson_by_id(lesson_id)
-        if lesson:
-            lesson.students.extend(students)
-            db.session.commit()
-            return True
-        return False
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        print(f"Error assigning students to lesson: {str(e)}")
-        return False
-
-def add_student_to_lesson(lesson_id, student):
-    """Assign a single student to a lesson."""
-    try:
-        lesson = get_lesson_by_id(lesson_id)
-        if lesson:
-            lesson.students.append(student)
-            db.session.commit()
-            return True
-        return False
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        print(f"Error adding student to lesson: {str(e)}")
-        return False
+@with_instance(Class)
+def get_lessons_by_class(class_: Class) -> list[Lesson]:
+    """
+    Get all lessons for a particular class by joining the Lesson table
+    with the ClassGroup table and filtering on the class_id.
+    """
+    return Lesson.query.join(ClassGroup).filter(ClassGroup.class_id == class_.class_id).all()

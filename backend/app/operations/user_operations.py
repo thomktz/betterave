@@ -7,7 +7,8 @@ It excludes operations related specifically to students, which are defined in st
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import and_
 from extensions import db, bcrypt
-from app.models.user import UserLevel, UserType, User
+from app.decorators import with_instance
+from app.models import UserLevel, UserType, User
 
 
 
@@ -36,7 +37,6 @@ def add_user(
     password_override: str = None,
     linkedin: str = None,
     website: str = None,
-    
 ) -> int:
     """
     Add a user to the database.
@@ -86,7 +86,8 @@ def add_user(
         print(f"Error adding user: {str(e)}")
         return -1
 
-def modify_user(user_id: int, new_data: dict) -> bool:
+@with_instance(User)
+def modify_user(user: User, new_data: dict) -> bool:
     """
     Modify user information in the database.
 
@@ -98,21 +99,22 @@ def modify_user(user_id: int, new_data: dict) -> bool:
         bool: True if the user was successfully modified, False otherwise.
     """
     try:
-        user = get_user_by_id(user_id)
-        if user:
-            for key, value in new_data.items():
-                if hasattr(user, key):
-                    setattr(user, key, value)
-
-            db.session.commit()
-            return True
-        return False
+        for key, value in new_data.items():
+            if hasattr(user, key):
+                if key == "level":
+                    value = UserLevel(value)
+                elif key == "user_type":
+                    value = UserType(value)
+                setattr(user, key, value)
+        db.session.commit()
+        return True
     except SQLAlchemyError as e:
         db.session.rollback()
         print(f"Error modifying user: {str(e)}")
         return False
 
-def delete_user(user_id: int) -> bool:
+@with_instance(User)
+def delete_user(user: User) -> bool:
     """
     Remove a user from the database.
 
@@ -123,12 +125,9 @@ def delete_user(user_id: int) -> bool:
         bool: True if the user was successfully removed, False otherwise.
     """
     try:
-        user = get_user_by_id(user_id)
-        if user:
-            db.session.delete(user)
-            db.session.commit()
-            return True
-        return False
+        db.session.delete(user)
+        db.session.commit()
+        return True
     except SQLAlchemyError as e:
         db.session.rollback()
         print(f"Error deleting user: {str(e)}")
@@ -146,9 +145,9 @@ def get_all_users() -> list[User]:
     """Return all users in the database."""
     return User.query.all()
 
-def get_user_profile_pic(user_id: int)->str:
+@with_instance(User)
+def get_user_profile_pic(user: User) -> str:
     """Get the profil picture of a particular user."""
-    user = get_user_by_id(user_id)
     return user.profile_pic
 
 def get_user_by_name(name, surname):

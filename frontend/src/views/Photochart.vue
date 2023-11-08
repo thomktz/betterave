@@ -24,8 +24,8 @@
         students: [],
         classes: ['1A', '2A', '3A'], // List of classes
         selectedClass: 'all', // Current selected class
-    };
-},
+      };
+    },
     computed: {
       filteredStudents() {
         if (this.selectedClass === 'all') {

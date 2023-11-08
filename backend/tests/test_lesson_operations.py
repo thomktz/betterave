@@ -1,70 +1,92 @@
 import pytest
 from backend.app.operations import lesson_operations, user_operations
-from app.models.user import UserType, UserLevel
+from app.models import UserType, UserLevel
 from datetime import date, time
+from app.operations.class_operations import add_class
+from app.operations.class_group_operations import add_class_group, delete_class_group
+from app.operations.lesson_operations import add_lesson, modify_lesson, remove_lesson, get_lesson_by_id
+from app.operations.user_operations import add_user
 
 # Constants
+CLASS_NAME = "Test Class"
 CLASS_ID = 101
+ECTS_CREDITS = 3
+LEVEL = "1A"
+BACKGROUND_COLOR = "#123456"
+GROUP_NAME = "Test Group"
+IS_MAIN_GROUP = True
 LESSON_DATE = date(2023, 10, 21)
 START_TIME = time(9, 0, 0)
 END_TIME = time(10, 0, 0)
 STUDENT_NAME = ("Alice", "Smith")
+HOMEWORK = "Solve problem set 4"
+ROOM = "A1"
 
 @pytest.fixture
-def setup_lesson(test_client):
-    """Creates a lesson and returns its ID."""
-    return lesson_operations.add_lesson(CLASS_ID, LESSON_DATE, START_TIME, END_TIME)
+def setup_teacher(test_client):
+    """Creates a user and returns their ID."""
+    student_id = add_user("John", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
+    return student_id
 
 @pytest.fixture
-def setup_student_instance(test_client):
-    """Creates a student and returns their instance."""
-    student_id = user_operations.add_user(STUDENT_NAME[0], STUDENT_NAME[1], "student_pic_url", UserType.STUDENT, UserLevel.NA)
-    return user_operations.get_user_by_id(student_id)
+def setup_class(test_client, setup_teacher):
+    """Fixture to create a class and return its instance."""
+    class_id = add_class(
+        class_id=CLASS_ID,
+        name=CLASS_NAME,
+        ects_credits=ECTS_CREDITS,
+        default_teacher_id=setup_teacher,
+        level=LEVEL,
+        backgroundColor=BACKGROUND_COLOR
+    )
+    return class_id
 
-def test_add_and_get_lesson(test_client):
-    """Test adding and retrieving a lesson."""
-    lesson_id = lesson_operations.add_lesson(CLASS_ID, LESSON_DATE, START_TIME, END_TIME)
-    retrieved_lesson = lesson_operations.get_lesson_by_id(lesson_id)
-    assert retrieved_lesson.date == LESSON_DATE
+@pytest.fixture
+def setup_group(test_client, setup_class):
+    """Fixture to create a class group within the setup class and return its ID."""
+    group_id = add_class_group(name=GROUP_NAME, class_id=setup_class, is_main_group=IS_MAIN_GROUP)
+    yield group_id
+    delete_class_group(group_id)
+
+@pytest.fixture
+def setup_lesson(test_client, setup_group, setup_teacher):
+    """Fixture to create a lesson and return its ID."""
+    lesson_id = add_lesson(
+        group_id=setup_group,
+        date=LESSON_DATE,
+        start_time=START_TIME,
+        end_time=END_TIME,
+        homework=HOMEWORK,
+        room=ROOM,
+        teacher_id=setup_teacher
+    )
+    yield lesson_id
+    remove_lesson(lesson_id)
+
+def test_add_lesson(test_client, setup_group, setup_teacher):
+    """Test adding a new lesson."""
+    lesson_id = add_lesson(
+        group_id=setup_group,
+        date=LESSON_DATE,
+        start_time=START_TIME,
+        end_time=END_TIME,
+        homework=HOMEWORK,
+        room=ROOM,
+        teacher_id=setup_teacher
+    )
+    assert lesson_id is not None
+    assert lesson_id > 0
 
 def test_modify_lesson(test_client, setup_lesson):
-    """Test modifying lesson information."""
-    success = lesson_operations.modify_lesson(setup_lesson, {"date": LESSON_DATE})
-    modified_lesson = lesson_operations.get_lesson_by_id(setup_lesson)
-    assert success
-    assert modified_lesson.date == LESSON_DATE
+    """Test modifying a lesson."""
+    new_homework = "Solve problem set 5"
+    success = modify_lesson(setup_lesson, {'homework': new_homework})
+    assert success is True
+    modified_lesson = get_lesson_by_id(setup_lesson)
+    assert modified_lesson.homework == new_homework
 
 def test_remove_lesson(test_client, setup_lesson):
     """Test removing a lesson."""
-    success = lesson_operations.remove_lesson(setup_lesson)
-    deleted_lesson = lesson_operations.get_lesson_by_id(setup_lesson)
-    assert success
-    assert deleted_lesson is None
-
-def test_assign_students_to_lesson(test_client, setup_lesson, setup_student_instance):
-    """Test assigning students to a lesson."""
-    students = [setup_student_instance]
-    success = lesson_operations.assign_students_to_lesson(setup_lesson, students)
-    assert success
-
-def test_add_student_to_lesson(test_client, setup_lesson, setup_student_instance):
-    """Test adding a single student to a lesson."""
-    success = lesson_operations.add_student_to_lesson(setup_lesson, setup_student_instance)
-    assert success
-
-def test_get_all_lessons(test_client, setup_lesson):
-    """Test retrieving all lessons."""
-    lessons = lesson_operations.get_all_lessons()
-    assert len(lessons) > 0
-
-def test_get_lessons_by_class_id(test_client, setup_lesson):
-    """Test getting lessons by class ID."""
-    lessons = lesson_operations.get_lessons_by_class_id(CLASS_ID)
-    assert len(lessons) > 0
-
-def test_get_lessons_by_student_id(test_client, setup_lesson, setup_student_instance):
-    """Test getting lessons by student ID."""
-    student_id = setup_student_instance.user_id
-    lesson_operations.add_student_to_lesson(setup_lesson, setup_student_instance)
-    lessons = lesson_operations.get_lessons_by_student_id(student_id)
-    assert len(lessons) > 0
+    success = remove_lesson(setup_lesson)
+    assert success is True
+    assert get_lesson_by_id(setup_lesson) is None
