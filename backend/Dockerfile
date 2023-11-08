@@ -19,4 +19,4 @@ EXPOSE 5000
 
 # Run the init_db script to initialize the database
 # and then start the Flask application
-CMD poetry run python -m scripts.init_db
+RUN poetry run python -m scripts.init_db
