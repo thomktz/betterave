@@ -62,21 +62,21 @@ admins = [
 def initialize_database():
     with app.app_context():
         # Flag to determine whether to initialize the database
-        initialize_db = False
+        # initialize_db = False
 
-        try:
-            # Try to count the number of Users.
-            user_count = db.session.query(User).count()
-            if user_count == 0:
-                # The table is empty, set the flag to initialize the database
-                initialize_db = True
-        except:
-            # If we cannot query the database (e.g., the tables don't exist), set the flag
-            initialize_db = True
+        # try:
+        #     # Try to count the number of Users.
+        #     user_count = db.session.query(User).count()
+        #     if user_count == 0:
+        #         # The table is empty, set the flag to initialize the database
+        #         initialize_db = True
+        # except:
+        #     # If we cannot query the database (e.g., the tables don't exist), set the flag
+        #     initialize_db = True
 
-        if not initialize_db:
-            print("Database already initialized.")
-            return
+        # if not initialize_db:
+        #     print("Database already initialized.")
+        #     return
         
         db.session.remove()
         db.drop_all()
