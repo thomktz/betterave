@@ -17,9 +17,10 @@ def load_user(user_id):
 
 def create_app():
     """Function to create app instance"""
+    print(f"Creating app from {os.getcwd()}", flush=True)
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or b'\x05\xe1C\x07k\x1ay<\xb6\xa4\xf8\xc6\xa8f\xb4*'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////data/test.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////database/test.db'
     app.config.update(
         DEBUG=True,
         SESSION_COOKIE_HTTPONLY=True,
@@ -29,8 +30,7 @@ def create_app():
     
     CORS(app, supports_credentials=True, resources={r"/*": {
         "origins": [
-            "http://localhost:8080", 
-            "https://localhost:8080", 
+            "http://127.0.0.1:8080",
             "https://app.betterave.kientz.net", 
             "http://89.168.39.28:8080"
             "https://89.168.39.28:8080"
@@ -49,7 +49,7 @@ def create_app():
 
     with app.app_context():
         db.create_all()
-    
+        db.session.commit()
     
     @app.route("/")
     def index():
