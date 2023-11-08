@@ -1,20 +1,13 @@
-# base image
-FROM node:16-alpine
+FROM node:lts-alpine
 
-# set working directory
 WORKDIR /app
 
-# install and cache app dependencies
-COPY package.json /app/package.json
-RUN npm install --silent
-RUN npm install vue@next
+ENV PATH /app/node_modules/.bin:$PATH
 
-# Copy project files into the docker directory
-COPY . /app
+RUN npm install @vue/cli@5.0.8 -g
 
-# build app for production with minification
-RUN npm run build
-
-EXPOSE 8080
+COPY package.json .
+COPY package-lock.json .
+RUN npm install
 
 CMD ["npm", "run", "serve"]

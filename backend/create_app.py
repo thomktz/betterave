@@ -27,11 +27,14 @@ def create_app():
         SESSION_COOKIE_SAMESITE="Strict",
     )
     
-    CORS_ORIGINS = os.getenv('CORS_ORIGINS', "http://localhost:8080")
-    PORT = int(os.getenv('PORT', 5000))
-    
     CORS(app, supports_credentials=True, resources={r"/*": {
-        "origins": CORS_ORIGINS,
+        "origins": [
+            "http://localhost:8080", 
+            "https://localhost:8080", 
+            "https://app.betterave.kientz.net", 
+            "http://89.168.39.28:8080"
+            "https://89.168.39.28:8080"
+        ],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
         "expose_headers": ["Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"],
@@ -46,5 +49,10 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+    
+    
+    @app.route("/")
+    def index():
+        return "Hello, World!"
         
-    return app, PORT
+    return app

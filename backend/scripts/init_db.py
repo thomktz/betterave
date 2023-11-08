@@ -10,7 +10,7 @@ from app.operations.class_operations import add_class, get_classes_from_level
 from app.operations.lesson_operations import add_lesson
 from app.operations.class_group_operations import add_class_group, enroll_student_in_group, get_group_by_name
 from app.operations.user_class_group_operations import add_user_class_group
-from app.models import UserLevel
+from app.models import UserLevel, User
 
 CLASSES_PER_STUDENT = 10
 
@@ -61,11 +61,25 @@ admins = [
 
 def initialize_database():
     with app.app_context():
-        # Drop all tables
+        # Flag to determine whether to initialize the database
+        initialize_db = False
+
+        try:
+            # Try to count the number of Users.
+            user_count = db.session.query(User).count()
+            if user_count == 0:
+                # The table is empty, set the flag to initialize the database
+                initialize_db = True
+        except:
+            # If we cannot query the database (e.g., the tables don't exist), set the flag
+            initialize_db = True
+
+        if not initialize_db:
+            print("Database already initialized.")
+            return
+        
         db.session.remove()
         db.drop_all()
-        
-        # Create all tables
         db.create_all()
         
         student_ids = []

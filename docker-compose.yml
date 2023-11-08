@@ -1,26 +1,34 @@
 version: '3.8'
 
 services:
+
   backend:
     build: ./backend
-    ports:
-      - "5000:5000" 
-    environment:
-      - PORT=5000
-      - CORS_ORIGINS=http://localhost:8080
-      - FLASK_ENV=development
     networks:
-      - betteravenet
+      mynet:
+        ipv4_address: 172.28.1.1
+    environment:
+      - SECRET_KEY=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
+    volumes:
+      - ./backend:/app
+    ports: 
+      - 5000:5000
+    command: poetry run gunicorn "create_app:create_app()" --bind 0.0.0.0:5000
 
   frontend:
     build: ./frontend
-    ports:
-      - "8080:8080"
-    environment:
-      - VUE_APP_API_BASE_URL=http://localhost:5000
     networks:
-      - betteravenet
+      mynet:
+        ipv4_address: 172.28.1.2
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+    ports:
+      - 8080:8080
 
 networks:
-  betteravenet:
+  mynet:
     driver: bridge
+    ipam:
+     config:
+       - subnet: 172.28.0.0/16
