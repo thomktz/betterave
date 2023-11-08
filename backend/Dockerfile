@@ -1,3 +1,4 @@
+# frontend Dockerfile
 # Use an official Python runtime as a parent image
 FROM python:3.10-slim
 
@@ -8,6 +9,9 @@ WORKDIR /usr/src/app
 RUN pip install poetry
 RUN poetry config virtualenvs.create false
 
+# Add poetry and python to PATH
+ENV PATH="${PATH}:/root/.poetry/bin:/usr/local/bin/python"
+
 # Copy the current directory contents into the container at /usr/src/app
 COPY . .
 
@@ -17,6 +21,4 @@ RUN poetry install --no-dev
 # Expose port 5000 to be accessible from the outside
 EXPOSE 5000
 
-RUN poetry run python -m scripts.init_db
 CMD poetry run python main.py
-

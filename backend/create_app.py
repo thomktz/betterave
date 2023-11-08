@@ -19,7 +19,7 @@ def create_app():
     """Function to create app instance"""
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or b'\x05\xe1C\x07k\x1ay<\xb6\xa4\xf8\xc6\xa8f\xb4*'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./test.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////data/test.db'
     app.config.update(
         DEBUG=True,
         SESSION_COOKIE_HTTPONLY=True,
