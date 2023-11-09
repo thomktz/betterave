@@ -1,7 +1,7 @@
 <template>
 <div class="profile-pill" @mouseover="showDropdown = true" @mouseleave="showDropdown = false">
     <div class="email-with-icon">
-    <img :src="'/' + user.profile_pic" alt="Profile Icon" class="profile-icon" />
+    <img v-if="user && user.profile_pic" :src="'/' + user.profile_pic" alt="Profile Icon" class="profile-icon" />
     <span>{{ user.email }}</span>
     </div>
     <div v-if="showDropdown" class="dropdown-content">

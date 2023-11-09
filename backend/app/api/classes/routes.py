@@ -72,7 +72,7 @@ class ClassMessages(Resource):
         class_ = get_class_by_id(class_id)
         if not class_:
             api.abort(404, f'Class with id {class_id} not found')
-        return get_class_messages(class_)
+        return [message.as_dict() for message in get_class_messages(class_)]
 
     @api.doc(security='apikey')
     @require_authentication()
@@ -82,5 +82,5 @@ class ClassMessages(Resource):
         content = api.payload.get('content')
         message = add_class_message(content, class_id=class_id, user_id=current_user.user_id)
         if message:
-            return api.marshal(message, message_model), 201
+            return api.marshal(message.as_dict(), message_model), 201
         api.abort(400, 'Could not add message to the class')

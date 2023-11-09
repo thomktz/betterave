@@ -13,6 +13,9 @@ def add_message_to_group(content: str, group_id: int, user_id: int):
     msg = Message(content=content, group_id=group_id, user_id=user_id)
     db.session.add(msg)
     db.session.commit()
+
+    print(msg.as_dict(), flush=True)
+    
     return msg
 
 @with_instance(Message)
