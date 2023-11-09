@@ -1,4 +1,5 @@
 from flask_restx import Resource
+from flask_login import current_user
 from .models import class_group_model, message_model, message_post_model
 from .namespace import api
 from app.operations.class_group_operations import (
