@@ -19,10 +19,12 @@ class Message(db.Model):
         return {
             "message_id": self.message_id,
             "group_id": self.group_id,
-            "user_id": self.user_id,
             "content": self.content,
             "timestamp": self.timestamp.isoformat(),
-            "user_name": self.user.name,
-            "user_surname": self.user.surname,
-            "user_profile_pic": self.user.profile_pic,
+            "sender_details": {
+                "user_id": self.user.user_id,
+                "name": self.user.name,
+                "surname": self.user.surname,
+                "profile_pic": self.user.profile_pic
+            }
         }

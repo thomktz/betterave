@@ -24,7 +24,7 @@ def setup_class(test_client, setup_teacher):
         ects_credits=ECTS_CREDITS,
         default_teacher_id=setup_teacher,
         level=LEVEL,
-        backgroundColor=BACKGROUND_COLOR
+        background_color=BACKGROUND_COLOR
     )
     return class_operations.get_class_by_id(class_id)
 
@@ -36,17 +36,17 @@ def test_add_class(setup_teacher):
         ects_credits=ECTS_CREDITS,
         default_teacher_id=setup_teacher,
         level=LEVEL,
-        backgroundColor=BACKGROUND_COLOR
+        background_color=BACKGROUND_COLOR
     )
     assert class_id != -1
     new_class = class_operations.get_class_by_id(class_id)
     assert new_class is not None
     assert new_class.name == CLASS_NAME
 
-def test_modify_class(setup_class):
+def test_update_class(setup_class):
     """Test modifying class information."""
     new_name = "Advanced Data Science"
-    success = class_operations.modify_class(
+    success = class_operations.update_class(
         setup_class.class_id,
         {"name": new_name}
     )
@@ -54,9 +54,9 @@ def test_modify_class(setup_class):
     modified_class = class_operations.get_class_by_id(setup_class.class_id)
     assert modified_class.name == new_name
 
-def test_remove_class(setup_class):
+def test_delete_class(setup_class):
     """Test removing a class."""
-    success = class_operations.remove_class(setup_class.class_id)
+    success = class_operations.delete_class(setup_class.class_id)
     assert success is True
     deleted_class = class_operations.get_class_by_id(setup_class.class_id)
     assert deleted_class is None

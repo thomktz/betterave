@@ -87,7 +87,7 @@ def add_user(
         return -1
 
 @with_instance(User)
-def modify_user(user: User, new_data: dict) -> bool:
+def update_user(user: User, new_data: dict) -> bool:
     """
     Modify user information in the database.
 

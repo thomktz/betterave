@@ -2,7 +2,7 @@ import pytest
 from app.operations.class_group_operations import (
     add_class_group,
     delete_class_group,
-    modify_class_group,
+    update_class_group,
     get_class_group_by_id,
     enroll_student_in_group,
     unenroll_student_from_group
@@ -36,7 +36,7 @@ def setup_class(test_client, setup_teacher):
         ects_credits=ECTS_CREDITS,
         default_teacher_id=setup_teacher,
         level=LEVEL,
-        backgroundColor=BACKGROUND_COLOR
+        background_color=BACKGROUND_COLOR
     )
     return class_id
 
@@ -59,10 +59,10 @@ def test_add_class_group(setup_class):
     group_id = add_class_group(name=GROUP_NAME, class_id=setup_class, is_main_group=IS_MAIN_GROUP)
     assert group_id != -1 
 
-def test_modify_class_group(setup_group):
+def test_update_class_group(setup_group):
     """Test modifying a class group."""
     NEW_NAME = "Updated Group Name"
-    assert modify_class_group(setup_group, {'name': NEW_NAME}) is True
+    assert update_class_group(setup_group, {'name': NEW_NAME}) is True
     group = get_class_group_by_id(setup_group)
     assert group.name == NEW_NAME  # Check that the group name was updated.
 

@@ -31,7 +31,7 @@ def add_event(asso_id, name, date, start_time, end_time, description=None, locat
         print(f"Error adding event: {str(e)}")
         return -1
 
-def modify_event(event_id, new_data: dict) -> bool:
+def update_event(event_id, new_data: dict) -> bool:
     """Modify event information in the database."""
     try:
         event = get_event_by_id(event_id)
@@ -47,7 +47,7 @@ def modify_event(event_id, new_data: dict) -> bool:
         print(f"Error modifying event: {str(e)}")
         return False
 
-def remove_event(event_id: int) -> bool:
+def delete_event(event_id: int) -> bool:
     """Remove an event from the database."""
     try:
         event = get_event_by_id(event_id)

@@ -10,7 +10,7 @@ class Class(db.Model):
     ects_credits = db.Column(db.Integer, nullable=False)
     ensae_link = db.Column(db.String, nullable=False)
     level = db.Column(db.Enum(UserLevel), nullable=False)
-    backgroundColor = db.Column(db.String, nullable=True)
+    background_color = db.Column(db.String, nullable=True)
     
     default_teacher_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     default_teacher = db.relationship('User', foreign_keys=[default_teacher_id])

@@ -34,7 +34,7 @@ def add_user_class_group(user_id: int, class_id: int, primary_class_group_id: in
 
 
 @with_instance(UserClassGroup)
-def modify_user_class_group(user_class_group: UserClassGroup, new_data: dict) -> bool:
+def update_user_class_group(user_class_group: UserClassGroup, new_data: dict) -> bool:
     """
     Modify UserClassGroup information in the database.
 

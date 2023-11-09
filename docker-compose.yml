@@ -8,6 +8,7 @@ services:
       mynet:
         ipv4_address: 172.28.1.1
     environment:
+      - API_KEY=BETTERAVEAPIKEY9999
       - SECRET_KEY=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
     volumes:
       - ./backend:/app
@@ -15,16 +16,16 @@ services:
     ports: 
       - 5000:5000
 
-  frontend:
-    build: ./frontend
-    networks:
-      mynet:
-        ipv4_address: 172.28.1.2
-    volumes:
-      - './frontend:/app'
-      - '/app/node_modules'
-    ports:
-      - 8080:8080
+  # frontend:
+  #   build: ./frontend
+  #   networks:
+  #     mynet:
+  #       ipv4_address: 172.28.1.2
+  #   volumes:
+  #     - './frontend:/app'
+  #     - '/app/node_modules'
+  #   ports:
+  #     - 8080:8080
 
 networks:
   mynet:

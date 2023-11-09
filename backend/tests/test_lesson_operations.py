@@ -4,7 +4,7 @@ from app.models import UserType, UserLevel
 from datetime import date, time
 from app.operations.class_operations import add_class
 from app.operations.class_group_operations import add_class_group, delete_class_group
-from app.operations.lesson_operations import add_lesson, modify_lesson, remove_lesson, get_lesson_by_id
+from app.operations.lesson_operations import add_lesson, update_lesson, delete_lesson, get_lesson_by_id
 from app.operations.user_operations import add_user
 
 # Constants
@@ -37,7 +37,7 @@ def setup_class(test_client, setup_teacher):
         ects_credits=ECTS_CREDITS,
         default_teacher_id=setup_teacher,
         level=LEVEL,
-        backgroundColor=BACKGROUND_COLOR
+        background_color=BACKGROUND_COLOR
     )
     return class_id
 
@@ -61,7 +61,7 @@ def setup_lesson(test_client, setup_group, setup_teacher):
         teacher_id=setup_teacher
     )
     yield lesson_id
-    remove_lesson(lesson_id)
+    delete_lesson(lesson_id)
 
 def test_add_lesson(test_client, setup_group, setup_teacher):
     """Test adding a new lesson."""
@@ -77,16 +77,16 @@ def test_add_lesson(test_client, setup_group, setup_teacher):
     assert lesson_id is not None
     assert lesson_id > 0
 
-def test_modify_lesson(test_client, setup_lesson):
+def test_update_lesson(test_client, setup_lesson):
     """Test modifying a lesson."""
     new_homework = "Solve problem set 5"
-    success = modify_lesson(setup_lesson, {'homework': new_homework})
+    success = update_lesson(setup_lesson, {'homework': new_homework})
     assert success is True
     modified_lesson = get_lesson_by_id(setup_lesson)
     assert modified_lesson.homework == new_homework
 
-def test_remove_lesson(test_client, setup_lesson):
+def test_delete_lesson(test_client, setup_lesson):
     """Test removing a lesson."""
-    success = remove_lesson(setup_lesson)
+    success = delete_lesson(setup_lesson)
     assert success is True
     assert get_lesson_by_id(setup_lesson) is None

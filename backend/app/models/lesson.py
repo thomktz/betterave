@@ -13,11 +13,9 @@ class Lesson(db.Model):
     homework = db.Column(db.String, nullable=True)
     room = db.Column(db.String, nullable=True)
     teacher_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=True)
-    
-    # Relationships
+    teacher = db.relationship('User', back_populates='lessons_taught')
     # References 'class_group' instead of 'class'
     class_group = db.relationship('ClassGroup', back_populates='lessons')
-    teacher = db.relationship('User', foreign_keys=[teacher_id])
     
     # Ordering methods for comparing lessons
     def __lt__(self, other):
