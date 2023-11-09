@@ -9,7 +9,7 @@
             @click="toggleSubscription(asso)"
             :class="asso.subscribed ? 'subscribed' : ''"
           >
-            <img :src="asso.logo" alt="Asso Logo" class="asso-logo">
+            <img :src="'/' + asso.profile_pic" alt="Asso Logo" class="asso-logo">
             <span class="asso-name">{{ asso.name }}</span>
             <div v-if="asso.subscribed" class="tick-mark">✓</div>
           </li>
