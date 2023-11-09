@@ -36,10 +36,10 @@ export default {
         };
 
         // Delete user by ID
-        const deleteUser = async (userId) => {
+        const deleteUser = async (user_id) => {
             try {
-                await apiClient.delete(`/users/${userId}`);
-                users.value = users.value.filter(user => user.user_id !== userId);
+                await apiClient.delete(`/users/${user_id}`);
+                users.value = users.value.filter(user => user.user_id !== user_id);
                 
             } catch (error) {
                 console.error('Error deleting user:', error);

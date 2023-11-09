@@ -22,7 +22,7 @@ const routes = [
         component: HomePage
       },
       {
-        path: 'class/:classId', // dynamic segment for class id
+        path: 'class/:class_id', // dynamic segment for class id
         name: 'class-details',
         component: ClassPage
       },

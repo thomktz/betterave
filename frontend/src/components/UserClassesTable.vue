@@ -47,13 +47,13 @@
       emitUpdateClass(item) {
         // Emit an event for the parent component to handle, passing the relevant data
         this.$emit('update-class-group', {
-          classId: item.class_id,
+          class_id: item.class_id,
           secondaryClassGroupName: item.secondary_class_group_name
         });
       },
-      emitDeleteClass(classId) {
-        console.log("Deleting class", classId);
-        // this.$emit('delete-class', classId);
+      emitDeleteClass(class_id) {
+        console.log("Deleting class", class_id);
+        // this.$emit('delete-class', class_id);
       },
       getGroupName(item) {
         return item.secondary_class_group_name ? "Secondary group" : 'No groups';

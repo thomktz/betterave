@@ -44,8 +44,8 @@ export default {
     this.nextLessons = response.data;
   },
   methods: {
-    goToClass(classId) {
-      this.$router.push(`/class/${classId}`);
+    goToClass(class_id) {
+      this.$router.push(`/class/${class_id}`);
     },
     getEventStyle(item) {
       return {

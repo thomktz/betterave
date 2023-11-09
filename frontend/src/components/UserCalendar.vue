@@ -53,8 +53,8 @@ import interactionPlugin from '@fullcalendar/interaction';
             }
           },
           eventClick: (info) => {
-            const classId = info.event.extendedProps.class_id;
-            this.$router.push(`/class/${classId}`);
+            const class_id = info.event.extendedProps.class_id;
+            this.$router.push(`/class/${class_id}`);
           },
           eventMouseEnter: function(info) {
             info.el.style.cursor = 'pointer';

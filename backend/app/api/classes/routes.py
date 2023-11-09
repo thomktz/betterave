@@ -79,7 +79,7 @@ class ClassMessages(Resource):
     def post(self, class_id):
         """Post a new message to the main group of a specific class"""
         content = api.payload.get('content')
-        message = add_class_message(content, class_id=class_id, user_id=user_id)
+        message = add_class_message(content, class_id=class_id, user_id=current_user.user_id)
         if message:
             return api.marshal(message, message_model), 201
         api.abort(400, 'Could not add message to the class')

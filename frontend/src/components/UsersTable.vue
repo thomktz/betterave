@@ -226,9 +226,9 @@ const navigateToEditClasses = (studentId) => {
 const emit = defineEmits(['delete-user', 'edit-user', 'add-user']);
 
 // Methods for handling emits
-const emitDeleteUser = (userId) => {
-  console.log(`Request to delete user with ID: ${userId}`);
-  emit('delete-user', userId);
+const emitDeleteUser = (user_id) => {
+  console.log(`Request to delete user with ID: ${user_id}`);
+  emit('delete-user', user_id);
 };
 
 const emitEditUser = (user) => {

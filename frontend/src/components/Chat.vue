@@ -4,7 +4,7 @@
       <div 
         v-for="message in messages" 
         :key="message.id" 
-        :class="message.user_id === userId ? 'msg right-msg' : 'msg left-msg'"
+        :class="message.user_id === user_id ? 'msg right-msg' : 'msg left-msg'"
         @mouseover="showDate(message)" 
         @mouseleave="hideDate()"
       >
@@ -30,11 +30,11 @@ import apiClient from '@/apiConfig';
 
   export default {
     props: {
-      classId: {
+      class_id: {
         type: String,
         required: true,
       },
-      userId: {
+      user_id: {
         type: Number,
         required: true,
       },
@@ -68,7 +68,7 @@ import apiClient from '@/apiConfig';
       },
       async fetchClassMessages() {
         try {
-          const response = await apiClient.get(`/classes/${this.classId}/messages`);
+          const response = await apiClient.get(`/classes/${this.class_id}/messages`);
           
           if (response.data && Array.isArray(response.data)) {
             this.messages = response.data;
@@ -82,7 +82,7 @@ import apiClient from '@/apiConfig';
       async sendMessage() {
         if (!this.newMessage.trim()) return;  // Don't send empty messages
         try {
-          const response = await apiClient.post(`/classes/${this.classId}/messages`, 
+          const response = await apiClient.post(`/classes/${this.class_id}/messages`, 
             { content: this.newMessage }, 
           );
           this.newMessage = ''
