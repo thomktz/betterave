@@ -16,16 +16,16 @@ services:
     ports: 
       - 5000:5000
 
-  # frontend:
-  #   build: ./frontend
-  #   networks:
-  #     mynet:
-  #       ipv4_address: 172.28.1.2
-  #   volumes:
-  #     - './frontend:/app'
-  #     - '/app/node_modules'
-  #   ports:
-  #     - 8080:8080
+  frontend:
+    build: ./frontend
+    networks:
+      mynet:
+        ipv4_address: 172.28.1.2
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+    ports:
+      - 8080:8080
 
 networks:
   mynet:

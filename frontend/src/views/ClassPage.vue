@@ -25,9 +25,9 @@
     </v-container>
   </template>
   
-  <script>
-  import axios from 'axios';
-  import Chat from '@/components/Chat.vue';
+<script>
+import Chat from '@/components/Chat.vue';
+import apiClient from '@/apiConfig';
   
   export default {
     components: {
@@ -44,7 +44,7 @@
     async mounted() {
       const classId = this.$route.params.classId;
       try {
-        const response = await axios.get(`/class/${classId}`, { withCredentials: true });
+        const response = await apiClient.get(`/classes/${classId}`, { withCredentials: true });
         this.classDetails = response.data;
         this.userId = this.classDetails.user_id;
         this.userAuthorised = this.classDetails.user_authorised;

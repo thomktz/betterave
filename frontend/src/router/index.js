@@ -9,7 +9,7 @@ import AssoControls from '../views/controls/AssoControls.vue'
 import TeacherControls from '../views/controls/TeacherControls.vue'
 import AdminControls from '../views/controls/AdminControls.vue'
 import EditClasses from '../views/controls/EditClasses.vue'
-import axios from 'axios';
+import apiClient from '@/apiConfig'
 
 const routes = [
   {
@@ -80,12 +80,10 @@ router.beforeEach(async (to, from, next) => {
     next();
     return;
   }
-
+  console.log('Trying to access page : ' + to.name);
   // Otherwise, check if the user is authenticated and has the required role.
   try {
-    const response = await axios.get('/check-auth', {
-      withCredentials: true,
-    });
+    const response = await apiClient.get('/auth/check-auth');
 
     const userAuthenticated = response.data.status === 'authenticated';
     const userRole = response.data.role; 

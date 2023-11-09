@@ -79,7 +79,7 @@
           </v-icon>
           <v-icon
             small
-            @click="emitDeleteUser(item.id)"
+            @click="emitDeleteUser(item.user_id)"
           >
             mdi-delete
           </v-icon>
@@ -176,7 +176,7 @@
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="showEditDialog = false">Cancel</v-btn>
         <v-btn color="blue darken-1" text @click="handleEditUser">Save</v-btn>
-        <v-btn color="green" text @click="navigateToEditClasses(selectedUser.id)">
+        <v-btn color="green" text @click="navigateToEditClasses(selectedUser.user_id)">
           Edit classes
         </v-btn>
       </v-card-actions>

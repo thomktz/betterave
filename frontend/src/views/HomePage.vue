@@ -3,22 +3,21 @@
     <div class="content-container">
       <!-- Left Side Columns -->
       <div class="columns-container">
-        <ColumnNextclasses title="Next classes" />
+        <ColumnNextclasses :user="user" title="Next classes" />
         <InfoColumn title="Homework" :list="homeworkList" />
         <InfoColumn title="Notifications" :list="notifications" />
       </div>
 
       <!-- Right Side Calendar -->
       <div class="calendar-box">
-        <UserCalendar />
+        <UserCalendar :user="user" />
       </div>
     </div>
-    
   </v-container>
 </template>
 
 <script>
-import axios from 'axios';
+import apiClient from '@/apiConfig';
 import UserCalendar from '@/components/UserCalendar.vue';
 import InfoColumn from '@/components/InfoColumn.vue';
 import ColumnNextclasses from '@/components/ColumnNextclasses.vue';
@@ -40,13 +39,9 @@ export default {
     };
   },
   async mounted() {
-    try {
-      const response = await axios.get('/profile', { withCredentials: true });
-      this.user = response.data;
-      this.$emit('updateTitle', "Hello, " + this.user.name + "!");
-    } catch (error) {
-      console.error("There was an error fetching user data:", error);
-    }
+    const response = await apiClient.get('/users/me');
+    this.user = response.data;
+    this.$emit('updateTitle', "Hello, " + this.user.name + "!");
   },
   methods: {
 
@@ -55,13 +50,12 @@ export default {
 </script>
 
 <style scoped>
-
 .calendar-box {
-  background-color: #f5f5f5; /* light background color */
-  border-radius: 10px; /* rounded corners */
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* subtle shadow for modern effect */
-  width: calc(50% - 40px); /* adjust for padding */
-  overflow: hidden; /* hide overflow for nested elements to ensure corners are rounded */
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  width: calc(50% - 20px);
+  overflow: hidden;
   height: 70vh;
 }
 
@@ -77,8 +71,7 @@ export default {
 .columns-container {
   display: flex;
   justify-content: space-between;
-  width: calc(50% - 40px); /* adjust for padding */
+  width: calc(50% - 20px);
   height: 70vh;
 }
-
 </style>

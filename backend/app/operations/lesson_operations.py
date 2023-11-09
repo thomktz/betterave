@@ -73,6 +73,10 @@ def get_all_lessons() -> list[Lesson]:
     """Return all lessons in the database."""
     return Lesson.query.all()
 
+def get_all_future_lessons() -> list[Lesson]:
+    """Return all lessons in the database."""
+    return Lesson.query.filter(Lesson.date >= datetime.now().date()).all()
+
 @with_instance(Class)
 def get_lessons_by_class(class_: Class) -> list[Lesson]:
     """
@@ -93,12 +97,13 @@ def get_student_lessons(user: User, sort: bool = True) -> list[Lesson]:
     return sorted(lessons) if sort else lessons
 
 @with_instance(User)
-def get_student_future_lessons(user: User, current_time, sort: bool = True) -> list[Lesson]:
+def get_student_future_lessons(user: User, sort: bool = True) -> list[Lesson]:
     """Get future lessons for a student through class groups."""
     # Retrieve all lessons for the student from their groups
     future_lessons = []
+    date = datetime.now().date()
     for group in user.groups:
-        group_lessons = [lesson for lesson in group.lessons if lesson.date >= current_time.date()]
+        group_lessons = [lesson for lesson in group.lessons if lesson.date >= date]
         future_lessons.extend(group_lessons)
 
     return sorted(future_lessons) if sort else future_lessons
@@ -112,9 +117,9 @@ def get_teacher_lessons(teacher: User, sort: bool = True) -> list[Lesson]:
     return sorted(lessons, key=lambda l: (l.date, l.start_time)) if sort else lessons
 
 @with_instance(User)
-def get_teacher_future_lessons(teacher: User, current_time, sort: bool = True) -> list[Lesson]:
+def get_teacher_future_lessons(teacher: User, sort: bool = True) -> list[Lesson]:
     """Get future lessons for a teacher."""
     # Using the lessons_taught relationship to filter future lessons
-    future_lessons = teacher.lessons_taught.filter(Lesson.date >= current_time.date()).all()
+    future_lessons = teacher.lessons_taught.filter(Lesson.date >= datetime.now().date()).all()
 
     return sorted(future_lessons, key=lambda l: (l.date, l.start_time)) if sort else future_lessons

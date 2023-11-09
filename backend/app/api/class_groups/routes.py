@@ -77,11 +77,8 @@ class GroupMessages(Resource):
     @api.expect(message_post_model)
     def post(self, group_id):
         """Post a new message to a specific class group"""
-        # In practice, it would be better to use the current_user.user_id
-        # But then we couldn't test this endpoint on the docs UI
-        user_id = api.payload.get("user_id")
         content = api.payload.get("content")
-        message = add_message_to_group(content, user_id=user_id, group_id=group_id)
+        message = add_message_to_group(content, user_id=current_user.user_id, group_id=group_id)
         if message:
             return api.marshal(message.as_dict(), message_model), 201
         api.abort(400, 'Could not add message to the class')

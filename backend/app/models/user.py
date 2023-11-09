@@ -57,3 +57,19 @@ class User(db.Model, UserMixin):
             'level': self.level.value,
             'user_type': self.user_type.value,
         }
+    
+    @property
+    def is_student(self):
+        return self.user_type == UserType.STUDENT
+    
+    @property
+    def is_teacher(self):
+        return self.user_type == UserType.TEACHER
+    
+    @property
+    def is_asso(self):
+        return self.user_type == UserType.ASSO
+    
+    @property
+    def is_admin(self):
+        return self.user_type == UserType.ADMIN

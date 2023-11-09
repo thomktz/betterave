@@ -47,3 +47,17 @@ user_classgroups_model = api.model(
         "classgroups": fields.List(fields.Nested(class_group_model), description="List of classes associated with the user")
     }
 )
+
+asso_model = api.model(
+    "Asso", 
+    {
+        "user_id": fields.Integer(description="Unique identifier"),
+        "email": fields.String(required=True, description="User email address"),
+        "name": fields.String(required=True, description="User first name"),
+        "profile_pic": fields.String(description="URL to the user\"s profile picture"),
+        "user_type": fields.String(attribute="user_type.value", description="Type of user (e.g., student, teacher, admin)"),
+        "linkedin": fields.String(description="URL to the asso\"s LinkedIn page", required=False),
+        "website": fields.String(description="URL to the asso\"s website", required=False),
+        
+    },
+)

@@ -5,13 +5,11 @@ from extensions import db
 from flask_login import current_user
 from flask import jsonify, request
 from flask_restx import abort
-
-
+from app.models import User
 
 def is_valid_apikey(key):
     """Function to check if the API key is valid"""
     return key == os.getenv('API_KEY')
-
 
 def with_instance(model_classes: Union[Type[Any], List[Type[Any]]]) -> Callable:
     """
@@ -43,7 +41,6 @@ def with_instance(model_classes: Union[Type[Any], List[Type[Any]]]) -> Callable:
             return func(*new_args, **kwargs)
         return wrapper
     return decorator
-
 
 def require_authentication(*user_types_required):
     """
@@ -87,12 +84,12 @@ def current_user_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         # Flask passes the URL parameters as keyword arguments to the decorated function
-        user_id = kwargs.get('user_id', None)
+        user = kwargs.get('user', None)
 
         # If the current user is authenticated through Flask-Login's current_user
         if current_user.is_authenticated:
             # Allow admins or if user_id matches the current_user's id
-            if (current_user.user_type.value == "admin") or (user_id is not None and user_id == current_user.user_id):
+            if current_user.is_admin or (user.user_id == current_user.user_id):
                 return f(*args, **kwargs)
             else:
                 abort(403, "You do not have permission to access this resource.")
@@ -105,4 +102,24 @@ def current_user_required(f):
 
         # If neither authenticated nor valid API key provided, deny access
         abort(401, "Unauthorized access")
+    return decorated_function
+
+def resolve_user(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user_id_or_me = kwargs.get('user_id_or_me', None)
+        if not user_id_or_me:
+            return jsonify({"message": "User ID not specified:"}), 400
+        if user_id_or_me == "me":
+            # Assuming 'current_user' is a proxy to the current user
+            user = current_user
+        else:
+            user = User.query.get(int(user_id_or_me))
+            if not user:
+                return jsonify({"message": "User not found"}), 404
+        # Replace 'user_id_or_me' with 'user' before calling the actual route function
+        kwargs['user'] = user
+        # Remove 'user_id' to match the expected parameters of the actual route function
+        kwargs.pop('user_id_or_me', None)
+        return f(*args, **kwargs)
     return decorated_function

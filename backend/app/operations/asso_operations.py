@@ -2,6 +2,7 @@ from extensions import db
 from app.decorators import with_instance
 from app.models.user import User, UserType
 from sqlalchemy.exc import SQLAlchemyError
+from app.operations.event_operations import get_association_future_events
 
 @with_instance([User, User])
 def subscribe_to_asso(user: User, asso: User) -> bool:
@@ -11,6 +12,11 @@ def subscribe_to_asso(user: User, asso: User) -> bool:
             return True
         
         user.subscriptions.append(asso)
+        
+        future_events = get_association_future_events(asso)
+        for event in future_events:
+            event.attending_users.append(user)
+            
         db.session.commit()
         return True
     except SQLAlchemyError as e:
@@ -26,6 +32,12 @@ def unsubscribe_from_asso(user: User, asso: User) -> bool:
             return True
         
         user.subscriptions.remove(asso)
+        
+        future_events = get_association_future_events(asso)
+        for event in future_events:
+            if user in event.attending_users:
+                event.attending_users.remove(user)
+                
         db.session.commit()
         return True
     except SQLAlchemyError as e:

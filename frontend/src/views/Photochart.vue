@@ -17,7 +17,8 @@
   </template>
   
   <script>
-  import axios from 'axios';
+  import apiClient from '@/apiConfig';
+
   export default {
     data() {
       return {
@@ -38,7 +39,7 @@
     async mounted() {
       this.$emit('updateTitle', "Trombinoscope"); // Update the title in the header
       try {
-        const response = await axios.get('/photochart', { withCredentials: true });
+        const response = await apiClient.get('/users');
         this.students = response.data;
       } catch (error) {
         console.error("There was an error fetching student data:", error);
@@ -65,13 +66,12 @@
   position: relative;
 }
 
-/* Styles for the trombinoscope to occupy the remaining height after .custom-select */
 .trombinoscope {
   flex: 1; 
   overflow-y: auto; 
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  grid-auto-rows: 250px; /* Set fixed row height */
+  grid-auto-rows: 250px;
   gap: 20px;
   align-content: flex-start;
   padding-bottom: 30px; 
@@ -104,9 +104,9 @@
   border-radius: 40px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;
-  padding: 0;  /* No padding so the image can take up the full space */
-  position: relative;  /* Set to relative so absolute positioning of children is based on this container */
-  overflow: hidden;  /* Keep the image and gradient inside the box */
+  padding: 0; 
+  position: relative; 
+  overflow: hidden; 
 }
 
 .student::after {
@@ -115,7 +115,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 50%;  /* This determines the height of the gradient, adjust if necessary */
+  height: 50%; 
   background: linear-gradient(transparent, rgba(0, 0, 0, 1));
   pointer-events: none; 
 }
@@ -127,11 +127,11 @@
 }
 
 .student:hover::after {
-  opacity: 0;  /* fade out gradient */
+  opacity: 0; 
 }
 
 .student:hover p {
-  opacity: 0;  /* fade out name */
+  opacity: 0; 
 }
 
 .student::after, .student p {
@@ -139,21 +139,21 @@
 }
 
 img {
-  width: 100%;  /* Full width of parent */
-  height: 100%;  /* Full height of parent */
+  width: 100%; 
+  height: 100%; 
   object-fit: cover;
-  display: block;  /* Remove any unwanted space below the image */
+  display: block; 
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 p {
-  position: absolute;  /* Position it on top of the gradient */
-  bottom: 10px;  /* From the bottom of the .student container */
+  position: absolute; 
+  bottom: 10px; 
   left: 50%;
-  transform: translateX(-50%);  /* Center it horizontally */
-  margin: 0;  /* Remove default margins */
+  transform: translateX(-50%); 
+  margin: 0; 
   color: #fff;
-  font-weight: bold;  /* Optional: Make the name stand out more */
+  font-weight: bold; 
   z-index: 2;
 }
   </style>

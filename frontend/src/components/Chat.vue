@@ -24,7 +24,7 @@
 </template>
   
   <script>
-  import axios from 'axios';
+import apiClient from '@/apiConfig';
   import { format } from 'date-fns';
 
 
@@ -68,7 +68,7 @@
       },
       async fetchClassMessages() {
         try {
-          const response = await axios.get(`/classes/${this.classId}/messages`, { withCredentials: true });
+          const response = await apiClient.get(`/classes/${this.classId}/messages`);
           
           if (response.data && Array.isArray(response.data)) {
             this.messages = response.data;
@@ -82,9 +82,8 @@
       async sendMessage() {
         if (!this.newMessage.trim()) return;  // Don't send empty messages
         try {
-          const response = await axios.post(`/classes/${this.classId}/messages`, 
+          const response = await apiClient.post(`/classes/${this.classId}/messages`, 
             { content: this.newMessage }, 
-            { withCredentials: true }
           );
           this.newMessage = ''
         } catch (error) {

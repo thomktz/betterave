@@ -5,7 +5,7 @@
         <ul v-if="assos.length">
           <li 
             v-for="asso in assos" 
-            :key="asso.id" 
+            :key="asso.user_id" 
             @click="toggleSubscription(asso)"
             :class="asso.subscribed ? 'subscribed' : ''"
           >
@@ -23,7 +23,7 @@
 </template>
   
   <script>
-  import axios from 'axios';
+import apiClient from '@/apiConfig';
   
   export default {
     data() {
@@ -34,7 +34,7 @@
     async mounted() {
       this.$emit('updateTitle', "Association subscriptions");
       try {
-        const response = await axios.get('/assos', { withCredentials: true });
+        const response = await apiClient.get('/users/associations/me');
         this.assos = response.data;
       } catch (error) {
         console.error("There was an error fetching associations data:", error);
@@ -45,9 +45,9 @@
         asso.subscribed = !asso.subscribed;
         try {
           if (asso.subscribed) {
-            await axios.post(`/assos/${asso.id}/subscribe`, {}, { withCredentials: true });
+            await apiClient.post(`/users/me/subscribe/${asso.user_id}`);
           } else {
-            await axios.delete(`/assos/${asso.id}/unsubscribe`, { withCredentials: true });
+            await apiClient.post(`/users/me/unsubscribe/${asso.user_id}`);
           }
         } catch (error) {
           console.error("There was an error toggling subscription:", error);

@@ -5,11 +5,15 @@ from flask_cors import CORS
 
 from extensions import db, bcrypt, login_manager, api
 
-from app.routes import bp as auth_bp
-from app.routes.api_routes import *
-from app.routes.auth_routes import *
-
-from app.api import users_ns, classes_ns, lessons_ns, class_groups_ns, user_class_groups_ns
+from app.api import (
+    auth_ns, 
+    users_ns, 
+    classes_ns, 
+    lessons_ns, 
+    class_groups_ns, 
+    user_class_groups_ns, 
+    events_ns
+)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -21,6 +25,7 @@ def create_app():
     print(f"Creating app from {os.getcwd()}", flush=True)
     print("API KEY:", os.environ.get('API_KEY'))
     
+    # Initialize the Flask app
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or b'\x05\xe1C\x07k\x1ay<\xb6\xa4\xf8\xc6\xa8f\xb4*'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////database/betterave.db'
@@ -44,21 +49,22 @@ def create_app():
         "expose_headers": ["Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"],
     }})
 
-
+    # Initialize the extensions
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
     api.init_app(app)
     
     # Initialize the Flask-RestX Api and register the namespaces
+    api.add_namespace(auth_ns, path='/auth')
     api.add_namespace(users_ns, path='/users')
     api.add_namespace(classes_ns, path='/classes')
     api.add_namespace(lessons_ns, path='/lessons')
     api.add_namespace(class_groups_ns, path='/class_groups')
     api.add_namespace(user_class_groups_ns, path='/user_class_groups')
+    api.add_namespace(events_ns, path='/events')
 
-    app.register_blueprint(auth_bp)
-
+    # Load/create the database
     with app.app_context():
         db.create_all()
         db.session.commit()

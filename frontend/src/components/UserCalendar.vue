@@ -5,17 +5,23 @@
   </template>
   
   <script>
-  import axios from 'axios';
-  import FullCalendar from '@fullcalendar/vue3';
-  import dayGridPlugin from '@fullcalendar/daygrid';
-  import timeGridPlugin from '@fullcalendar/timegrid';
-  import listPlugin from '@fullcalendar/list';
-  import interactionPlugin from '@fullcalendar/interaction';
-  
+import apiClient from '@/apiConfig';
+import FullCalendar from '@fullcalendar/vue3';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
+import interactionPlugin from '@fullcalendar/interaction';
+
   export default {
     name: 'UserCalendar',
     components: {
       FullCalendar
+    },
+    props: {
+      user: {
+        type: Object,
+        required: true
+      },
     },
     data() {
       return {
@@ -61,7 +67,7 @@
     },
     async mounted() {
       try {
-        const response = await axios.get('/lessons', { withCredentials: true });
+        const response = await apiClient.get(`/users/me/lessons`);
         this.calendarOptions.events = response.data;
       } catch (error) {
         console.error("There was an error fetching lessons:", error);
@@ -79,4 +85,3 @@ background-color: var(--secondary-color);
 color: var(--primary-text-color);
 }
 </style>
-  

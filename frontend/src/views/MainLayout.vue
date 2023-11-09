@@ -17,19 +17,16 @@
       <h1>{{ headerTitle }}</h1>
 
       <div class="right-section">
-        <ProfilePill :userEmail="user.email" :userProfilePic="user.profile_pic" :userType="user.user_type" />
+        <ProfilePill :user="user" />
         <DarkModeToggle @toggle="toggleDarkMode" :darkMode="darkMode" />
       </div>
-
     </header>
     <router-view @updateTitle="setTitle" />
   </div>
 </template>
 
-
-  
 <script>
-import axios from 'axios';
+import apiClient from '@/apiConfig';
 import { ref } from 'vue';
 import ProfilePill from '@/components/ProfilePill.vue';
 import DarkModeToggle from '@/components/DarkModeToggle.vue';
@@ -41,17 +38,13 @@ export default {
   },
   data() {
     return {
-      user: {
-        name: '',
-        email: '',
-        profile_pic: '',
-        user_type: ''
-      },
+      user: {},
       headerTitle: ref("Welcome to Betterave!"),
       darkMode: false
     };
   },
   async mounted() {
+    // Handle dark mode
     const storedPreference = localStorage.getItem('darkMode');
     if (storedPreference !== null) {
       this.darkMode = storedPreference === 'true';
@@ -61,7 +54,7 @@ export default {
     document.documentElement.setAttribute('data-dark-mode', this.darkMode);
     this.$vuetify.theme.name = this.darkMode ? 'dark' : 'light';
     try {
-      const response = await axios.get('/profile', { withCredentials: true });
+      const response = await apiClient.get('/users/me');
       this.user = response.data;
     } catch (error) {
       console.error("There was an error fetching user data:", error);

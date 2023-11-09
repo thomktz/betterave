@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import axios from 'axios';
 import UserClassesTable from '@/components/UserClassesTable.vue';
+import apiClient from '@/apiConfig';
 
 export default {
   components: {
@@ -22,10 +22,10 @@ export default {
     }
   },
   async mounted () {
-    const response = await axios.get(`/users/${this.userId}`, { withCredentials: true });
+    const response = await apiClient.get(`/users/${this.userId}/classgroups`);
     console.log(response.data);
     this.classesInfo = response.data;
-    this.classes = this.classesInfo.classes;
+    this.classes = this.classesInfo.classgroups;
     this.name = this.classesInfo.name;
     this.surname = this.classesInfo.surname;
 
@@ -40,7 +40,7 @@ export default {
         const update_data = {
           "secondary_class_group_name": secondaryClassGroupName
         }
-        const response = await axios.put(`/user_class_groups/${this.userId}/${classId}`, update_data, { withCredentials: true });
+        const response = await apiClient.put(`/user_class_groups/${this.userId}/${classId}`, update_data);
         
         // Handle the successful update
         console.log('Update successful:', response.data);

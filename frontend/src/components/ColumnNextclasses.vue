@@ -2,8 +2,8 @@
     <div class="nextclasses-column">
       <h2>{{ title }}</h2>
       <ul>
-        <li v-for="(item, index) in nextClasses" :key="item.id">
-          <div class="date-indicator" v-if="isFirstClassOfDay(nextClasses, index)">
+        <li v-for="(item, index) in nextLessons" :key="item.id">
+          <div class="date-indicator" v-if="isFirstClassOfDay(nextLessons, index)">
             {{ formatDate(item.start) }}
           </div>
           <div :style="getEventStyle(item)" class="event-item" @click="goToClass(item.class_id)">
@@ -11,128 +11,123 @@
                 <div class="event-start-time">{{ formatEventTime(item) }}</div>
                 <div class="event-room">Room {{ item.room }}</div>
             </div>
-            <div class="event-content">{{ item.text }}</div>
+          <div class="event-content">{{ item.title }}</div>
         </div>
-        </li>
-      </ul>
-    </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  export default {
-    props: {
-      title: {
-        type: String,
-        required: true
-      },
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+import apiClient from '@/apiConfig';
+
+export default {
+  props: {
+    user: {
+      type: Object,
+      required: true
     },
-    data () {
+    title: {
+      type: String,
+      required: true
+    },
+  },
+  data () {
+    return {
+      nextLessons: [],
+      classesToDisplay: 20,
+    };
+  },
+  async mounted () {
+    // Get lessons
+    const response = await apiClient.get(`/users/me/lessons/future`);
+    this.nextLessons = response.data;
+  },
+  methods: {
+    goToClass(classId) {
+      this.$router.push(`/class/${classId}`);
+    },
+    getEventStyle(item) {
       return {
-        nextClasses: [],
-        classesToDisplay: 20,
+        backgroundColor: item.backgroundColor || '#4868bf' // Default color
       };
     },
-    async mounted () {
-      const allClasses = await axios.get('/lessons', { withCredentials: true });
-      const currentTime = new Date();
-      this.nextClasses = allClasses.data.filter((lesson) => new Date(lesson.start) > currentTime).slice(0, this.classesToDisplay).map(lesson => ({
-        id: lesson.id,
-        class_id: lesson.class_id,
-        text: lesson.title,  
-        start: lesson.start,
-        end: lesson.end,
-        room: lesson.room,
-        color: lesson.color,
-      }));
-      console.log(this.nextClasses);
+    formatEventTime(item) {
+      // 'HH:mm' format
+      const eventTime = new Date(item.start);
+      return eventTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
     },
-    methods: {
-      goToClass(classId) {
-        this.$router.push(`/class/${classId}`);
-      },
-      getEventStyle(item) {
-        return {
-          backgroundColor: item.color || '#4868bf' // Si la couleur n'est pas fournie, utilise une couleur par défaut (#4868bf)
-        };
-      },
-      formatEventTime(item) {
-        // Format de l'heure au format 'HH:mm'
-        const eventTime = new Date(item.start);
-        return eventTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-      },
-      isFirstClassOfDay(list, index) {
-        // Vérifie si c'est le premier cours de la journée en comparant les dates
-        if (index === 0) {
-          return true;
-        } else {
-          const currentStartTime = new Date(list[index].start).setHours(0, 0, 0, 0);
-          const previousStartTime = new Date(list[index - 1].start).setHours(0, 0, 0, 0);
-          return currentStartTime !== previousStartTime;
-        }
-      },
-      formatDate(date) {
-        // Format de la date au format 'dd/mm/yyyy'
-        const eventDate = new Date(date);
-        const options = { weekday: 'long', month: 'long', day: 'numeric' };
-        return eventDate.toLocaleDateString('en-US', options);
-      },
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .nextclasses-column {
-    flex: 1.5;
-    padding: 20px;
-    background-color: var(--secondary-color);
-    color: var(--primary-text-color);
-    border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-    margin: 0 10px;
-    overflow-y: auto;
+    isFirstClassOfDay(list, index) {
+      if (index === 0) {
+        return true;
+      } else {
+        const currentStartTime = new Date(list[index].start).setHours(0, 0, 0, 0);
+        const previousStartTime = new Date(list[index - 1].start).setHours(0, 0, 0, 0);
+        return currentStartTime !== previousStartTime;
+      }
+    },
+    formatDate(date) {
+      // Format de la date au format 'dd/mm/yyyy'
+      const eventDate = new Date(date);
+      const options = { weekday: 'long', month: 'long', day: 'numeric' };
+      return eventDate.toLocaleDateString('en-US', options);
+    },
   }
-  
-  h2 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #b0b0b0;
-    padding-bottom: 10px;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    margin-bottom: 10px;
-  }
-  
-  .event-item {
-    display: flex;
-    flex-direction: column; /* Stack children vertically */
-    padding: 10px;
-    border-radius: 10px;
-    color: rgb(0, 0, 0);
-    margin-top: 10px;
-    cursor: pointer;
+};
+</script>
+
+<style scoped>
+.nextclasses-column {
+  flex: 1.5;
+  padding: 20px;
+  background-color: var(--secondary-color);
+  color: var(--primary-text-color);
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  margin: 0 10px;
+  overflow-y: auto;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #b0b0b0;
+  padding-bottom: 10px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+.event-item {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 10px;
+  color: rgb(0, 0, 0);
+  margin-top: 10px;
+  cursor: pointer;
 }
 
 .event-header {
-    display: flex;
-    justify-content: space-between; /* Pushes start time and room to opposite ends */
-    width: 100%;
-    font-size: 0.7rem
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.7rem
 }
 
 .event-start-time, .event-room {
-    margin: 0; /* Remove any default margins for consistency */
+  margin: 0;
 }
 
 .event-content {
-    margin-top: 10px;
-    font-size: 0.8rem;
+  margin-top: 10px;
+  font-size: 0.8rem;
 }
 
   
@@ -149,10 +144,10 @@
 
 .date-indicator::after {
     content: "";
-    flex-grow: 1; /* allows the line to take up remaining space */
+    flex-grow: 1;
     height: 1px;
-    background-color: #b0b0b0; /* color of the line */
-    margin-left: 10px; /* space between the date and the line */
+    background-color: #b0b0b0;
+    margin-left: 10px;
 }
   </style>
-  
+  @/apiConfig
