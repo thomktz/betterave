@@ -1,4 +1,3 @@
-// src/services/apiClient.js
 import axios from 'axios';
 import { useToast } from 'vue-toastification';
 
@@ -17,6 +16,7 @@ const toast = useToast();
 apiClient.interceptors.response.use(
   response => {
     // Your response success handling
+    console.log("Response:", response);
     return response;
   },
   error => {
