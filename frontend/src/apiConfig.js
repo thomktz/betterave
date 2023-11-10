@@ -12,11 +12,25 @@ console.log("Using API URL:", process.env.VUE_APP_API_URL);
 // Create toast instance
 const toast = useToast();
 
+// Add a request interceptor
+apiClient.interceptors.request.use(
+  request => {
+    // Log the full request details here
+    console.log("Starting Request", JSON.stringify(request, null, 2));
+    return request;
+  },
+  error => {
+    // Do something with request error
+    console.error("Request Error:", error);
+    return Promise.reject(error);
+  }
+);
+
+
 // Add a response interceptor
 apiClient.interceptors.response.use(
   response => {
     // Your response success handling
-    console.log("Response:", response);
     return response;
   },
   error => {
