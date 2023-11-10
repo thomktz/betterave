@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 from flask_cors import CORS
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from extensions import db, bcrypt, login_manager, api
 
@@ -35,6 +36,7 @@ def create_app():
         REMEMBER_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Strict",
     )
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1, x_prefix=1)
     
     CORS(app, supports_credentials=True, resources={r"/*": {
         "origins": [
