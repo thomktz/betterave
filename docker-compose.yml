@@ -6,7 +6,7 @@ services:
     build: ./backend
     networks:
       mynet:
-        ipv4_address: 172.28.1.1
+        ipv4_address: 172.16.0.2
     environment:
       - API_KEY=BETTERAVEAPIKEY9999
       - SECRET_KEY=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
@@ -20,7 +20,7 @@ services:
     build: ./frontend
     networks:
       mynet:
-        ipv4_address: 172.28.1.2
+        ipv4_address: 172.16.0.3
     volumes:
       - './frontend:/app'
       - '/app/node_modules'
@@ -32,4 +32,4 @@ networks:
     driver: bridge
     ipam:
      config:
-       - subnet: 172.28.0.0/16
+       - subnet: 172.16.0.0/29
