@@ -1,5 +1,4 @@
 import os
-from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 from extensions import db, bcrypt, login_manager
@@ -8,7 +7,6 @@ from app.routes import bp as auth_bp
 from app.routes.api_routes import *
 from app.routes.auth_routes import *
 
-load_dotenv()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -17,9 +15,10 @@ def load_user(user_id):
 
 def create_app():
     """Function to create app instance"""
+    print(f"Creating app from {os.getcwd()}", flush=True)
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or b'\x05\xe1C\x07k\x1ay<\xb6\xa4\xf8\xc6\xa8f\xb4*'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./test.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////database/betterave.db'
     app.config.update(
         DEBUG=True,
         SESSION_COOKIE_HTTPONLY=True,
@@ -27,10 +26,14 @@ def create_app():
         SESSION_COOKIE_SAMESITE="Strict",
     )
     
-    local_ip = os.getenv("LOCAL_IP", "127.0.0.1")
-
     CORS(app, supports_credentials=True, resources={r"/*": {
-        "origins": f"http://{local_ip}:8080",
+        "origins": [
+            "http://localhost:8080",
+            "http://127.0.0.1:8080",
+            "https://app.betterave.kientz.net", 
+            "http://89.168.39.28:8080"
+            "https://89.168.39.28:8080"
+        ],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
         "expose_headers": ["Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"],
@@ -45,5 +48,10 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+        db.session.commit()
+    
+    @app.route("/")
+    def index():
+        return "Hello, World!"
         
-    return app, local_ip
+    return app

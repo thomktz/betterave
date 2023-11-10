@@ -10,7 +10,7 @@ from app.operations.class_operations import add_class, get_classes_from_level
 from app.operations.lesson_operations import add_lesson
 from app.operations.class_group_operations import add_class_group, enroll_student_in_group, get_group_by_name
 from app.operations.user_class_group_operations import add_user_class_group
-from app.models import UserLevel
+from app.models import UserLevel, User
 
 CLASSES_PER_STUDENT = 10
 
@@ -61,6 +61,9 @@ admins = [
 
 def initialize_database():
     with app.app_context():
+        
+        db.session.remove()
+        db.drop_all()
         db.create_all()
         
         student_ids = []
