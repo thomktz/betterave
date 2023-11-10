@@ -1,7 +1,7 @@
 <template>
     <v-container class="fill-height" fluid>
         <UsersTable
-          :users="usersList"
+          :users="users"
           @delete-user="deleteUser"
           @add-user="addUser"
           @edit-user="editUser"
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import apiClient from '@/apiConfig';
 import UsersTable from '@/components/UsersTable.vue';
 import { ref, onMounted } from 'vue';
 
@@ -22,13 +22,13 @@ export default {
       this.$emit('updateTitle', "Admin Controls"); 
     },
     setup() {
-        const usersList = ref([]); // Create a reactive reference for the users list
+        const users = ref([]); // Create a reactive reference for the users list
 
         // Fetch users from the API
         const fetchUsers = async () => {
             try {
-                const response = await axios.get('/users', { withCredentials: true });
-                usersList.value = response.data; // Assign the response data to usersList
+                const response = await apiClient.get('/users');
+                users.value = response.data; 
             } catch (error) {
                 console.error('Error fetching users:', error);
                 // Handle error, e.g., show notification
@@ -36,12 +36,10 @@ export default {
         };
 
         // Delete user by ID
-        const deleteUser = async (userId) => {
+        const deleteUser = async (user_id) => {
             try {
-                await axios.delete(`/users/${userId}`, { withCredentials: true });
-                // Upon successful deletion, refetch the users list or remove the user from the local list
-                usersList.value = usersList.value.filter(user => user.id !== userId);
-                // Show success notification
+                await apiClient.delete(`/users/${user_id}`);
+                users.value = users.value.filter(user => user.user_id !== user_id);
                 
             } catch (error) {
                 console.error('Error deleting user:', error);
@@ -51,34 +49,30 @@ export default {
         // Add a new user
         const addUser = async (userData) => {
             try {
-                const response = await axios.post('/users', userData, { withCredentials: true });
-                usersList.value.push(response.data); // Add the new user to the list
-                // Show success notification
+                const response = await apiClient.post('/users', userData);
+                users.value.push(response.data); 
             } catch (error) {
                 console.error('Error adding user:', error);
-                // Handle error, e.g., show notification
             }
         };
 
         // Edit existing user details
         const editUser = async (userData) => {
             try {
-                await axios.put(`/users/${userData.id}`, userData, { withCredentials: true });
+                await apiClient.put(`/users/${userData.user_id}`, userData);
                 // Find and update the user in the list
-                const index = usersList.value.findIndex(user => user.id === userData.id);
+                const index = users.value.findIndex(user => user.user_id === userData.user_id);
                 if (index !== -1) {
-                    usersList.value[index] = {...usersList.value[index], ...userData};
+                    users.value[index] = {...users.value[index], ...userData};
                 }
-                // Show success notification
             } catch (error) {
                 console.error('Error editing user:', error);
-                // Handle error, e.g., show notification
             }
         };
 
         onMounted(fetchUsers);
         return {
-            usersList,
+            users,
             deleteUser,
             addUser,
             editUser

@@ -4,13 +4,13 @@
       <div 
         v-for="message in messages" 
         :key="message.id" 
-        :class="message.user_id === userId ? 'msg right-msg' : 'msg left-msg'"
+        :class="message.sender_details.user_id === user_id ? 'msg right-msg' : 'msg left-msg'"
         @mouseover="showDate(message)" 
         @mouseleave="hideDate()"
       >
-        <img :src="'/' + message.user_profile_pic" :alt="message.user_name" class="msg-img" />
+        <img :src="'/' + message.sender_details.profile_pic" :alt="message.sender_details.name" class="msg-img" />
         <div class="whole-message">
-          <div class="msg-name">{{ message.user_name }} {{ message.user_surname }}</div>
+          <div class="msg-name">{{ message.sender_details.name }} {{ message.sender_details.surname }}</div>
           <div class="msg-text">{{ message.content }}</div>
           <div class="msg-date" v-show="hoveredMessageId === message.id">{{ formatDate(message.timestamp) }}</div>
         </div>
@@ -24,17 +24,17 @@
 </template>
   
   <script>
-  import axios from 'axios';
+import apiClient from '@/apiConfig';
   import { format } from 'date-fns';
 
 
   export default {
     props: {
-      classId: {
+      class_id: {
         type: String,
         required: true,
       },
-      userId: {
+      user_id: {
         type: Number,
         required: true,
       },
@@ -68,28 +68,25 @@
       },
       async fetchClassMessages() {
         try {
-          const response = await axios.get(`/classes/${this.classId}/messages`, { withCredentials: true });
+          const response = await apiClient.get(`/classes/${this.class_id}/messages`);
           
           if (response.data && Array.isArray(response.data)) {
             this.messages = response.data;
           }
         } catch (error) {
           console.error("There was an error fetching class messages:", error);
-          // Handle error (e.g., showing an error message to the user)
         }
         this.scrollToBottom();
       },
       async sendMessage() {
         if (!this.newMessage.trim()) return;  // Don't send empty messages
         try {
-          const response = await axios.post(`/classes/${this.classId}/messages`, 
+          const response = await apiClient.post(`/classes/${this.class_id}/messages`, 
             { content: this.newMessage }, 
-            { withCredentials: true }
           );
           this.newMessage = ''
         } catch (error) {
           console.error("There was an error sending the message:", error);
-          // Handle error (e.g., showing an error message to the user)
         }
         this.fetchClassMessages()
       },

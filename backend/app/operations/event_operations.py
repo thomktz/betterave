@@ -1,8 +1,10 @@
 from datetime import datetime
+from flask import request
 from sqlalchemy.exc import SQLAlchemyError
 from extensions import db
-from app.models import Event
+from app.models import Event, User
 from app.operations.user_operations import get_user_by_id
+from app.decorators import is_valid_apikey, with_instance
 
 def add_event(asso_id, name, date, start_time, end_time, description=None, location=None):
     """Add an event to the database."""
@@ -31,7 +33,7 @@ def add_event(asso_id, name, date, start_time, end_time, description=None, locat
         print(f"Error adding event: {str(e)}")
         return -1
 
-def modify_event(event_id, new_data: dict) -> bool:
+def update_event(event_id, new_data: dict) -> bool:
     """Modify event information in the database."""
     try:
         event = get_event_by_id(event_id)
@@ -47,7 +49,7 @@ def modify_event(event_id, new_data: dict) -> bool:
         print(f"Error modifying event: {str(e)}")
         return False
 
-def remove_event(event_id: int) -> bool:
+def delete_event(event_id: int) -> bool:
     """Remove an event from the database."""
     try:
         event = get_event_by_id(event_id)
@@ -69,39 +71,68 @@ def get_all_events() -> list[Event]:
     """Return all events in the database."""
     return Event.query.all()
 
-def get_events_by_asso_id(asso_id: int) -> list[Event]:
+@with_instance(User)
+def get_association_events(asso: User) -> list[Event]:
     """Get all events organized by a particular association."""
-    return Event.query.filter_by(asso_id=asso_id).all()
+    return Event.query.filter_by(asso_id=asso.user_id).all()
 
-def get_events_by_attendee_id(user_id: int) -> list[Event]:
+@with_instance(User)
+def get_user_events(user: User) -> list[Event]:
     """Get all events a particular user is attending."""
-    user = get_user_by_id(user_id)
     return user.attended_events
 
-def assign_attendees_to_event(event_id, attendees: list):
-    """Assign a list of attendees to an event."""
-    try:
-        event = get_event_by_id(event_id)
-        if event:
-            event.attending_users.extend(attendees)
-            db.session.commit()
-            return True
-        return False
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        print(f"Error assigning attendees to event: {str(e)}")
+def get_all_future_events() -> list[Event]:
+    """Get all future events."""
+    return Event.query.filter(Event.date >= datetime.now().date()).all()
+
+@with_instance(User)
+def get_association_future_events(asso: User) -> list[Event]:
+    """Get all future events organized by a particular association."""
+    return Event.query.filter_by(asso_id=asso.user_id).filter(Event.date >= datetime.now().date()).all()
+
+@with_instance(User)
+def get_user_future_events(user: User) -> list[Event]:
+    """Get all future events a particular user is attending."""
+    return user.attended_events.filter(Event.date >= datetime.now().date()).all()
+
+def add_attendees_to_event(event_id, user_ids=None, user_level=None, asso_id=None):
+    """Add users to an event. If no users are specified, add all users."""
+    event = Event.query.get(event_id)
+    if not event:
         return False
 
-def add_attendee_to_event(event_id, attendee):
-    """Assign a single attendee to an event."""
-    try:
-        event = get_event_by_id(event_id)
-        if event:
-            event.attending_users.append(attendee)
-            db.session.commit()
-            return True
-        return False
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        print(f"Error adding attendee to event: {str(e)}")
-        return False
+    if user_ids:
+        # Add specific users to the event
+        users = User.query.filter(User.user_id.in_(user_ids)).all()
+        event.attending_users.extend(users)
+    elif user_level:
+        # Add all users of a certain level to the event
+        users = User.query.filter_by(level=user_level).all()
+        event.attending_users.extend(users)
+    elif asso_id:
+        # Add all users subscribed to a particular association to the event
+        asso = User.query.get(asso_id)
+        if not asso:
+            return False
+        users = asso.subscribers
+        event.attending_users.extend(users)
+    else:
+        # If no specific users or level provided, assume adding all users
+        users = User.query.all()
+        event.attending_users.extend(users)
+
+    db.session.commit()
+    return True
+
+def can_create_event(user, asso_id=None):
+    """Check if a user can create an event."""
+    # Assume that admin can create events for any association or for all users
+    apikey = request.headers.get('X-API-KEY')
+    if apikey and is_valid_apikey(apikey):
+        return True
+    if user.is_admin:
+        return True
+    # Associations can only create events for themselves
+    if user.is_asso and user.user_id == asso_id:
+        return True
+    return False

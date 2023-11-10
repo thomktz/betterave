@@ -69,4 +69,4 @@ def test_get_all_assos(setup_asso):
     assos = get_all_assos()
     assert len(assos) >= 1
     for asso in assos:
-        assert asso.user_type == UserType("asso")
+        assert asso.is_asso

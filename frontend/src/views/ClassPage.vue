@@ -19,15 +19,15 @@
     
         <!-- Right Container -->
         <div class="info-container">
-            <Chat :classId="classId" :userId="userId"></Chat>
+            <Chat :class_id="class_id" :user_id="user_id"></Chat>
         </div>
       </div>
     </v-container>
   </template>
   
-  <script>
-  import axios from 'axios';
-  import Chat from '@/components/Chat.vue';
+<script>
+import Chat from '@/components/Chat.vue';
+import apiClient from '@/apiConfig';
   
   export default {
     components: {
@@ -36,21 +36,24 @@
     data() {
       return {
         classDetails: {},
-        classId: this.$route.params.classId,
-        userId: NaN,
-        userAuthorised: false
+        class_id: this.$route.params.class_id,
+        user_id: NaN,
       };
     },
     async mounted() {
-      const classId = this.$route.params.classId;
+      const class_id = this.$route.params.class_id;
       try {
-        const response = await axios.get(`/class/${classId}`, { withCredentials: true });
+        const response = await apiClient.get(`/classes/${class_id}`);
         this.classDetails = response.data;
-        this.userId = this.classDetails.user_id;
-        this.userAuthorised = this.classDetails.user_authorised;
         this.$emit('updateTitle', this.classDetails.name);
       } catch (error) {
         console.error("Error fetching class details:", error);
+      }
+      try {
+        const response = await apiClient.get('/users/me');
+        this.user_id = response.data.user_id;
+      } catch (error) {
+        console.error("Error fetching user details:", error);
       }
     }
   }

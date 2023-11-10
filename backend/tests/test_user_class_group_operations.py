@@ -3,7 +3,7 @@ from app.models import UserType, UserLevel
 from app.operations.user_class_group_operations import (
     add_user_class_group,
     delete_user_class_group,
-    modify_user_class_group,
+    update_user_class_group,
     get_user_class_group_by_id
 )
 from app.operations.class_group_operations import add_class_group, delete_class_group
@@ -41,7 +41,7 @@ def setup_class(test_client, setup_teacher):
         ects_credits=ECTS_CREDITS,
         default_teacher_id=setup_teacher,
         level=LEVEL,
-        backgroundColor="#123456"
+        background_color="#123456"
     )
     yield class_id
 
@@ -101,11 +101,11 @@ def test_add_user_class_group(setup_user, setup_primary_class_group):
     )
     assert user_class_group_id != -1
 
-def test_modify_user_class_group(setup_user_class_group):
+def test_update_user_class_group(setup_user_class_group):
     """Test modifying a UserClassGroup."""
     # Assume that `secondary_class_group_id` is an attribute you can update.
     NEW_SECONDARY_GROUP_ID = 123  # placeholder for a new secondary group ID
-    assert modify_user_class_group(setup_user_class_group, {'secondary_class_group_id': NEW_SECONDARY_GROUP_ID}) is True
+    assert update_user_class_group(setup_user_class_group, {'secondary_class_group_id': NEW_SECONDARY_GROUP_ID}) is True
     user_class_group = get_user_class_group_by_id(setup_user_class_group)
     assert user_class_group.secondary_class_group_id == NEW_SECONDARY_GROUP_ID
 

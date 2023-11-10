@@ -40,7 +40,7 @@ def add_lesson(group_id, date, start_time, end_time, homework=None, room=None, t
 
 
 @with_instance(Lesson)
-def modify_lesson(lesson: Lesson, new_data: dict) -> bool:
+def update_lesson(lesson: Lesson, new_data: dict) -> bool:
     """Modify lesson information in the database."""
     try:
         for key, value in new_data.items():
@@ -54,7 +54,7 @@ def modify_lesson(lesson: Lesson, new_data: dict) -> bool:
         return False
 
 @with_instance(Lesson)
-def remove_lesson(lesson: Lesson) -> bool:
+def delete_lesson(lesson: Lesson) -> bool:
     """Remove a lesson from the database."""
     try:
         db.session.delete(lesson)
@@ -73,6 +73,10 @@ def get_all_lessons() -> list[Lesson]:
     """Return all lessons in the database."""
     return Lesson.query.all()
 
+def get_all_future_lessons() -> list[Lesson]:
+    """Return all lessons in the database."""
+    return Lesson.query.filter(Lesson.date >= datetime.now().date()).all()
+
 @with_instance(Class)
 def get_lessons_by_class(class_: Class) -> list[Lesson]:
     """
@@ -80,3 +84,42 @@ def get_lessons_by_class(class_: Class) -> list[Lesson]:
     with the ClassGroup table and filtering on the class_id.
     """
     return Lesson.query.join(ClassGroup).filter(ClassGroup.class_id == class_.class_id).all()
+
+
+@with_instance(User)
+def get_student_lessons(user: User, sort: bool = True) -> list[Lesson]:
+    """Get all lessons associated with a student through class groups."""
+    # Collect lessons from all groups where the student is enrolled
+    lessons = []
+    for group in user.groups:
+        lessons.extend(group.lessons)
+
+    return sorted(lessons) if sort else lessons
+
+@with_instance(User)
+def get_student_future_lessons(user: User, sort: bool = True) -> list[Lesson]:
+    """Get future lessons for a student through class groups."""
+    # Retrieve all lessons for the student from their groups
+    future_lessons = []
+    date = datetime.now().date()
+    for group in user.groups:
+        group_lessons = [lesson for lesson in group.lessons if lesson.date >= date]
+        future_lessons.extend(group_lessons)
+
+    return sorted(future_lessons) if sort else future_lessons
+
+@with_instance(User)
+def get_teacher_lessons(teacher: User, sort: bool = True) -> list[Lesson]:
+    """Get all lessons associated with a teacher."""
+    # The lessons_taught relationship gives us direct access to the lessons
+    lessons = teacher.lessons_taught.all()
+
+    return sorted(lessons, key=lambda l: (l.date, l.start_time)) if sort else lessons
+
+@with_instance(User)
+def get_teacher_future_lessons(teacher: User, sort: bool = True) -> list[Lesson]:
+    """Get future lessons for a teacher."""
+    # Using the lessons_taught relationship to filter future lessons
+    future_lessons = teacher.lessons_taught.filter(Lesson.date >= datetime.now().date()).all()
+
+    return sorted(future_lessons, key=lambda l: (l.date, l.start_time)) if sort else future_lessons

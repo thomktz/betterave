@@ -1,12 +1,20 @@
 import os
+
 from flask import Flask
 from flask_cors import CORS
-from extensions import db, bcrypt, login_manager
+from werkzeug.middleware.proxy_fix import ProxyFix
 
-from app.routes import bp as auth_bp
-from app.routes.api_routes import *
-from app.routes.auth_routes import *
+from extensions import db, bcrypt, login_manager, api
 
+from app.api import (
+    auth_ns, 
+    users_ns, 
+    classes_ns, 
+    lessons_ns, 
+    class_groups_ns, 
+    user_class_groups_ns, 
+    events_ns
+)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -16,6 +24,9 @@ def load_user(user_id):
 def create_app():
     """Function to create app instance"""
     print(f"Creating app from {os.getcwd()}", flush=True)
+    print("API KEY:", os.environ.get('API_KEY'))
+    
+    # Initialize the Flask app
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or b'\x05\xe1C\x07k\x1ay<\xb6\xa4\xf8\xc6\xa8f\xb4*'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////database/betterave.db'
@@ -25,6 +36,7 @@ def create_app():
         REMEMBER_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Strict",
     )
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1, x_prefix=1)
     
     CORS(app, supports_credentials=True, resources={r"/*": {
         "origins": [
@@ -39,18 +51,28 @@ def create_app():
         "expose_headers": ["Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"],
     }})
 
-
+    # Initialize the extensions
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
+    api.init_app(app)
     
-    app.register_blueprint(auth_bp)
+    # Initialize the Flask-RestX Api and register the namespaces
+    api.add_namespace(auth_ns, path='/auth')
+    api.add_namespace(users_ns, path='/users')
+    api.add_namespace(classes_ns, path='/classes')
+    api.add_namespace(lessons_ns, path='/lessons')
+    api.add_namespace(class_groups_ns, path='/class_groups')
+    api.add_namespace(user_class_groups_ns, path='/user_class_groups')
+    api.add_namespace(events_ns, path='/events')
 
+    # Load/create the database
     with app.app_context():
         db.create_all()
         db.session.commit()
     
-    @app.route("/")
+    # For testing purposes
+    @app.route("/hello")
     def index():
         return "Hello, World!"
         

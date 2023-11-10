@@ -1,5 +1,4 @@
 import random
-import datetime
 import json
 import numpy as np
 from main import app
@@ -8,7 +7,7 @@ from app.operations.user_operations import add_user, get_user_by_name
 from app.operations.student_operations import get_students_from_level
 from app.operations.class_operations import add_class, get_classes_from_level
 from app.operations.lesson_operations import add_lesson
-from app.operations.class_group_operations import add_class_group, enroll_student_in_group, get_group_by_name
+from app.operations.class_group_operations import add_class_group, enroll_student_in_group, get_class_group_by_name
 from app.operations.user_class_group_operations import add_user_class_group
 from app.models import UserLevel, User
 
@@ -154,7 +153,7 @@ def initialize_database():
                     name=class_dict["name"],
                     ects_credits=class_dict["ects"],
                     default_teacher_id=get_user_by_name(*class_dict["teacher_name"]).user_id,
-                    backgroundColor=class_dict["backgroundColor"],
+                    background_color=class_dict["backgroundColor"],
                     level=class_dict["level"],
                 )
             )
@@ -211,7 +210,7 @@ def initialize_database():
         for class_dict in classes:
             for lesson in class_dict["lesson_info"]:
                 date, start_time, end_time, lesson_type, teacher, room = lesson
-                group_id = get_group_by_name(class_dict["class_id"], lesson_type).group_id
+                group_id = get_class_group_by_name(class_dict["class_id"], lesson_type).group_id
                 lesson_ids.append(
                     add_lesson(
                         group_id=group_id,

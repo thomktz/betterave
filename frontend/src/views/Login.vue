@@ -1,20 +1,4 @@
 <template>
-  <v-snackbar
-    v-model="showSnackbar"
-    color="error"
-    :timeout="1000"
-    right
-    top 
-  >
-    Incorrect e-mail or password!
-    <v-btn
-        dark
-        text
-        @click="showSnackbar = false"
-    >
-        Close
-    </v-btn>
-</v-snackbar>
 <v-container class="fill-height" fluid>
     <img src="/logo_ensae.png" alt="ENSAE Logo" class="logo" />
     <v-row align="center" justify="center" style="width: 100%;">
@@ -37,37 +21,25 @@
   </v-container>
 </template>
 <script>
-import axios from 'axios';
+import apiClient from '@/apiConfig';
 
 export default {
   data() {
     return {
       email: '',
       password: '',
-      showSnackbar: false
     }
   },
   methods: {
-    async login() {
-      try {
-        const response = await axios.post('/login', {
-          email: this.email,
-          password: this.password
-        }, 
-        { 
-          withCredentials: true
-        });
-        if (response.data.status === "success") {
-          console.log("Login successful!");
-          this.$router.push({ name: 'homepage' });
-          } else {
-            console.error("Login failed:", response.data.message);
-            this.showSnackbar = true;
-          }
-        } catch (error) {
-          console.error("There was an error logging in:", error);
-          this.showSnackbar = true;
-        }
+    login() {
+      apiClient.post('/auth/login', {
+        email: this.email,
+        password: this.password
+      })
+      .then(response => {
+        console.log("Login successful!");
+        this.$router.push({ name: 'homepage' });
+      });
     }
   }
 }
@@ -95,7 +67,7 @@ export default {
 .betterave-logo {
   width: 70%;
   height: auto;
-  margin-bottom: 10px; /* The only margin required is at the bottom to space it from the card */
+  margin-bottom: 10px;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -119,4 +91,4 @@ export default {
 .login-col {
   margin-bottom: 100px;
 }
-</style>
+</style>@/apiConfig

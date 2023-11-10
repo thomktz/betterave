@@ -30,6 +30,7 @@ class User(db.Model, UserMixin):
     groups = db.relationship('ClassGroup', secondary="group_enrollment", back_populates='students')
     class_groups = db.relationship('UserClassGroup', back_populates='user', lazy='dynamic')
     messages = db.relationship('Message', back_populates='user')
+    lessons_taught = db.relationship('Lesson', back_populates='teacher', lazy='dynamic')
     attended_events = db.relationship('Event', secondary='event_attendance', back_populates='attending_users')
     subscriptions = db.relationship(
         'User', 
@@ -45,3 +46,30 @@ class User(db.Model, UserMixin):
     def get_id(self):
         """Necessary because UserMixin expects either an "id" argument or a "get_id" method."""
         return self.user_id
+    def as_dict(self):
+        """Convert the SQLAlchemy object into a dictionary."""
+        return {
+            'user_id': self.user_id,
+            'email': self.email,
+            'name': self.name,
+            'surname': self.surname,
+            'profile_pic': self.profile_pic,
+            'level': self.level.value,
+            'user_type': self.user_type.value,
+        }
+    
+    @property
+    def is_student(self):
+        return self.user_type == UserType.STUDENT
+    
+    @property
+    def is_teacher(self):
+        return self.user_type == UserType.TEACHER
+    
+    @property
+    def is_asso(self):
+        return self.user_type == UserType.ASSO
+    
+    @property
+    def is_admin(self):
+        return self.user_type == UserType.ADMIN

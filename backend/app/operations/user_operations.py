@@ -22,7 +22,7 @@ def check_password(hashed_password: str, password: str) -> bool:
 
 def authenticate_user(email: str, password: str) -> bool:
     """Authenticate a user using their email and password."""
-    user = get_user_by_email(email)
+    user = get_user_by_email(email.lower())
     if not user:
         return False
     return check_password(user.hashed_password, password)
@@ -87,7 +87,7 @@ def add_user(
         return -1
 
 @with_instance(User)
-def modify_user(user: User, new_data: dict) -> bool:
+def update_user(user: User, new_data: dict) -> bool:
     """
     Modify user information in the database.
 
@@ -125,6 +125,10 @@ def delete_user(user: User) -> bool:
         bool: True if the user was successfully removed, False otherwise.
     """
     try:
+        # Delete all UserClassGroup associations
+        for ucg in user.class_groups:
+            db.session.delete(ucg)
+        
         db.session.delete(user)
         db.session.commit()
         return True

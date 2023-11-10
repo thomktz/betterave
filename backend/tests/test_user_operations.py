@@ -10,10 +10,10 @@ def test_add_and_get_user_by_id(test_client):
     user = user_operations.get_user_by_id(user_id)
     assert user.name == "Alice"
 
-def test_modify_user(test_client):
+def test_update_user(test_client):
     """Test modifying user details."""
     user_id = user_operations.add_user("Alice", "Bob", PIC_URL, UserType.STUDENT, UserLevel._1A)
-    modification_success = user_operations.modify_user(user_id, {"name": "Alicia"})
+    modification_success = user_operations.update_user(user_id, {"name": "Alicia"})
     user = user_operations.get_user_by_id(user_id)
     assert modification_success
     assert user.name == "Alicia"

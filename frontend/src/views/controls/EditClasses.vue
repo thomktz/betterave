@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import axios from 'axios';
 import UserClassesTable from '@/components/UserClassesTable.vue';
+import apiClient from '@/apiConfig';
 
 export default {
   components: {
@@ -14,7 +14,7 @@ export default {
   },
   data () {
     return {
-      userId: this.$route.params.student_id,
+      user_id: this.$route.params.student_id,
       classesInfo: {},
       classes: [],
       name: '',
@@ -22,10 +22,10 @@ export default {
     }
   },
   async mounted () {
-    const response = await axios.get(`/users/${this.userId}`, { withCredentials: true });
+    const response = await apiClient.get(`/users/${this.user_id}/classgroups`);
     console.log(response.data);
     this.classesInfo = response.data;
-    this.classes = this.classesInfo.classes;
+    this.classes = this.classesInfo.classgroups;
     this.name = this.classesInfo.name;
     this.surname = this.classesInfo.surname;
 
@@ -33,14 +33,14 @@ export default {
     this.$emit('updateTitle', `${this.name} ${this.surname} Classes`);
   },
   methods: {
-    async updateClassGroup({ classId, secondaryClassGroupName }) {
+    async updateClassGroup({ class_id, secondaryClassGroupName }) {
       try {
         // Perform the API call to update the UserClassGroup
-        console.log(classId, secondaryClassGroupName)
+        console.log(class_id, secondaryClassGroupName)
         const update_data = {
           "secondary_class_group_name": secondaryClassGroupName
         }
-        const response = await axios.put(`/user_class_groups/${this.userId}/${classId}`, update_data, { withCredentials: true });
+        const response = await apiClient.put(`/user_class_groups/${this.user_id}/${class_id}`, update_data);
         
         // Handle the successful update
         console.log('Update successful:', response.data);

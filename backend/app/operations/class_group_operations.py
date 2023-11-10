@@ -31,7 +31,7 @@ def add_class_group(name: str, class_id: int, is_main_group: bool) -> int:
         return -1
 
 @with_instance(ClassGroup)
-def modify_class_group(group: ClassGroup, new_data: dict) -> bool:
+def update_class_group(group: ClassGroup, new_data: dict) -> bool:
     """
     Modify class group information in the database.
 
@@ -86,6 +86,14 @@ def get_class_group_by_id(group_id: int) -> ClassGroup:
     """
     return db.session.get(ClassGroup, group_id)
 
+def get_all_class_groups() -> list[ClassGroup]:
+    """
+    Return all class groups in the database.
+
+    Returns:
+        list[ClassGroup]: A list of class group objects.
+    """
+    return ClassGroup.query.all()
 
 @with_instance([User, ClassGroup])
 def enroll_student_in_group(student: User, group: ClassGroup) -> bool:
@@ -133,6 +141,6 @@ def unenroll_student_from_group(student: User, group: ClassGroup) -> bool:
         print(f"Error unenrolling student: {str(e)}")
         return False
     
-def get_group_by_name(class_id, name):
+def get_class_group_by_name(class_id, name):
     """Return a class group by its name."""
     return ClassGroup.query.filter_by(class_id=class_id, name=name).first()

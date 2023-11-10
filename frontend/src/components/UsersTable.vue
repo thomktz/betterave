@@ -79,7 +79,7 @@
           </v-icon>
           <v-icon
             small
-            @click="emitDeleteUser(item.id)"
+            @click="emitDeleteUser(item.user_id)"
           >
             mdi-delete
           </v-icon>
@@ -176,7 +176,7 @@
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="showEditDialog = false">Cancel</v-btn>
         <v-btn color="blue darken-1" text @click="handleEditUser">Save</v-btn>
-        <v-btn color="green" text @click="navigateToEditClasses(selectedUser.id)">
+        <v-btn color="green" text @click="navigateToEditClasses(selectedUser.user_id)">
           Edit classes
         </v-btn>
       </v-card-actions>
@@ -226,9 +226,9 @@ const navigateToEditClasses = (studentId) => {
 const emit = defineEmits(['delete-user', 'edit-user', 'add-user']);
 
 // Methods for handling emits
-const emitDeleteUser = (userId) => {
-  console.log(`Request to delete user with ID: ${userId}`);
-  emit('delete-user', userId);
+const emitDeleteUser = (user_id) => {
+  console.log(`Request to delete user with ID: ${user_id}`);
+  emit('delete-user', user_id);
 };
 
 const emitEditUser = (user) => {

@@ -3,7 +3,7 @@ from extensions import db
 from app.models import UserLevel, Class
 from app.decorators import with_instance
 
-def add_class(class_id, name, ects_credits, default_teacher_id, level, backgroundColor, **kwargs) -> int:
+def add_class(class_id, name, ects_credits, default_teacher_id, level, background_color, **kwargs) -> int:
     """
     Add a class to the database.
 
@@ -12,7 +12,7 @@ def add_class(class_id, name, ects_credits, default_teacher_id, level, backgroun
         name (str): The name of the class.
         ects_credits (int): The ECTS credits for the class.
         default_teacher_id (int): The default teacher for the class.
-        backgroundColor (str): The background color for the class.
+        background_color (str): The background color for the class.
         **kwargs: Additional class attributes (e.g., ensae_link).
 
     Returns:
@@ -28,7 +28,7 @@ def add_class(class_id, name, ects_credits, default_teacher_id, level, backgroun
             ensae_link=ensae_link,
             default_teacher_id=default_teacher_id,
             level=UserLevel(level.upper()) if isinstance(level, str) else level,
-            backgroundColor=backgroundColor,
+            background_color=background_color,
         )
 
         db.session.add(new_class)
@@ -40,9 +40,9 @@ def add_class(class_id, name, ects_credits, default_teacher_id, level, backgroun
         return -1
 
 @with_instance(Class)
-def modify_class(class_instance: Class, new_data: dict) -> bool:
+def update_class(class_instance: Class, new_data: dict) -> bool:
     """
-    Modify class information in the database.
+    Update class information in the database.
 
     Args:
         class_instance (Class): The instance of the class to be modified.
@@ -65,7 +65,7 @@ def modify_class(class_instance: Class, new_data: dict) -> bool:
     
     
 @with_instance(Class)
-def remove_class(class_instance: Class) -> bool:
+def delete_class(class_instance: Class) -> bool:
     """
     Remove a class from the database.
 

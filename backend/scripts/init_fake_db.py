@@ -204,7 +204,7 @@ def initialize_database():
                     name=class_dict["name"],
                     ects_credits=class_dict["ects_credits"],
                     default_teacher_id=get_user_by_name(*class_dict["teachers"][0]).user_id,
-                    backgroundColor=class_dict["backgroundColor"],
+                    background_color=class_dict["backgroundColor"],
                 )
             )
         
