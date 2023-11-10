@@ -30,6 +30,9 @@ export default {
       password: '',
     }
   },
+  mounted() {
+    this.logout();
+  },
   methods: {
     login() {
       apiClient.post('/auth/login', {
@@ -39,6 +42,15 @@ export default {
       .then(response => {
         console.log("Login successful!");
         this.$router.push({ name: 'homepage' });
+      });
+    },
+    logout() {
+      apiClient.post('/auth/logout')
+      .then(() => {
+        console.log("Logged out successfully.");
+      })
+      .catch(error => {
+        console.error("Error during logout: ", error);
       });
     }
   }

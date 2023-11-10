@@ -34,17 +34,17 @@ apiClient.interceptors.response.use(
     return response;
   },
   error => {
-    // Your error handling
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      'An unknown error occurred';
-
-    // Display the error message
-    toast.error(message);
-
-    // Handle error logging or display here if needed
-    console.error("Caught error:", error);
+    // Check if the error is an expected one
+    if (error.response && error.response.status === 401 && error.config.url.includes('/check-auth')) {
+      // This is an expected error, so we don't show an error message
+      console.log('User not authenticated, expected behavior');
+    } else {
+      // For other errors, display the error message
+      const message = (error.response && error.response.data && error.response.data.message) || 
+                      error.message || 
+                      'An unknown error occurred';
+      toast.error(message);
+    }
   }
 );
 
