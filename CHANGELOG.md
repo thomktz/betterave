@@ -10,9 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Register page
 - user_post_model
 - Export toast from apiConfig
+- .env.local creation script
 
 ### Changed
 - Visual overhaul to the EditClasses page
+- Redo readme
 
 # [3.0.1] - 2023-11-10
 ### Added
