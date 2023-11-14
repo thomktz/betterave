@@ -42,7 +42,7 @@ def create_app():
         "origins": [
             "http://localhost:8080",
             "http://127.0.0.1:8080",
-            "https://app.betterave.kientz.net", 
+            "https://betterave.kientz.net", 
             "http://89.168.39.28:8080"
             "https://89.168.39.28:8080"
         ],
