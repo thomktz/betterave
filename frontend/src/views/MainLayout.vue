@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import apiClient from '@/apiConfig';
+import { apiClient } from '@/apiConfig';
 import { ref } from 'vue';
 import ProfilePill from '@/components/ProfilePill.vue';
 import DarkModeToggle from '@/components/DarkModeToggle.vue';

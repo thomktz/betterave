@@ -1,11 +1,11 @@
-# routes.py
 from datetime import datetime
 from flask_restx import Resource
 from .models import (
     user_model, 
-    user_full_model, 
+    user_post_model, 
     user_classgroups_model, 
     asso_model,
+    class_group_model
 )
 from .namespace import api
 from app.operations.user_operations import ( 
@@ -37,6 +37,11 @@ from app.operations.event_operations import (
     get_all_future_events,
     get_user_future_events,
 )
+from app.operations.user_class_group_operations import (
+    enroll_user_in_class,
+    unenroll_user_from_class,
+    get_user_class_group_by_id,
+)
 from app.api.lessons.models import fullcalendar_lesson_model
 from app.api.events.models import fullcalendar_event_model
 from app.decorators import require_authentication, current_user_required, resolve_user
@@ -50,9 +55,7 @@ class UserList(Resource):
         """List all users"""
         return get_all_users()
 
-    @api.doc(security='apikey')
-    @require_authentication('admin')
-    @api.expect(user_full_model)
+    @api.expect(user_post_model)
     def post(self):
         """Create a new user"""
         # Extract the fields from the api.payload
@@ -73,7 +76,7 @@ class UserResource(Resource):
         """Fetch a user given its identifier"""
         return user
 
-    @api.expect(user_full_model)
+    @api.expect(user_post_model)
     @api.response(204, 'User updated successfully')
     @api.doc(security='apikey')
     @require_authentication()
@@ -112,10 +115,12 @@ class UserClassGroupsResource(Resource):
             "id": user.user_id,
             "name": user.name,
             "surname": user.surname,
+            "level": user.level.value,
             "classgroups": [
                 {
                     "class_id": class_group.class_id,
                     "class_name": class_group.class_.name,
+                    "class_ects": class_group.class_.ects_credits,
                     "primary_class_group_id": class_group.primary_class_group_id,
                     "secondary_class_group_id": class_group.secondary_class_group_id,
                     "secondary_class_group_name": class_group.secondary_class_group.name if class_group.secondary_class_group else "",
@@ -201,6 +206,7 @@ class SubscribeAssociation(Resource):
     @api.doc(security='apikey')
     @require_authentication()
     @resolve_user
+    @current_user_required
     def post(self, user, asso_id):
         """Subscribe a user to an association"""
         asso = get_user_by_id(asso_id)
@@ -218,7 +224,8 @@ class UnsubscribeAssociation(Resource):
     @api.doc(security='apikey')
     @require_authentication()
     @resolve_user
-    def post(self, user, asso_id):
+    @current_user_required
+    def delete(self, user, asso_id):
         """Unsubscribe a user from an association"""
         asso = get_user_by_id(asso_id)
         if not asso:
@@ -229,7 +236,51 @@ class UnsubscribeAssociation(Resource):
             return {"message": "User unsubscribed successfully from the association"}, 200
         else:
             api.abort(400, "Could not unsubscribe user from the association")
-            
+
+@api.route('/<string:user_id_or_me>/enroll/<int:class_id>')
+class EnrollClass(Resource):
+    @api.doc(security='apikey')
+    @require_authentication()
+    @resolve_user
+    @current_user_required
+    @api.marshal_with(class_group_model)
+    def post(self, user, class_id):
+        """Enroll a user in a class"""
+        message, ugc_id = enroll_user_in_class(user.user_id, class_id)
+        if message == "Success":
+            class_group = get_user_class_group_by_id(ugc_id)
+            return {
+                "class_id": class_group.class_id,
+                "class_name": class_group.class_.name,
+                "class_ects": class_group.class_.ects_credits,
+                "primary_class_group_id": class_group.primary_class_group_id,
+                "secondary_class_group_id": class_group.secondary_class_group_id,
+                "secondary_class_group_name": class_group.secondary_class_group.name if class_group.secondary_class_group else "",
+                "all_groups": [group.name for group in class_group.class_.groups if not group.is_main_group]
+            }
+        elif message == "Already enrolled in class":
+            api.abort(400, "User already enrolled in the class")
+        elif message == "Class has no main group":
+            api.abort(400, "Class has no main group")
+        else:
+            api.abort(400, "Could not enroll user in the class")
+
+@api.route('/<string:user_id_or_me>/unenroll/<int:class_id>')
+class UnenrollClass(Resource):
+    @api.doc(security='apikey')
+    @require_authentication()
+    @resolve_user
+    @current_user_required
+    def delete(self, user, class_id):
+        """Unenroll a user from a class"""
+        result = unenroll_user_from_class(user.user_id, class_id)
+        if result == "Success":
+            return {"message": "User unenrolled successfully from the class"}, 200
+        elif result == "Not enrolled in class":
+            api.abort(400, "User not enrolled in the class")
+        else:
+            api.abort(400, "Could not unenroll user from the class")
+
 @api.route('/<string:user_id_or_me>/events')
 class UserEvents(Resource):
     @api.doc(security='apikey')

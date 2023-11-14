@@ -7,21 +7,33 @@
         <v-card class="elevation-12" dark>
           <v-card-title>Login</v-card-title>
           <v-card-text>
-            <v-text-field label="Email" v-model="email" prepend-icon="mdi-email" type="text"></v-text-field>
+            <v-text-field label="Email" v-model="email" prepend-icon="mdi-email" type="text" placeholder="john.doe@ensae.fr"></v-text-field>
             <v-text-field label="Password" v-model="password" prepend-icon="mdi-lock" type="password" @keyup.enter="login"></v-text-field>
           </v-card-text>
           <v-card-actions class="login-button">
             <v-btn rounded block class="centered-button" @click="login">
               Login
             </v-btn>
+            <!-- Registration Link -->
+            
           </v-card-actions>
+          <v-card-text class="text-center">
+            <a
+              class="text-blue text-decoration-none"
+              @click="openRegisterDialog"
+            >
+              Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
+            </a>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
+    <RegisterDialog ref="registerDialog"></RegisterDialog>
   </v-container>
 </template>
 <script>
-import apiClient from '@/apiConfig';
+import { apiClient, toast } from '@/apiConfig';
+import RegisterDialog from '@/components/RegisterDialog.vue';
 
 export default {
   data() {
@@ -30,17 +42,26 @@ export default {
       password: '',
     }
   },
+  components: {
+    RegisterDialog
+  },
   mounted() {
     this.logout();
   },
   methods: {
+    openRegisterDialog() {
+      if (this.$refs.registerDialog) {
+        this.$refs.registerDialog.open();
+      } else {
+        console.error("RegisterDialog component not found");
+      }
+    },
     login() {
       apiClient.post('/auth/login', {
         email: this.email,
         password: this.password
       })
       .then(response => {
-        console.log("Login successful!");
         this.$router.push({ name: 'homepage' });
       });
     },
@@ -84,7 +105,9 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-
+.v-card-text  {
+  padding-bottom: 0px;
+}
 .login-button {
   padding: 0.5rem 2rem;
 }
@@ -98,9 +121,12 @@ export default {
 .centered-button:hover {
     background-position: -100% 0;
 }
-
+.text-center {
+  padding: 5px;
+  cursor: pointer;
+}
 
 .login-col {
   margin-bottom: 100px;
 }
-</style>@/apiConfig
+</style>

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import apiClient from '@/apiConfig';
+import { apiClient } from '@/apiConfig';
 import UserCalendar from '@/components/UserCalendar.vue';
 import InfoColumn from '@/components/InfoColumn.vue';
 import ColumnNextclasses from '@/components/ColumnNextclasses.vue';

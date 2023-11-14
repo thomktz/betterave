@@ -175,10 +175,10 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="showEditDialog = false">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="handleEditUser">Save</v-btn>
         <v-btn color="green" text @click="navigateToEditClasses(selectedUser.user_id)">
           Edit classes
         </v-btn>
+        <v-btn color="blue darken-1" text @click="handleEditUser">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -227,13 +227,11 @@ const emit = defineEmits(['delete-user', 'edit-user', 'add-user']);
 
 // Methods for handling emits
 const emitDeleteUser = (user_id) => {
-  console.log(`Request to delete user with ID: ${user_id}`);
   emit('delete-user', user_id);
 };
 
 const emitEditUser = (user) => {
   selectedUser.value = { ...user }; // Make a copy of the user object for editing
-  console.log(`Opening edit dialog for user:`, selectedUser.value);
   showEditDialog.value = true; // Show the edit dialog
 };
 

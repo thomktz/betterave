@@ -17,7 +17,7 @@
   </template>
   
   <script>
-  import apiClient from '@/apiConfig';
+  import { apiClient } from '@/apiConfig';
 
   export default {
     data() {

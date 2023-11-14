@@ -7,13 +7,15 @@ from app.operations.class_operations import (
     get_class_by_id,
     get_all_classes,
     update_class,
-    delete_class
+    delete_class,
+    get_classes_from_level
 )
 from app.operations.message_operations import (
     get_class_messages,
     add_class_message
 )
 from app.api.class_groups.models import message_model, message_post_model
+from app.models import UserLevel
 from app.decorators import require_authentication
 
 @api.route('/')
@@ -61,6 +63,26 @@ class ClassResource(Resource):
         """Delete a class given its identifier"""
         delete_class(class_id)
         return None, 204
+    
+@api.route('/level/<level_or_me>')
+@api.response(404, 'Level not found')
+class ClassLevelResource(Resource):
+    @api.doc(security='apikey')
+    @require_authentication()
+    @api.marshal_list_with(class_model)
+    def get(self, level_or_me):
+        """Fetch all classes for a given level"""
+        try:
+            if level_or_me == 'me':
+                user_level = current_user.level
+            else:
+                user_level = UserLevel(level_or_me)
+            classes = get_classes_from_level(user_level)
+            if not classes:
+                api.abort(404, f'No classes found for level {level_or_me}')
+            return classes
+        except ValueError:  # If 'level' is not a valid UserLevel
+            api.abort(404, f'Invalid level {level_or_me}')
 
 @api.route('/<int:class_id>/messages')
 class ClassMessages(Resource):

@@ -27,7 +27,7 @@
   
 <script>
 import Chat from '@/components/Chat.vue';
-import apiClient from '@/apiConfig';
+import { apiClient } from '@/apiConfig';
   
   export default {
     components: {

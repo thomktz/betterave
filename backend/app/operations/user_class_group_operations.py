@@ -2,7 +2,75 @@ from sqlalchemy.exc import SQLAlchemyError
 from extensions import db
 from app.models import UserClassGroup, ClassGroup
 from app.decorators import with_instance
+from app.operations.class_group_operations import enroll_student_in_group, unenroll_student_from_group
 
+def enroll_user_in_class(user_id: int, class_id: int):
+    """
+    Enroll a user in a class.
+
+    Args:
+        user_id (int): The ID of the user (student).
+        class_id (int): The ID of the class.
+
+    Returns:
+        bool: True if the user was successfully enrolled, False otherwise.
+    """
+    # Check if the user is already enrolled in the class
+    if ucg := get_ucg_by_user_and_class(user_id, class_id):
+        return "Already enrolled in class", ucg.id
+
+    # Get the main group for the class
+    main_group = ClassGroup.query.filter_by(class_id=class_id, is_main_group=True).first()
+    if not main_group:
+        return "Class has no main group", None
+    
+    # Pick the secondary groups which has the lowest number of students
+    secondary_groups = ClassGroup.query.filter_by(class_id=class_id, is_main_group=False).all()
+    secondary_groups.sort(key=lambda x: len(x.students))
+    secondary_group = secondary_groups[0] if secondary_groups else None
+
+    # Enroll student in groups
+    enroll_student_in_group(user_id, main_group.group_id)
+    if secondary_group:
+        enroll_student_in_group(user_id, secondary_group.group_id)
+        
+    # Create a new UserClassGroup
+    if ucg_id := add_user_class_group(
+        user_id=user_id,
+        class_id=class_id,
+        primary_class_group_id=main_group.group_id,
+        secondary_class_group_id=secondary_group.group_id if secondary_group else None
+    ):
+        return "Success", ucg_id
+    else:
+        return "Error adding user to class", None
+    
+def unenroll_user_from_class(user_id: int, class_id: int):
+    """
+    Unenroll a user from a class.
+
+    Args:
+        user_id (int): The ID of the user (student).
+        class_id (int): The ID of the class.
+
+    Returns:
+        bool: True if the user was successfully unenrolled, False otherwise.
+    """
+    # Get the UserClassGroup
+    user_class_group = get_ucg_by_user_and_class(user_id, class_id)
+    if not user_class_group:
+        return "Not enrolled in class"
+
+    # Unenroll student from groups
+    unenroll_student_from_group(user_id, user_class_group.primary_class_group)
+    if user_class_group.secondary_class_group:
+        unenroll_student_from_group(user_id, user_class_group.secondary_class_group)
+
+    # Delete the UserClassGroup
+    if delete_user_class_group(user_class_group):
+        return "Success"
+    else:
+        return "Error deleting user from class"
 
 def add_user_class_group(user_id: int, class_id: int, primary_class_group_id: int, secondary_class_group_id: int = None) -> int:
     """
