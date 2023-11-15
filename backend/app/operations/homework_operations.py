@@ -1,18 +1,18 @@
 from sqlalchemy.exc import SQLAlchemyError
 from extensions import db
-from app.models import Homework, Class
+from app.models import Homework
 from app.decorators import with_instance
 
 def add_homework(homework_id, title) -> int:
     """
-    Add a class to the database.
+    Add a homework to the database.
 
     Args:
         homework_id (int): The ID of the homework.
         title (str): The name of the homework.
 
     Returns:
-        int: The ID of the newly created class.
+        int: The ID of the newly created homework.
     """
     try:
         
@@ -21,7 +21,7 @@ def add_homework(homework_id, title) -> int:
             title=title,
         )
 
-        db.session.add(new_class)
+        db.session.add(new_homework)
         db.session.commit()
         return homework_id
     except SQLAlchemyError as e:
@@ -29,7 +29,7 @@ def add_homework(homework_id, title) -> int:
         print(f"Error adding homewor: {str(e)}")
         return -1
 
-@with_instance(Class)
+@with_instance(Homework)
 def update_homework(homework_instance: Homework, new_data: dict) -> bool:
     """
     Update homework in the database.
@@ -54,13 +54,13 @@ def update_homework(homework_instance: Homework, new_data: dict) -> bool:
         return False
     
     
-@with_instance(Class)
-def delete_class(homework_instance: Class) -> bool:
+@with_instance(Homework)
+def delete_homework(homework_instance: Homework) -> bool:
     """
     Remove a homework from the database.
 
     Args:
-        homework_instance (Class): The instance of the homework to be removed.
+        homework_instance (Homework): The instance of the homework to be removed.
 
     Returns:
         bool: True if the homework was successfully removed, False otherwise.

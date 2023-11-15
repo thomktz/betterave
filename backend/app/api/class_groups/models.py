@@ -23,6 +23,13 @@ message_model = api.model("Message", {
     "sender_details": fields.Nested(sender_details_model, description="The details of the user who posted the message")
 })
 
+homework_model = api.model("Homework", {
+    "homework_id": fields.Integer(readonly=True, description="The unique identifier of a homework"),
+    "group_id": fields.Integer(required=True, description="The identifier of the class group associated with the message"),
+    "content": fields.String(required=True, description="The content/description of the homework"),
+    "due_date": fields.DateTime(required=True, description="The due date of the homework")
+})
+
 
 message_post_model = api.model("MessagePost", {
     "content": fields.String(required=True, description="The content of the new message"),

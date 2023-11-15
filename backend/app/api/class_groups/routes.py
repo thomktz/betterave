@@ -1,6 +1,6 @@
 from flask_restx import Resource
 from flask_login import current_user
-from .models import class_group_model, message_model, message_post_model
+from .models import class_group_model, message_model, message_post_model, homework_model
 from .namespace import api
 from app.operations.class_group_operations import (
     get_all_class_groups,
@@ -13,6 +13,13 @@ from app.operations.message_operations import (
     get_messages_by_group_id,
     add_message_to_group,
     delete_message
+)
+from app.operations.homework_operations import (
+    add_homework,
+    update_homework,
+    delete_homework,
+    get_homework_by_id,
+    get_all_homeworks
 )
 from app.decorators import require_authentication
 
