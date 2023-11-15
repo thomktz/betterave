@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { th } from 'date-fns/locale';
 import { useToast } from 'vue-toastification';
 
 // Create an Axios instance
@@ -16,12 +17,12 @@ const toast = useToast();
 apiClient.interceptors.request.use(
   request => {
     // Log the full request details here
-    console.log("Starting Request", JSON.stringify(request, null, 2));
+    // console.log("Starting Request", JSON.stringify(request, null, 2));
     return request;
   },
   error => {
     // Do something with request error
-    console.error("Request Error:", error);
+    c// onsole.error("Request Error:", error);
     return Promise.reject(error);
   }
 );
@@ -44,8 +45,9 @@ apiClient.interceptors.response.use(
                       error.message || 
                       'An unknown error occurred';
       toast.error(message);
+      return Promise.reject(error);
     }
   }
 );
 
-export default apiClient;
+export { apiClient, toast };

@@ -9,7 +9,7 @@ import AssoControls from '../views/controls/AssoControls.vue'
 import TeacherControls from '../views/controls/TeacherControls.vue'
 import AdminControls from '../views/controls/AdminControls.vue'
 import EditClasses from '../views/controls/EditClasses.vue'
-import apiClient from '@/apiConfig'
+import { apiClient } from '@/apiConfig'
 
 const routes = [
   {
@@ -80,15 +80,12 @@ router.beforeEach(async (to, from, next) => {
     next();
     return;
   }
-  console.log('Trying to access page : ' + to.name);
   // Otherwise, check if the user is authenticated and has the required role.
   try {
     const response = await apiClient.get('/auth/check-auth');
 
     const userAuthenticated = response.data.status === 'authenticated';
     const userRole = response.data.role; 
-
-    console.log(userAuthenticated, userRole);
 
     // Check if the route requires authentication
     if (to.meta.requiresAuth) {
@@ -105,7 +102,6 @@ router.beforeEach(async (to, from, next) => {
         return;
       }
     }
-    console.log('All good to proceed to page!');
     // If all checks pass, proceed to the route.
     next();
   } catch (error) {

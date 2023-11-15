@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import apiClient from '@/apiConfig';
+import { apiClient } from '@/apiConfig';
 import UsersTable from '@/components/UsersTable.vue';
 import { ref, onMounted } from 'vue';
 

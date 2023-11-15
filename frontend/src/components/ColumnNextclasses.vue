@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import apiClient from '@/apiConfig';
+import { apiClient } from '@/apiConfig';
 
 export default {
   props: {
@@ -150,4 +150,3 @@ li {
     margin-left: 10px;
 }
   </style>
-  @/apiConfig

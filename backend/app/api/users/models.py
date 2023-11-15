@@ -3,7 +3,6 @@
 from flask_restx import fields, Model
 from .namespace import api
 
-# User model for public data
 user_model = api.model(
     "User", 
     {
@@ -17,12 +16,15 @@ user_model = api.model(
     },
 )
 
-# Full user model including sensitive data
-user_full_model = api.inherit(
-    "UserFull", 
-    user_model, 
+user_post_model = api.model(
+    "UserPost",
     {
-        "hashed_password": fields.String(required=True, description="User hashed password")
+        "name": fields.String(required=True, description="User first name"),
+        "surname": fields.String(required=True, description="User last name"),
+        "email_override": fields.String(required=False, description="User email address"),
+        "level": fields.String(required=True, description="User level or grade"),
+        "user_type": fields.String(required=True, description="Type of user (e.g., student, teacher, admin)"),
+        "password_override": fields.String(required=True, description="User password"),
     }
 )
 
@@ -31,6 +33,7 @@ class_group_model = api.model(
     {
         "class_id": fields.Integer(description="Class ID"),
         "class_name": fields.String(description="Class name"),
+        "class_ects": fields.Integer(description="Class ECTS"),
         "primary_class_group_id": fields.Integer(description="Primary class group ID"),
         "secondary_class_group_id": fields.Integer(description="Secondary class group ID"),
         "secondary_class_group_name": fields.String(description="Secondary class group name"),
@@ -44,6 +47,7 @@ user_classgroups_model = api.model(
         "id": fields.Integer(description="User ID"),
         "name": fields.String(description="First name of the user"),
         "surname": fields.String(description="Last name of the user"),
+        "level": fields.String(description="User level (1A, 2A, 3A)"),
         "classgroups": fields.List(fields.Nested(class_group_model), description="List of classes associated with the user")
     }
 )

@@ -15,7 +15,7 @@
 </template>
   
   <script>
-import apiClient from '@/apiConfig';
+import { apiClient, toast } from '@/apiConfig';
   
   export default {
     props: {
@@ -33,7 +33,6 @@ import apiClient from '@/apiConfig';
       async logout() {
         apiClient.post('/auth/logout')
         .then(response => {
-          console.log("Logout successful!");
           this.$router.push({ name: 'Login' });
         });
       },
@@ -132,4 +131,4 @@ import apiClient from '@/apiConfig';
   align-items: center;
 }
 
-</style>@/apiConfig
+</style>

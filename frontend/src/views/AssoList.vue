@@ -23,7 +23,7 @@
 </template>
   
   <script>
-import apiClient from '@/apiConfig';
+import { apiClient } from '@/apiConfig';
   
   export default {
     data() {
@@ -47,7 +47,7 @@ import apiClient from '@/apiConfig';
           if (asso.subscribed) {
             await apiClient.post(`/users/me/subscribe/${asso.user_id}`);
           } else {
-            await apiClient.post(`/users/me/unsubscribe/${asso.user_id}`);
+            await apiClient.delete(`/users/me/unsubscribe/${asso.user_id}`);
           }
         } catch (error) {
           console.error("There was an error toggling subscription:", error);

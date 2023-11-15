@@ -5,7 +5,7 @@
   </template>
   
   <script>
-import apiClient from '@/apiConfig';
+import { apiClient } from '@/apiConfig';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
