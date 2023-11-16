@@ -1,83 +1,44 @@
 from sqlalchemy.exc import SQLAlchemyError
 from extensions import db
-from app.models import Homework
+from app.models import Homework, Class
 from app.decorators import with_instance
+from app.operations.class_operations import get_class_by_id
 
-def add_homework(homework_id, title) -> int:
-    """
-    Add a homework to the database.
+def get_homeworks_by_group_id(group_id: int):
+    """Retrieve homeworks for a specific class."""
+    return Homework.query.filter_by(group_id=group_id).all()
 
-    Args:
-        homework_id (int): The ID of the homework.
-        title (str): The name of the homework.
+def add_homework_to_group(content: str, group_id: int, homework_id: int, due_date):
+    """Add a homework to a specific class."""
+    hmw = Homework(content=content, group_id=group_id, homework_id=homework_id, due_date=due_date)
+    db.session.add(hmw)
+    db.session.commit()
 
-    Returns:
-        int: The ID of the newly created homework.
-    """
-    try:
-        
-        new_homework = Homework(
-            homework_id=homework_id,
-            title=title,
-        )
-
-        db.session.add(new_homework)
-        db.session.commit()
-        return homework_id
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        print(f"Error adding homewor: {str(e)}")
-        return -1
+    print(hmw.as_dict(), flush=True)
+    
+    return hmw
 
 @with_instance(Homework)
-def update_homework(homework_instance: Homework, new_data: dict) -> bool:
-    """
-    Update homework in the database.
-
-    Args:
-        homework_instance (Homework): The instance of the homework to be modified.
-        new_data (dict): A dictionary containing the updated homework information.
-
-    Returns:
-        bool: True if the homework was successfully modified, False otherwise.
-    """
-    try:
-        for key, value in new_data.items():
-            if hasattr(homework_instance, key):
-                setattr(homework_instance, key, value)
-
+def delete_homework(homework: Homework):
+    """Delete a homework."""
+    if homework:
+        db.session.delete(homework)
         db.session.commit()
         return True
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        print(f"Error modifying homework: {str(e)}")
-        return False
+    return False
+
+@with_instance(Class)
+def get_class_homeworks(class_: Class):
+    """Retrieve homeworks for a specific class."""
+    return get_homeworks_by_group_id(class_.main_group().group_id)
+
     
-    
-@with_instance(Homework)
-def delete_homework(homework_instance: Homework) -> bool:
-    """
-    Remove a homework from the database.
-
-    Args:
-        homework_instance (Homework): The instance of the homework to be removed.
-
-    Returns:
-        bool: True if the homework was successfully removed, False otherwise.
-    """
-    try:
-        db.session.delete(homework_instance)
-        db.session.commit()
-        return True
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        print(f"Error deleting homework: {str(e)}")
-        return False
-
-def get_homework_by_id(homework_id: int) -> Homework:
-    """Get a homework by its ID."""
-    return db.session.get(Homework, homework_id)
-
-def get_all_homeworks() -> list:
-    """Return all homeworks in the database."""
-    return Homework.query.all()
+def add_class_homework(content, class_id, homework_id, due_date):
+    """Add a homework to a specific class's main group."""
+    class_ = get_class_by_id(class_id)
+    if class_ and class_.main_group():
+        # Add homework to the main group of the class.
+        return add_homework_to_group(content, class_.main_group().group_id, homework_id,due_date)
+    else:
+        # Handle the case where the class or main group doesn't exist.
+        return None

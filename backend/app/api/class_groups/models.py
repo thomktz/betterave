@@ -25,11 +25,14 @@ message_model = api.model("Message", {
 
 homework_model = api.model("Homework", {
     "homework_id": fields.Integer(readonly=True, description="The unique identifier of a homework"),
-    "group_id": fields.Integer(required=True, description="The identifier of the class group associated with the message"),
-    "content": fields.String(required=True, description="The content/description of the homework"),
-    "due_date": fields.DateTime(required=True, description="The due date of the homework")
+   # "group_id": fields.Integer(required=True, description="The identifier of the class group associated with the message"),
+   # "content": fields.String(required=True, description="The content/description of the homework"),
+   # "due_date": fields.DateTime(required=True, description="The due date of the homework")
 })
 
+homework_post_model = api.model("HomeworkPost", {
+    "content": fields.String(required=True, description="The content/description of the new homework"),
+})
 
 message_post_model = api.model("MessagePost", {
     "content": fields.String(required=True, description="The content of the new message"),
