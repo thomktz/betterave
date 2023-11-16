@@ -14,7 +14,18 @@
     
         <!-- Middle Container -->
         <div class="info-container">
-          <!-- Content for the middle container -->
+           <Homework :group_id="classDetails.group_id"></Homework>
+
+           <v-card>
+          <v-card-title>Add New Homework</v-card-title>
+          <v-card-text>
+            <v-form @submit.prevent="addHomework">
+              <v-text-field v-model="newHomework.content" label="Homework Content" required></v-text-field>
+              <v-date-picker v-model="newHomework.due_date" label="Due Date" required></v-date-picker>
+              <v-btn type="submit">Add Homework</v-btn>
+            </v-form>
+          </v-card-text>
+           </v-card>
         </div>
     
         <!-- Right Container -->
@@ -28,9 +39,11 @@
 <script>
 import Chat from '@/components/Chat.vue';
 import { apiClient } from '@/apiConfig';
+import Homework from '@/components/Homework.vue';
   
   export default {
     components: {
+      Homework,
         Chat
     },
     data() {
@@ -38,6 +51,10 @@ import { apiClient } from '@/apiConfig';
         classDetails: {},
         class_id: this.$route.params.class_id,
         user_id: NaN,
+        newHomework: {
+        content: '',
+        due_date: null
+      }
       };
     },
     async mounted() {

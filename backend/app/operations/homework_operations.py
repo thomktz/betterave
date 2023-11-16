@@ -8,7 +8,7 @@ def get_homeworks_by_group_id(group_id: int):
     """Retrieve homeworks for a specific class."""
     return Homework.query.filter_by(group_id=group_id).all()
 
-def add_homework_to_group(content: str, group_id: int, homework_id: int, due_date):
+def add_homework_to_group(content: str, due_date, group_id: int):
     """Add a homework to a specific class."""
     hmw = Homework(content=content, group_id=group_id, homework_id=homework_id, due_date=due_date)
     db.session.add(hmw)
@@ -38,7 +38,7 @@ def add_class_homework(content, class_id, homework_id, due_date):
     class_ = get_class_by_id(class_id)
     if class_ and class_.main_group():
         # Add homework to the main group of the class.
-        return add_homework_to_group(content, class_.main_group().group_id, homework_id,due_date)
+        return add_homework_to_group(content,due_date, class_.main_group().group_id)
     else:
         # Handle the case where the class or main group doesn't exist.
         return None

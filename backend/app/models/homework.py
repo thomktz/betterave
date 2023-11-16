@@ -19,3 +19,11 @@ class Homework(db.Model):
     
     def get_content(self):
         return str(self.content)
+    
+    def as_dict(self):
+        return {
+            "homework_id": self.homework_id,
+            "group_id": self.group_id,
+            "content": self.content,
+            "due_date": self.due_date
+        }
