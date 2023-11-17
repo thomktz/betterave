@@ -73,8 +73,10 @@ def get_all_lessons() -> list[Lesson]:
     """Return all lessons in the database."""
     return Lesson.query.all()
 
-def get_all_future_lessons() -> list[Lesson]:
+def get_all_future_lessons(sort: bool = True) -> list[Lesson]:
     """Return all lessons in the database."""
+    if sort:
+        return sorted(Lesson.query.filter(Lesson.date >= datetime.now().date()).all())
     return Lesson.query.filter(Lesson.date >= datetime.now().date()).all()
 
 @with_instance(Class)
@@ -114,7 +116,7 @@ def get_teacher_lessons(teacher: User, sort: bool = True) -> list[Lesson]:
     # The lessons_taught relationship gives us direct access to the lessons
     lessons = teacher.lessons_taught.all()
 
-    return sorted(lessons, key=lambda l: (l.date, l.start_time)) if sort else lessons
+    return sorted(lessons) if sort else lessons
 
 @with_instance(User)
 def get_teacher_future_lessons(teacher: User, sort: bool = True) -> list[Lesson]:
@@ -122,4 +124,4 @@ def get_teacher_future_lessons(teacher: User, sort: bool = True) -> list[Lesson]
     # Using the lessons_taught relationship to filter future lessons
     future_lessons = teacher.lessons_taught.filter(Lesson.date >= datetime.now().date()).all()
 
-    return sorted(future_lessons, key=lambda l: (l.date, l.start_time)) if sort else future_lessons
+    return sorted(future_lessons) if sort else future_lessons

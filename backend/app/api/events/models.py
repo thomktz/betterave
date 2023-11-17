@@ -16,7 +16,7 @@ fullcalendar_event_model = api.model('Event', {
         description="A unique identifier for the event prefixed with 'event_'"
     ),
     "resourceId": fields.Integer(
-        attribute=lambda x: x.association_id,
+        attribute=lambda x: x.asso_id,
         description="The identifier of the association that is hosting the event, used for associating events with resources"
     ),
     "start": fields.DateTime(
