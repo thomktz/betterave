@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask_restx import Resource
+from flask_restx import Resource, reqparse
 from .models import (
     user_model, 
     user_post_model, 
@@ -131,6 +131,11 @@ class UserClassGroupsResource(Resource):
         }
 
         return user_details
+    
+
+# Parser for query parameters in the URl, in order to take the limit parameters, which permits to only show X next courses
+parser = reqparse.RequestParser()
+parser.add_argument('limit', type=int, required=False, default=50, help='Limit the number of lessons/events returned')
 
 @api.route('/<string:user_id_or_me>/lessons')
 class UserLessons(Resource):
@@ -138,15 +143,20 @@ class UserLessons(Resource):
     @require_authentication()
     @resolve_user
     @current_user_required
+    @api.expect(parser)
     @api.marshal_list_with(fullcalendar_lesson_model)
     def get(self, user):
         """
         Get a list of lessons for a specific student or teacher
         """
+
+        args = parser.parse_args()
+        limit = args.get("limit") # taking back the limit argument presents in the URL
+    
         if user.is_student:
-            lessons = get_student_lessons(user)
+            lessons = get_student_lessons(user,limit)
         elif user.is_teacher:
-            lessons = get_teacher_lessons(user)
+            lessons = get_teacher_lessons(user,limit)
         elif user.is_admin:
             lessons = get_all_lessons()
         else:
@@ -160,15 +170,20 @@ class UserFutureLessons(Resource):
     @require_authentication()
     @resolve_user
     @current_user_required
+    @api.expect(parser)
     @api.marshal_list_with(fullcalendar_lesson_model)
     def get(self, user):
         """
         Get a list of future lessons for a specific student or teacher
         """
+        args = parser.parse_args()
+        limit = args.get("limit") # taking back the limit argument presents in the URL
+    
+
         if user.is_student:
-            future_lessons = get_student_future_lessons(user)
+            future_lessons = get_student_future_lessons(user,limit)
         elif user.is_teacher:
-            future_lessons = get_teacher_future_lessons(user)
+            future_lessons = get_teacher_future_lessons(user,limit)
         elif user.is_admin:
             future_lessons = get_all_future_lessons()
         else:
@@ -287,36 +302,47 @@ class UserEvents(Resource):
     @require_authentication()
     @resolve_user
     @current_user_required
+    @api.expect(parser)
     @api.marshal_list_with(fullcalendar_event_model)
     def get(self, user):
         """
         Get a list of events for a specific user
         """
+
+        args = parser.parse_args()
+        limit = args.get("limit") # taking back the limit argument presents in the URL
+    
+
         if user.is_asso:
-            events = get_association_events(user)
+            events = get_association_events(user,limit)
         elif user.is_admin:
             events = get_all_events()
         else:
-            events = get_user_events(user)
+            events = get_user_events(user,limit)
 
         return events
 
 @api.route('/<string:user_id_or_me>/events/future')
+
 class UserFutureEvents(Resource):
     @api.doc(security='apikey')
     @require_authentication()
     @resolve_user
     @current_user_required
+    @api.expect(parser)
     @api.marshal_list_with(fullcalendar_event_model)
-    def get(self, user_id):
+    def get(self, user):
         """
         Get a list of future events for a specific user
-        """        
+        """                
+        args = parser.parse_args()
+        limit = args.get("limit") # taking back the limit argument presents in the URL
+    
         if user.is_asso:
-            future_events = get_association_future_events(user)
+            future_events = get_association_future_events(user,limit)
         elif user.is_admin:
             future_events = get_all_future_events()
         else:
-            future_events = get_user_future_events(user)
+            future_events = get_user_future_events(user,limit)
 
         return future_events

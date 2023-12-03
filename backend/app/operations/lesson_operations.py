@@ -89,39 +89,45 @@ def get_lessons_by_class(class_: Class) -> list[Lesson]:
 
 
 @with_instance(User)
-def get_student_lessons(user: User, sort: bool = True) -> list[Lesson]:
+def get_student_lessons(user: User, limit : int = None, sort: bool = True) -> list[Lesson]:
     """Get all lessons associated with a student through class groups."""
     # Collect lessons from all groups where the student is enrolled
     lessons = []
     for group in user.groups:
-        lessons.extend(group.lessons)
+        all_lessons = group.lessons[:limit] if limit is not None else group.lessons
+        lessons.extend(all_lessons)
 
     return sorted(lessons) if sort else lessons
 
 @with_instance(User)
-def get_student_future_lessons(user: User, sort: bool = True) -> list[Lesson]:
+def get_student_future_lessons(user: User, limit: int = None, sort: bool = True) -> list[Lesson]:
     """Get future lessons for a student through class groups."""
     # Retrieve all lessons for the student from their groups
     future_lessons = []
     date = datetime.now().date()
     for group in user.groups:
-        group_lessons = [lesson for lesson in group.lessons if lesson.date >= date]
+        if limit is not None :
+            group_lessons = [lesson for lesson in group.lessons[:limit] if lesson.date >= date]
+        else :
+            group_lessons = [lesson for lesson in group.lessons if lesson.date >= date]
         future_lessons.extend(group_lessons)
 
     return sorted(future_lessons) if sort else future_lessons
 
 @with_instance(User)
-def get_teacher_lessons(teacher: User, sort: bool = True) -> list[Lesson]:
+def get_teacher_lessons(teacher: User, limit : int = None, sort: bool = True) -> list[Lesson]:
     """Get all lessons associated with a teacher."""
     # The lessons_taught relationship gives us direct access to the lessons
-    lessons = teacher.lessons_taught.all()
+
+    lessons = teacher.lessons_taught.limit(limit) if limit is not None else teacher.lessons_taught
+    lessons = lessons.all()
 
     return sorted(lessons) if sort else lessons
 
 @with_instance(User)
-def get_teacher_future_lessons(teacher: User, sort: bool = True) -> list[Lesson]:
+def get_teacher_future_lessons(teacher: User, limit : int = None, sort: bool = True) -> list[Lesson]:
     """Get future lessons for a teacher."""
     # Using the lessons_taught relationship to filter future lessons
-    future_lessons = teacher.lessons_taught.filter(Lesson.date >= datetime.now().date()).all()
+    future_lessons = teacher.lessons_taught.limit(limit).filter(Lesson.date >= datetime.now().date()).all() if limit is not None else teacher.lessons_taught.filter(Lesson.date >= datetime.now().date()).all()
 
     return sorted(future_lessons) if sort else future_lessons
