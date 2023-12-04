@@ -1,3 +1,8 @@
+"""
+Flask SQLAlchemy model for a specific lesson within a class.
+
+A lesson is a specific instance of a class, with a date, a start time, end time, room, teacher, etc.
+"""
 from extensions import db
 
 
@@ -20,13 +25,13 @@ class Lesson(db.Model):
 
     # Ordering methods for comparing lessons
     def __lt__(self, other):
-        # Compare first by date, then by start time
+        """Compare first by date, then by start time."""
         if not isinstance(other, Lesson):
             return NotImplemented
         return (self.date, self.start_time) < (other.date, other.start_time)
 
     def __eq__(self, other):
-        # Equal if both date and start time are the same
+        """Equal if both date and start time are the same."""
         if not isinstance(other, Lesson):
             return NotImplemented
         return self.date == other.date and self.start_time == other.start_time

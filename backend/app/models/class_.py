@@ -1,3 +1,13 @@
+"""
+SQLAlchemy model for a class.
+
+A class in the broadest sense is a course at ENSAE, with a name, a number of ECTS credits, etc.
+Not to be confused with
+- a class group, which is a subgroup of a class (Groupe de TD, Groupe d'amphi)
+- a lesson, which is an actual lesson (TD, Amphi, TP, etc.) that occurs at a given time and place
+
+"""
+
 from extensions import db
 from app.models.enums import UserLevel
 
@@ -29,4 +39,5 @@ class Class(db.Model):
         return self.groups.filter_by(is_main_group=False).all()
 
     def get_id(self):
+        """Get the ID of this class."""
         return str(self.class_id)

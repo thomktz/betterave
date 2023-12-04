@@ -1,4 +1,5 @@
-# reset_db.py
+"""Remove the database and create a new empty one."""
+
 from create_app import create_app
 from extensions import db
 import os

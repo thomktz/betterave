@@ -29,7 +29,7 @@ ROOM = "A1"
 
 @pytest.fixture
 def setup_teacher(test_client):
-    """Creates a user and returns their ID."""
+    """Create a user and returns their ID."""
     student_id = add_user("John", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
     return student_id
 

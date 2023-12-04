@@ -26,14 +26,14 @@ USER_LEVEL = UserLevel._1A
 
 @pytest.fixture
 def setup_teacher(test_client):
-    """Creates a user and returns their ID."""
+    """Create a user and returns their ID."""
     teacher_id = add_user("John", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
     return teacher_id
 
 
 @pytest.fixture
 def setup_class(test_client, setup_teacher):
-    """Creates a class and returns its ID."""
+    """Create a class and returns its ID."""
     class_id = add_class(
         class_id=CLASS_ID,
         name=CLASS_NAME,
@@ -47,7 +47,7 @@ def setup_class(test_client, setup_teacher):
 
 @pytest.fixture
 def setup_primary_class_group(test_client, setup_class):
-    """Creates a primary group for the class."""
+    """Create a primary group for the class."""
     primary_class_group_id = add_class_group(name=PRIMARY_GROUP_NAME, class_id=setup_class, is_main_group=True)
     yield primary_class_group_id
     delete_class_group(primary_class_group_id)
@@ -55,7 +55,7 @@ def setup_primary_class_group(test_client, setup_class):
 
 @pytest.fixture
 def setup_secondary_class_group(test_client, setup_class):
-    """Creates a secondary group for the class."""
+    """Create a secondary group for the class."""
     secondary_class_group_id = add_class_group(name=SECONDARY_GROUP_NAME, class_id=setup_class, is_main_group=False)
     yield secondary_class_group_id
     delete_class_group(secondary_class_group_id)
@@ -63,7 +63,7 @@ def setup_secondary_class_group(test_client, setup_class):
 
 @pytest.fixture
 def setup_user(test_client):
-    """Creates a user and returns their ID."""
+    """Create a user and returns their ID."""
     user_id = add_user(
         name=NAME,
         surname=SURNAME,
@@ -77,7 +77,7 @@ def setup_user(test_client):
 
 @pytest.fixture
 def setup_user_class_group(test_client, setup_user, setup_primary_class_group, setup_secondary_class_group):
-    """Creates a UserClassGroup and returns its ID."""
+    """Create a UserClassGroup and returns its ID."""
     user_class_group_id = add_user_class_group(
         user_id=setup_user,
         class_id=CLASS_ID,

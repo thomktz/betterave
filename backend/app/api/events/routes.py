@@ -23,7 +23,7 @@ class EventList(Resource):
     @require_authentication()
     @api.marshal_list_with(fullcalendar_event_model)
     def get(self):
-        """Get a list of all events"""
+        """Get a list of all events."""
         return get_all_events()
 
     @api.doc(security="apikey")
@@ -31,7 +31,7 @@ class EventList(Resource):
     @api.expect(event_post_model)
     @api.marshal_with(fullcalendar_event_model)
     def post(self):
-        """Create a new event"""
+        """Create a new event."""
         event_data = api.payload
         if can_create_event(current_user, event_data["asso_id"]):
             event_id = add_event(**event_data)
@@ -48,7 +48,7 @@ class EventResource(Resource):
     @api.doc(security="apikey")
     @require_authentication("admin", "asso")
     def delete(self, event_id):
-        """Delete an event"""
+        """Delete an event."""
         if delete_event(event_id):
             return {"message": "Event deleted successfully"}, 200
         api.abort(400, "Could not delete the event")
@@ -60,7 +60,7 @@ class EventAttendees(Resource):
     @require_authentication("admin", "asso")
     @api.expect(event_attendees_post_model)
     def post(self, event_id):
-        """Add attendees to an event"""
+        """Add attendees to an event."""
         user_ids = api.payload.get("user_ids", [])
         user_level = api.payload.get("user_level", None)
         asso_id = api.payload.get("asso_id", None)

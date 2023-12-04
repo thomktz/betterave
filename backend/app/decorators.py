@@ -1,3 +1,39 @@
+"""Custom decorators for Flask routes.
+
+with_instance:
+    Decorator factory that accepts a single SQLAlchemy model class or a list of them.
+    The resulting decorator converts IDs to instances for the specified leading arguments,
+
+    Example:
+
+    def get_user_name(user_id: int):
+        user = User.query.get(user_id)
+        return user.name
+
+    Becomes:
+
+    @with_instance(User)
+    def get_user_name(user: User):
+        return user.name
+
+    >> get_user_name(user_id=1)
+
+require_authentication:
+    A decorator that requires authentication for a Flask route. If the user is not authenticated, the decorator
+    will check for a valid API key in the request headers. If the user is authenticated, the decorator will check
+    if the user has the required user type(s) to access the route.
+
+    If no user types are specified, the decorator will allow any authenticated user to access the route.
+
+current_user_required:
+    Decorator that ensures the current user is authenticated and is either the user specified by the user_id
+    in the route or an admin. If the API key is provided, it also validates the key.
+
+resolve_user:
+    Decorator that resolves the user from the user_id_or_me parameter in the route. If the user_id_or_me parameter
+    is "me", the current user is used. Otherwise, the user is resolved from the user_id_or_me parameter.
+"""
+
 import os
 from typing import Any, Callable, List, Type, Union
 from functools import wraps
@@ -9,16 +45,30 @@ from app.models import User
 
 
 def is_valid_apikey(key):
-    """Function to check if the API key is valid"""
+    """Check if the API key is valid."""
     return key == os.getenv("API_KEY")
 
 
 def with_instance(model_classes: Union[Type[Any], List[Type[Any]]]) -> Callable:
     """
-    Decorator factory that accepts a single SQLAlchemy model class or a list of them.
+    Convert IDs to instances through a decorator factory.
+
+    It accepts a single SQLAlchemy model class or a list of them.
     The resulting decorator converts IDs to instances for the specified leading arguments,
-    allowing the function to accept a mix of instances and IDs for those arguments.
-    Other arguments are passed through unchanged.
+
+    Example:
+
+    def get_user_name(user_id: int):
+        user = User.query.get(user_id)
+        return user.name
+
+    Becomes:
+
+    @with_instance(User)
+    def get_user_name(user: User):
+        return user.name
+
+    >> get_user_name(user_id=1)
     """
     if not isinstance(model_classes, list):
         model_classes = [model_classes]
@@ -51,17 +101,11 @@ def with_instance(model_classes: Union[Type[Any], List[Type[Any]]]) -> Callable:
 
 def require_authentication(*user_types_required):
     """
-    A decorator that requires authentication for a Flask route. If the user is not authenticated, the decorator
-    will check for a valid API key in the request headers. If the user is authenticated, the decorator will check
-    if the user has the required user type(s) to access the route.
+    Authentificate user or check for valid API key.
 
+    If the user is authenticated, the decorator will check if the user
+    has the required user type(s) to access the route.
     If no user types are specified, the decorator will allow any authenticated user to access the route.
-
-    Args:
-        *user_types_required: A variable-length argument list of user types that are allowed to access the route.
-
-    Returns:
-        A decorated function that requires authentication to access the route.
     """
 
     def decorator(f):
@@ -92,8 +136,9 @@ def require_authentication(*user_types_required):
 
 def current_user_required(f):
     """
-    Decorator that ensures the current user is authenticated and is either the user specified by the user_id
-    in the route or an admin. If the API key is provided, it also validates the key.
+    Ensure that the current user is either the user specified by the user_id in the route or an admin.
+
+    If the API key is provided, it also validates the key.
     """
 
     @wraps(f)
@@ -122,6 +167,13 @@ def current_user_required(f):
 
 
 def resolve_user(f):
+    """
+    Resolve the user from the user_id_or_me parameter in the route.
+
+    If the user_id_or_me parameter is "me", the current user is used.
+    Otherwise, the user is resolved from the user_id_or_me parameter.
+    """
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user_id_or_me = kwargs.get("user_id_or_me", None)

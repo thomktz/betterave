@@ -51,12 +51,12 @@ class UserList(Resource):
     @require_authentication()
     @api.marshal_list_with(user_model)
     def get(self):
-        """List all users"""
+        """List all users."""
         return get_all_users()
 
     @api.expect(user_post_model)
     def post(self):
-        """Create a new user"""
+        """Create a new user."""
         # Extract the fields from the api.payload
         data = api.payload
         user_id = add_user(**data)
@@ -73,7 +73,7 @@ class UserResource(Resource):
     @resolve_user
     @api.marshal_with(user_model)
     def get(self, user):
-        """Fetch a user given its identifier"""
+        """Fetch a user given its identifier."""
         return user
 
     @api.expect(user_post_model)
@@ -83,7 +83,7 @@ class UserResource(Resource):
     @resolve_user
     @current_user_required
     def put(self, user):
-        """Update a user given its identifier"""
+        """Update a user given its identifier."""
         if not update_user(user, api.payload):
             api.abort(400, "Error updating user.")
         return {"message": "User updated successfully"}, 204
@@ -92,7 +92,7 @@ class UserResource(Resource):
     @api.response(204, "User deleted successfully")
     @require_authentication("admin")
     def delete(self, user_id_or_me):
-        """Delete a user given its identifier"""
+        """Delete a user given its identifier."""
         print("Deleting user", user_id_or_me, flush=True)
         if not delete_user(int(user_id_or_me)):
             api.abort(400, "Error deleting user.")
@@ -109,9 +109,7 @@ class UserClassGroupsResource(Resource):
     @current_user_required
     @api.marshal_with(user_classgroups_model)
     def get(self, user):
-        """
-        Get detailed information about a user by their ID, including class associations.
-        """
+        """Get detailed information about a user by their ID, including class associations."""
         user_details = {
             "id": user.user_id,
             "name": user.name,
@@ -144,9 +142,7 @@ class UserLessons(Resource):
     @current_user_required
     @api.marshal_list_with(fullcalendar_lesson_model)
     def get(self, user):
-        """
-        Get a list of lessons for a specific student or teacher
-        """
+        """Get a list of lessons for a specific student or teacher."""
         if user.is_student:
             lessons = get_student_lessons(user)
         elif user.is_teacher:
@@ -167,9 +163,7 @@ class UserFutureLessons(Resource):
     @current_user_required
     @api.marshal_list_with(fullcalendar_lesson_model)
     def get(self, user):
-        """
-        Get a list of future lessons for a specific student or teacher
-        """
+        """Get a list of future lessons for a specific student or teacher."""
         if user.is_student:
             future_lessons = get_student_future_lessons(user)
         elif user.is_teacher:
@@ -188,7 +182,7 @@ class AssociationList(Resource):
     @require_authentication()
     @api.marshal_list_with(asso_model)
     def get(self):
-        """Get a list of all associations"""
+        """Get a list of all associations."""
         associations = get_all_assos()
         return associations
 
@@ -200,7 +194,7 @@ class UserAssociationList(Resource):
     @resolve_user
     @current_user_required
     def get(self, user):
-        """Get a list of all associations with subscription status for a specific user"""
+        """Get a list of all associations with subscription status for a specific user."""
         associations = get_all_assos()
 
         marshalled = api.marshal(associations, asso_model)
@@ -216,7 +210,7 @@ class SubscribeAssociation(Resource):
     @resolve_user
     @current_user_required
     def post(self, user, asso_id):
-        """Subscribe a user to an association"""
+        """Subscribe a user to an association."""
         asso = get_user_by_id(asso_id)
         if not asso:
             api.abort(404, "Association not found")
@@ -235,7 +229,7 @@ class UnsubscribeAssociation(Resource):
     @resolve_user
     @current_user_required
     def delete(self, user, asso_id):
-        """Unsubscribe a user from an association"""
+        """Unsubscribe a user from an association."""
         asso = get_user_by_id(asso_id)
         if not asso:
             api.abort(404, "Association not found")
@@ -255,7 +249,7 @@ class EnrollClass(Resource):
     @current_user_required
     @api.marshal_with(class_group_model)
     def post(self, user, class_id):
-        """Enroll a user in a class"""
+        """Enroll a user in a class."""
         message, ugc_id = enroll_user_in_class(user.user_id, class_id)
         if message == "Success":
             class_group = get_user_class_group_by_id(ugc_id)
@@ -285,7 +279,7 @@ class UnenrollClass(Resource):
     @resolve_user
     @current_user_required
     def delete(self, user, class_id):
-        """Unenroll a user from a class"""
+        """Unenroll a user from a class."""
         result = unenroll_user_from_class(user.user_id, class_id)
         if result == "Success":
             return {"message": "User unenrolled successfully from the class"}, 200
@@ -303,9 +297,7 @@ class UserEvents(Resource):
     @current_user_required
     @api.marshal_list_with(fullcalendar_event_model)
     def get(self, user):
-        """
-        Get a list of events for a specific user
-        """
+        """Get a list of events for a specific user."""
         if user.is_asso:
             events = get_association_events(user)
         elif user.is_admin:
@@ -324,9 +316,7 @@ class UserFutureEvents(Resource):
     @current_user_required
     @api.marshal_list_with(fullcalendar_event_model)
     def get(self, user):
-        """
-        Get a list of future events for a specific user
-        """
+        """Get a list of future events for a specific user."""
         if user.is_asso:
             future_events = get_association_future_events(user)
         elif user.is_admin:

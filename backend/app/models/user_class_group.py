@@ -1,7 +1,18 @@
+"""
+Flask SQLAlchemy UserClassGroup Model.
+
+This model represents the relationship between a user and a class through its primary and secondary classgroups.
+"""
 from extensions import db
 
 
 class UserClassGroup(db.Model):
+    """
+    Flask SQLAlchemy UserClassGroup Model.
+
+    This model represents the relationship between a user and a class through its primary and secondary classgroups.
+    """
+
     __tablename__ = "user_class_group"
 
     id = db.Column(db.Integer, primary_key=True)

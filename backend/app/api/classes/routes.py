@@ -22,14 +22,14 @@ class ClassList(Resource):
     @require_authentication()
     @api.marshal_list_with(class_model)
     def get(self):
-        """List all classes"""
+        """List all classes."""
         return get_all_classes()
 
     @api.doc(security="apikey")
     @require_authentication("admin", "teacher")
     @api.expect(class_model)
     def post(self):
-        """Create a new class"""
+        """Create a new class."""
         return add_class(api.payload), 201
 
 
@@ -40,7 +40,7 @@ class ClassResource(Resource):
     @require_authentication()
     @api.marshal_with(class_model)
     def get(self, class_id):
-        """Fetch a class given its identifier"""
+        """Fetch a class given its identifier."""
         cls = get_class_by_id(class_id)
         if cls is None:
             api.abort(404, "Class not found")
@@ -51,7 +51,7 @@ class ClassResource(Resource):
     @api.expect(class_model)
     @api.response(204, "Class updated successfully")
     def put(self, class_id):
-        """Update a class given its identifier"""
+        """Update a class given its identifier."""
         update_class(class_id, api.payload)
         return None, 204
 
@@ -59,7 +59,7 @@ class ClassResource(Resource):
     @require_authentication("admin", "teacher")
     @api.response(204, "Class deleted successfully")
     def delete(self, class_id):
-        """Delete a class given its identifier"""
+        """Delete a class given its identifier."""
         delete_class(class_id)
         return None, 204
 
@@ -71,7 +71,7 @@ class ClassLevelResource(Resource):
     @require_authentication()
     @api.marshal_list_with(class_model)
     def get(self, level_or_me):
-        """Fetch all classes for a given level"""
+        """Fetch all classes for a given level."""
         try:
             if level_or_me == "me":
                 user_level = current_user.level
@@ -91,7 +91,7 @@ class ClassMessages(Resource):
     @require_authentication()
     @api.marshal_list_with(message_model)
     def get(self, class_id):
-        """Get all messages for the main group of a specific class"""
+        """Get all messages for the main group of a specific class."""
         class_ = get_class_by_id(class_id)
         if not class_:
             api.abort(404, f"Class with id {class_id} not found")
@@ -101,7 +101,7 @@ class ClassMessages(Resource):
     @require_authentication()
     @api.expect(message_post_model)
     def post(self, class_id):
-        """Post a new message to the main group of a specific class"""
+        """Post a new message to the main group of a specific class."""
         content = api.payload.get("content")
         message = add_class_message(content, class_id=class_id, user_id=current_user.user_id)
         if message:

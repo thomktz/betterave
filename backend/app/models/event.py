@@ -1,3 +1,5 @@
+"""SQLAlchemy model for the event table. Analoguous to the Lesson model."""
+
 from extensions import db
 
 

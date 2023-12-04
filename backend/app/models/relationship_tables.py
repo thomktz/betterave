@@ -1,3 +1,5 @@
+"""Various relationship tables for many-to-many relationships."""
+
 from extensions import db
 
 group_enrollment = db.Table(

@@ -1,3 +1,5 @@
+"""SQLAlchemy object representing a user with different roles and levels."""
+
 from flask_login import UserMixin
 from extensions import db
 from app.models.enums import UserLevel, UserType
@@ -42,6 +44,7 @@ class User(db.Model, UserMixin):
     )
 
     def get_user_type(self):
+        """Get the user type."""
         return self.user_type
 
     def get_id(self):
@@ -62,16 +65,20 @@ class User(db.Model, UserMixin):
 
     @property
     def is_student(self):
+        """Return whether the user is a student."""
         return self.user_type == UserType.STUDENT
 
     @property
     def is_teacher(self):
+        """Return whether the user is a teacher."""
         return self.user_type == UserType.TEACHER
 
     @property
     def is_asso(self):
+        """Return whether the user is an association."""
         return self.user_type == UserType.ASSO
 
     @property
     def is_admin(self):
+        """Return whether the user is an admin."""
         return self.user_type == UserType.ADMIN

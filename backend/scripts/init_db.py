@@ -1,3 +1,5 @@
+"""Initialize the database with dummy data."""
+
 import random
 import json
 import numpy as np
@@ -64,6 +66,7 @@ admins = [
 
 
 def initialize_database():
+    """Initialize the database with dummy data."""
     with app.app_context():
         db.session.remove()
         db.drop_all()
@@ -133,7 +136,7 @@ def initialize_database():
                         user_type="teacher",
                     )
                 )
-            for date, start_time, end_time, lesson_type, teacher, room in class_dict["lesson_info"]:
+            for _, _, _, _, teacher, _ in class_dict["lesson_info"]:
                 teacher_name = tuple(teacher)
                 if teacher_name not in teacher_set:
                     teacher_set.add(teacher_name)
@@ -170,7 +173,7 @@ def initialize_database():
             # 6 - Add secondary class groups
             lesson_types = set(["Cours"])
             for lesson in class_dict["lesson_info"]:
-                date, start_time, end_time, lesson_type, teacher, room = lesson
+                _, start_time, end_time, lesson_type, teacher, room = lesson
                 if lesson_type not in lesson_types:
                     lesson_types.add(lesson_type)
                     add_class_group(

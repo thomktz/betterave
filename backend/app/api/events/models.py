@@ -5,12 +5,13 @@ from .namespace import api
 
 class AssoNameModel(fields.Raw):
     def format(self, value):
+        """Format the association name to be displayed in the calendar."""
         return value.name
 
 
 class EventBackgroundColorModel(fields.Raw):
     def format(self, value):
-        # Return a default color for events
+        """Define the default background color for events."""
         return "#FFFFFF"
 
 

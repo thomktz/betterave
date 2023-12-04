@@ -1,8 +1,9 @@
+"""Script to scrap classes schedule and match classes with id and ECTS."""
+
+import json
+import re
 import requests
 from bs4 import BeautifulSoup
-import re
-from datetime import datetime
-import json
 
 
 # Courses url
@@ -95,12 +96,16 @@ EVENTS_TO_REMOVE = [
 ]
 
 
-def get_dict_courses(url, level):
-    """Get class_ids and classes' names from ensae.fr
+def get_dict_courses(url: str, level: str) -> dict:
+    """
+    Get class_ids and classes' names from ensae.fr.
 
-    Args:
-        url (str): url for scraping
-        level (str) : level of classes scraped
+    Parameters
+    ----------
+    url : str
+        Url of the page to scrap.
+    level : str
+        Level of the classes.
     """
     response = requests.get(url)
     courses_dict = {}
@@ -130,7 +135,8 @@ def get_dict_courses(url, level):
     return courses_dict
 
 
-def transform_date_french_to_iso(date_french):
+def transform_date_french_to_iso(date_french: str) -> str:
+    """Transform date from french format to iso format."""
     # Split the date string into its components
     day, month, year = date_french.split()
 
@@ -156,25 +162,14 @@ def transform_date_french_to_iso(date_french):
     return formatted_date
 
 
-def transform_time(original_time):
-    try:
-        # Parse the original time using the original format
-        original_datetime = datetime.strptime(original_time, "%H:%M")
+def scrap_events_data(path: str) -> list:
+    """
+    Scrap classes schedule.
 
-        # Format the time to match the new format '%H:%M'
-        new_time_format = original_datetime.strftime("%H:%M")
-
-        return new_time_format
-    except ValueError:
-        # Handle the case where the input time format is invalid
-        raise ValueError("Invalid input type format")
-
-
-def scrap_events_data(path):
-    """Scrap classes schedule
-
-    Args:
-        path (str): classes schedule as an html.
+    Parameters
+    ----------
+    path : str
+        Path to the html file containing the classes schedule.
     """
     with open(path, "r", encoding="utf-8") as file:
         html_content = file.read()
@@ -226,8 +221,8 @@ def scrap_events_data(path):
             date_iso = transform_date_french_to_iso(date)
             event_info = (
                 date_iso,
-                transform_time(start_time),
-                transform_time(end_time),
+                start_time,
+                end_time,
                 lesson_type,
                 teacher,
                 room,
@@ -254,11 +249,14 @@ def scrap_events_data(path):
     return event_data
 
 
-def combine_lessons(event_data):
-    """Combine lessons info within a class
+def combine_lessons(event_data: list) -> list:
+    """
+    Combine lessons info within a class.
 
-    Args:
-        event_data (list of dict): list of dict with entries by classes
+    Parameters
+    ----------
+    event_data : list of dict
+        List of dict with entries by classes.
     """
     combined_data = {}  # Create a dictionary to store the combined entries
 
@@ -274,11 +272,16 @@ def combine_lessons(event_data):
     return result
 
 
-def match_id_ects(event_data, MAPPING=MAPPING):
-    """Match id and ects to a class
+def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
+    """
+    Match id and ECTS to a class.
 
-    Args:
-        event_data (list of dict): list of dict with entries by classes
+    Parameters
+    ----------
+    event_data : list of dict
+        List of dict with entries by classes.
+    mapping : dict
+        Dict with classes names that need to be mapped.
     """
     classes_unclassified = []
     courses_ensae_dict = {
@@ -293,9 +296,9 @@ def match_id_ects(event_data, MAPPING=MAPPING):
 
     # Match classes for class_id, ects and link with scraping from ensae.fr
     for entry in event_data:
-        if entry["name"] in MAPPING:  # if different name, we match both
+        if entry["name"] in mapping:  # if different name, we match both
             new_name = entry["name"]
-            entry["name"] = MAPPING[new_name]
+            entry["name"] = mapping[new_name]
 
         # Exceptions
         if entry["name"] == "Anglais 2A - S1":
@@ -356,10 +359,8 @@ def match_id_ects(event_data, MAPPING=MAPPING):
     return (event_data, classes_unclassified)
 
 
-def replace_unicode_escapes(obj):
-    """
-    Replace unicode escapes in json, for instance replace \u00e9 by é
-    """
+def replace_unicode_escapes(obj) -> dict:
+    """Replace unicode escapes in json, for instance replace \u00e9 by é."""
     if isinstance(obj, str):
         return obj.encode("utf-8").decode("unicode_escape")
     elif isinstance(obj, list):

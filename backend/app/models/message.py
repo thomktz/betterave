@@ -1,9 +1,11 @@
+"""Flask SQLAlchemy model for Chat messages associated with a ClassGroup.""" ""
+
 from datetime import datetime
 from extensions import db
 
 
 class Message(db.Model):
-    """SQLAlchemy object for messages associated with a ClassGroup."""
+    """SQLAlchemy object for Chat messages associated with a ClassGroup."""
 
     __tablename__ = "message"
     message_id = db.Column(db.Integer, primary_key=True)
@@ -17,6 +19,7 @@ class Message(db.Model):
     user = db.relationship("User", back_populates="messages")
 
     def as_dict(self):
+        """Return the message as a dictionary."""
         return {
             "message_id": self.message_id,
             "group_id": self.group_id,

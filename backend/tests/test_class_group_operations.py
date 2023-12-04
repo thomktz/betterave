@@ -23,7 +23,7 @@ BACKGROUND_COLOR = "#123456"
 
 @pytest.fixture
 def setup_teacher(test_client):
-    """Creates a user and returns their ID."""
+    """Create a user and returns their ID."""
     teacher_id = add_user("John", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
     return teacher_id
 

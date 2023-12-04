@@ -1,7 +1,14 @@
+"""
+SQLAlchemy model for a class group.
+
+See the docstring of the Class model for more information.
+"""
 from extensions import db
 
 
 class ClassGroup(db.Model):
+    """SQLAlchemy object representing a group of students in a class."""
+
     __tablename__ = "class_group"
     group_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)

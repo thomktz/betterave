@@ -1,3 +1,5 @@
+"""Main entry point for the backend application."""
+
 from create_app import create_app
 
 app = create_app()

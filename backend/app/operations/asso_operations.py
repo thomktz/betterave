@@ -7,6 +7,7 @@ from app.operations.event_operations import get_association_future_events
 
 @with_instance([User, User])
 def subscribe_to_asso(user: User, asso: User) -> bool:
+    """Subscribe a user to an association."""
     try:
         # If already subscribed, no need to proceed
         if asso in user.subscriptions:
@@ -28,6 +29,7 @@ def subscribe_to_asso(user: User, asso: User) -> bool:
 
 @with_instance([User, User])
 def unsubscribe_from_asso(user: User, asso: User) -> bool:
+    """Unsubscribe a user from an association."""
     try:
         # If not subscribed, no need to proceed
         if asso not in user.subscriptions:

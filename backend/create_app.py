@@ -1,3 +1,5 @@
+"""App factory module."""
+
 import os
 
 from flask import Flask
@@ -19,13 +21,14 @@ from app.api import (
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Load the user from the database."""
     from app.models.user import User
 
     return User.query.get(int(user_id))
 
 
 def create_app():
-    """Function to create app instance"""
+    """Create the applicaiton instance."""
     print(f"Creating app from {os.getcwd()}", flush=True)
     print("API KEY:", os.environ.get("API_KEY"))
 
@@ -90,6 +93,7 @@ def create_app():
     # For testing purposes
     @app.route("/hello")
     def index():
+        """Route for testing purposes."""
         return "Hello, World!"
 
     return app

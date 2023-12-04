@@ -9,7 +9,7 @@ from app.operations.user_operations import check_password, get_user_by_email
 class LoginUser(Resource):
     @api.expect(login_model)
     def post(self):
-        """Login user"""
+        """Try to login user."""
         if current_user.is_authenticated:
             return {"message": "User already logged in"}, 200
         data = api.payload
@@ -26,7 +26,7 @@ class LoginUser(Resource):
 @api.route("/logout")
 class LogoutUser(Resource):
     def post(self):
-        """Logout user"""
+        """Logout user."""
         logout_user()
         return {"message": "Logged out successfully", "status": "success"}, 200
 
@@ -35,7 +35,7 @@ class LogoutUser(Resource):
 class CheckAuthentication(Resource):
     @api.marshal_with(login_status_model)
     def get(self):
-        """Check if user is authenticated"""
+        """Check if user is authenticated."""
         if current_user.is_authenticated:
             return {
                 "status": "authenticated",

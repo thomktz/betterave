@@ -86,10 +86,7 @@ def get_all_future_lessons(sort: bool = True) -> list[Lesson]:
 
 @with_instance(Class)
 def get_lessons_by_class(class_: Class) -> list[Lesson]:
-    """
-    Get all lessons for a particular class by joining the Lesson table
-    with the ClassGroup table and filtering on the class_id.
-    """
+    """Get all lessons for a particular class."""
     return Lesson.query.join(ClassGroup).filter(ClassGroup.class_id == class_.class_id).all()
 
 

@@ -1,10 +1,12 @@
+"""Flask SQLAlchemy model for a notification."""
+
 from datetime import datetime
 from extensions import db
 from models import UserLevel
 
 
 class Notification(db.Model):
-    """SQLAlchemy object representing a notification.."""
+    """SQLAlchemy object representing a notification."""
 
     __tablename__ = "notification"
     notification_id = db.Column(db.Integer, primary_key=True)
@@ -19,7 +21,9 @@ class Notification(db.Model):
     for_followers = db.Column(db.Boolean, default=False, nullable=False)
 
     def send_to_followers(self):
+        """Send the notification to all followers of the sender."""
         self.for_followers = True
 
     def send_to_level(self, user_level):
+        """Send the notification to all users of the specified level."""
         self.recipient_level = user_level
