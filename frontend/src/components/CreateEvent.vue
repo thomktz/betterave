@@ -14,6 +14,7 @@
           label="Event Date"
           readonly
           @click="showDatePicker = true"
+          @focus="showDatePicker = true"
           required
         ></v-text-field>
 
@@ -31,6 +32,7 @@
         </v-dialog>
         <div class="timepickers">
           <vue-timepicker
+            :key="startTimePickerKey"
             v-model="eventData.start_time"
             label="Start Time"
             required
@@ -43,6 +45,7 @@
           ></vue-timepicker>
 
           <vue-timepicker
+            :key="endTimePickerKey"
             v-model="eventData.end_time"
             label="End Time"
             required
@@ -54,6 +57,15 @@
             placeholder="  End time"
           ></vue-timepicker>
         </div>
+
+        <v-select
+          :items="participantOptions"
+          :disabled="isDropdownDisabled"
+          label="Participants"
+          class="participant-dropdown"
+          v-model="selectedParticipant"
+        ></v-select>
+
         <v-btn type="submit" class="create-event-button">Create Event</v-btn>
       </v-form>
     </v-container>
@@ -61,7 +73,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { toast } from '@/apiConfig';
 import VueTimepicker from 'vue3-timepicker';
 import 'vue3-timepicker/dist/VueTimepicker.css';
@@ -74,19 +86,43 @@ export default {
     user_id: {
       type: Number,
       required: true
+    },
+    user_type: {
+      type: String,
+      required: true
     }
   },
   setup(props, { emit }) {
-
+    const startTimePickerKey = ref(0);
+    const endTimePickerKey = ref(0);
     const eventData = ref({
       asso_id: props.user_id,
       name: '',
-      date: null, // or a default date string if preferred
+      date: null,
       start_time: '',
       end_time: '',
       description: '',
       location: ''
     });
+
+    const selectedParticipant = ref(null);
+
+    watch(selectedParticipant, (newValue) => {
+      eventData.value.participants = newValue;
+    });
+
+    const participantOptions = computed(() => {
+      if (props.user_type === "admin") {
+        return ["All users", "1A", "2A", "3A"];
+      }
+      selectedParticipant.value = "Subscribers";
+      return ["Subscribers"];
+    });
+
+    const isDropdownDisabled = computed(() => {
+      return props.user_type !== "admin";
+    });
+
 
     const formatDate = (dateStr) => {
       if (!dateStr) return '';
@@ -103,7 +139,7 @@ export default {
 
     const handleCreateEvent = () => {
       // Ensure that all fields are filled, display toast if not
-      if (!eventData.value.name || !eventData.value.date || !eventData.value.start_time || !eventData.value.end_time) {
+      if (!eventData.value.name || !eventData.value.date || !eventData.value.start_time || !eventData.value.end_time || !selectedParticipant.value) {
         toast.error('Please fill all fields');
         return '';
       }
@@ -117,11 +153,25 @@ export default {
         start_time: '',
         end_time: '',
         description: '',
-        location: ''
+        location: '',
+        participants: ''
       };
+      // Force re-render of the timepickers
+      startTimePickerKey.value++;
+      endTimePickerKey.value++;
     };
 
-    return { eventData, showDatePicker, handleCreateEvent, formatDate, formattedDate };
+    return { eventData, 
+      showDatePicker, 
+      handleCreateEvent, 
+      formatDate, 
+      formattedDate, 
+      startTimePickerKey, 
+      endTimePickerKey,
+      participantOptions,
+      isDropdownDisabled,
+      selectedParticipant
+     };
   }
 }
 </script>
@@ -147,7 +197,6 @@ export default {
   justify-content: space-between;
   gap: 20px;
 }
-
 .time-picker {
   flex: 1 1 50%;
   max-width: calc(50% - 10px);
@@ -159,7 +208,6 @@ export default {
   height: 50px;
   min-width: 100%;
 }
-
 .time-picker input {
   color: var(--v-input-text-color);
   font-family: 'Montserrat', sans-serif;
@@ -168,7 +216,7 @@ export default {
   color: var(--v-input-text-color);
 }
 .create-event-button {
-  margin-top: 30px !important;
+  margin-top: 15px !important;
   height: 45px !important;
   margin-left: auto !important;
   margin-right: auto !important;
@@ -188,11 +236,12 @@ export default {
   box-shadow: none !important;
   font-family: 'Montserrat', sans-serif !important;
 }
-
 .create-event-button:hover {
   background-color: darken(var(--v-input-background-color), 10%) !important;
   color: var(--primary-text-color) !important;
 }
-
+.participant-dropdown {
+  margin-top: 22px !important;
+}
 </style>
 

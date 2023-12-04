@@ -7,17 +7,13 @@
             v-for="event in events"
             :key="event.id"
             class="event-pill"
+            appendIcon="mdi-delete"
+            @click="deleteEvent(event)"
           >
             <div class="event-content">
               <h3 class="event-title">{{ event.title }}</h3>
               <p class="event-subtitle">{{ formatEventTimes(event.start, event.end) }}</p>
             </div>
-            <v-icon
-              class="delete-icon"
-              @click="deleteEvent(event)"
-            >
-              mdi-delete
-            </v-icon>
           </v-list-item>
         </v-list>
         <div v-else class="no-events">
@@ -27,6 +23,7 @@
       <CreateEvent
         v-if="user_id"
         :user_id="user_id"
+        :user_type="user_type"
         class="create-event-panel"
         @submitEvent="submitEvent"
       >
@@ -46,6 +43,7 @@ export default {
   data () {
     return {
       user_id: null,
+      user_type: null,
       events: [] // Placeholder for events data
     }
   },
@@ -55,6 +53,7 @@ export default {
     // Fetch the type of the current user (not the selected one!)
     const response = await apiClient.get(`/users/me`);
     this.user_id = response.data.user_id;
+    this.user_type = response.data.user_type;
 
     // Fetch events
     const eventsResponse = await apiClient.get('/users/me/events/future');
@@ -75,7 +74,8 @@ export default {
         start_time: eventData.start_time,
         end_time: eventData.end_time,
         description: eventData.description,
-        location: eventData.location
+        location: eventData.location,
+        participants: eventData.participants
       }
       console.log('Submitting event:', data);
       try {
@@ -128,13 +128,14 @@ export default {
   margin-bottom: 10px !important;
   padding: 10px !important;
   border: 1px solid var(--text-bubble-color) !important;
-  border-radius: 20px !important;
+  border-radius: 15px !important;
   background-color: var(--v-input-background-color) !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
 .event-content {
-  flex-grow: 1;
+  flex-grow: 0;
+  padding-right: 10px; /* Add some padding if needed */
 }
 
 .event-title {
@@ -147,11 +148,6 @@ export default {
   margin: 0;
 }
 
-.delete-icon {
-  margin-left: 16px; /* Or any other spacing you prefer */
-  cursor: pointer;
-}
-
 .no-events {
   text-align: center;
   color: var(--secondary-text-color);
@@ -162,5 +158,8 @@ export default {
 
   padding: 20px;
   border-radius: 15px;
+}
+.event-pill:hover .v-icon {
+  color: red;
 }
 </style>
