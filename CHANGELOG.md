@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Delete UCGs when updating student level
 - Added delete event route
 - New Asso Controls page
+- New pre-commit hooks:
+  - black (python - code formatter)
+  - flake8 (python - linter)
+  - prettier (js/vue - code formatter)
 
 ### Changed
 
