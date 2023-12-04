@@ -2,11 +2,11 @@ from datetime import datetime
 from flask import request
 from sqlalchemy.exc import SQLAlchemyError
 from extensions import db
-from app.models import Event, User
+from app.models import Event, User, UserLevel
 from app.operations.user_operations import get_user_by_id
 from app.decorators import is_valid_apikey, with_instance
 
-def add_event(asso_id, name, date, start_time, end_time, description=None, location=None):
+def add_event(asso_id, name, date, start_time, end_time, participants, description=None, location=None):
     """Add an event to the database."""
     try:
         if isinstance(date, str):
@@ -16,6 +16,14 @@ def add_event(asso_id, name, date, start_time, end_time, description=None, locat
         if isinstance(end_time, str):
             end_time = datetime.strptime(end_time, "%H:%M").time()
         
+        if participants == "Subscribers":
+            participants = User.query.get(asso_id).subscribers
+        elif participants == "All users":
+            participants = User.query.all()
+        else:
+            # Participants is a UserLevel
+            participants = User.query.filter_by(level=UserLevel(participants)).all()
+        
         new_event = Event(
             asso_id=asso_id,
             name=name,
@@ -23,7 +31,8 @@ def add_event(asso_id, name, date, start_time, end_time, description=None, locat
             start_time=start_time,
             end_time=end_time,
             description=description,
-            location=location
+            location=location,
+            attending_users=participants
         )
         db.session.add(new_event)
         db.session.commit()
