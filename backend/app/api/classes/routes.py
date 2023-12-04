@@ -18,91 +18,91 @@ from app.api.class_groups.models import message_model, message_post_model
 from app.models import UserLevel
 from app.decorators import require_authentication
 
-@api.route('/')
+@api.route("/")
 class ClassList(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @api.marshal_list_with(class_model)
     def get(self):
         """List all classes"""
         return get_all_classes()
 
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication("admin", "teacher")
     @api.expect(class_model)
     def post(self):
         """Create a new class"""
         return add_class(api.payload), 201
 
-@api.route('/<int:class_id>')
-@api.response(404, 'Class not found')
+@api.route("/<int:class_id>")
+@api.response(404, "Class not found")
 class ClassResource(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @api.marshal_with(class_model)
     def get(self, class_id):
         """Fetch a class given its identifier"""
         cls = get_class_by_id(class_id)
         if cls is None:
-            api.abort(404, 'Class not found')
+            api.abort(404, "Class not found")
         return cls
 
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication("admin", "teacher")
     @api.expect(class_model)
-    @api.response(204, 'Class updated successfully')
+    @api.response(204, "Class updated successfully")
     def put(self, class_id):
         """Update a class given its identifier"""
         update_class(class_id, api.payload)
         return None, 204
 
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication("admin", "teacher")
-    @api.response(204, 'Class deleted successfully')
+    @api.response(204, "Class deleted successfully")
     def delete(self, class_id):
         """Delete a class given its identifier"""
         delete_class(class_id)
         return None, 204
     
-@api.route('/level/<level_or_me>')
-@api.response(404, 'Level not found')
+@api.route("/level/<level_or_me>")
+@api.response(404, "Level not found")
 class ClassLevelResource(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @api.marshal_list_with(class_model)
     def get(self, level_or_me):
         """Fetch all classes for a given level"""
         try:
-            if level_or_me == 'me':
+            if level_or_me == "me":
                 user_level = current_user.level
             else:
                 user_level = UserLevel(level_or_me)
             classes = get_classes_from_level(user_level)
             if not classes:
-                api.abort(404, f'No classes found for level {level_or_me}')
+                api.abort(404, f"No classes found for level {level_or_me}")
             return classes
-        except ValueError:  # If 'level' is not a valid UserLevel
-            api.abort(404, f'Invalid level {level_or_me}')
+        except ValueError:  # If "level" is not a valid UserLevel
+            api.abort(404, f"Invalid level {level_or_me}")
 
-@api.route('/<int:class_id>/messages')
+@api.route("/<int:class_id>/messages")
 class ClassMessages(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @api.marshal_list_with(message_model)
     def get(self, class_id):
         """Get all messages for the main group of a specific class"""
         class_ = get_class_by_id(class_id)
         if not class_:
-            api.abort(404, f'Class with id {class_id} not found')
+            api.abort(404, f"Class with id {class_id} not found")
         return [message.as_dict() for message in get_class_messages(class_)]
 
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @api.expect(message_post_model)
     def post(self, class_id):
         """Post a new message to the main group of a specific class"""
-        content = api.payload.get('content')
+        content = api.payload.get("content")
         message = add_class_message(content, class_id=class_id, user_id=current_user.user_id)
         if message:
             return api.marshal(message.as_dict(), message_model), 201
-        api.abort(400, 'Could not add message to the class')
+        api.abort(400, "Could not add message to the class")

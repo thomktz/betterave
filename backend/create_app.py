@@ -24,12 +24,12 @@ def load_user(user_id):
 def create_app():
     """Function to create app instance"""
     print(f"Creating app from {os.getcwd()}", flush=True)
-    print("API KEY:", os.environ.get('API_KEY'))
+    print("API KEY:", os.environ.get("API_KEY"))
     
     # Initialize the Flask app
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or b'\x05\xe1C\x07k\x1ay<\xb6\xa4\xf8\xc6\xa8f\xb4*'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////database/betterave.db'
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or b"\x05\xe1C\x07k\x1ay<\xb6\xa4\xf8\xc6\xa8f\xb4*"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////database/betterave.db"
     app.config.update(
         DEBUG=True,
         SESSION_COOKIE_HTTPONLY=True,
@@ -58,13 +58,13 @@ def create_app():
     api.init_app(app)
     
     # Initialize the Flask-RestX Api and register the namespaces
-    api.add_namespace(auth_ns, path='/auth')
-    api.add_namespace(users_ns, path='/users')
-    api.add_namespace(classes_ns, path='/classes')
-    api.add_namespace(lessons_ns, path='/lessons')
-    api.add_namespace(class_groups_ns, path='/class_groups')
-    api.add_namespace(user_class_groups_ns, path='/user_class_groups')
-    api.add_namespace(events_ns, path='/events')
+    api.add_namespace(auth_ns, path="/auth")
+    api.add_namespace(users_ns, path="/users")
+    api.add_namespace(classes_ns, path="/classes")
+    api.add_namespace(lessons_ns, path="/lessons")
+    api.add_namespace(class_groups_ns, path="/class_groups")
+    api.add_namespace(user_class_groups_ns, path="/user_class_groups")
+    api.add_namespace(events_ns, path="/events")
 
     # Load/create the database
     with app.app_context():

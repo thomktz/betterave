@@ -67,17 +67,27 @@ export default {
       return `${startDate.toLocaleDateString('en-US', options)} - ${endDate.toLocaleDateString('en-US', options)}`;
     },
     async submitEvent(eventData) {
+      
+      const date = eventData.date;
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1; // getMonth() returns 0-11, so add 1 for the correct month
+      const day = date.getDate();
+
+      // Format the date as YYYY-MM-DD
+      const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+      
       const data = {
         asso_id: this.user_id,
         name: eventData.name,
-        date: eventData.date.toISOString().slice(0, 10),
+        date: formattedDate,
         start_time: eventData.start_time,
         end_time: eventData.end_time,
         description: eventData.description,
         location: eventData.location,
         participants: eventData.participants
       }
-      console.log('Submitting event:', data);
+      console.log(data);
+
       try {
         const response = await apiClient.post('/events/', data);
         this.events.push(response.data);

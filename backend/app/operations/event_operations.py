@@ -3,7 +3,6 @@ from flask import request
 from sqlalchemy.exc import SQLAlchemyError
 from extensions import db
 from app.models import Event, User, UserLevel
-from app.operations.user_operations import get_user_by_id
 from app.decorators import is_valid_apikey, with_instance
 
 def add_event(asso_id, name, date, start_time, end_time, participants, description=None, location=None):
@@ -17,12 +16,12 @@ def add_event(asso_id, name, date, start_time, end_time, participants, descripti
             end_time = datetime.strptime(end_time, "%H:%M").time()
         
         if participants == "Subscribers":
-            participants = User.query.get(asso_id).subscribers
+            attending_users = User.query.get(asso_id).subscribers
         elif participants == "All users":
-            participants = User.query.all()
+            attending_users = User.query.all()
         else:
             # Participants is a UserLevel
-            participants = User.query.filter_by(level=UserLevel(participants)).all()
+            attending_users = User.query.filter_by(level=UserLevel(participants)).all()
         
         new_event = Event(
             asso_id=asso_id,
@@ -32,7 +31,8 @@ def add_event(asso_id, name, date, start_time, end_time, participants, descripti
             end_time=end_time,
             description=description,
             location=location,
-            attending_users=participants
+            attending_users=attending_users,
+            participant_type=participants
         )
         db.session.add(new_event)
         db.session.commit()
@@ -136,12 +136,12 @@ def add_attendees_to_event(event_id, user_ids=None, user_level=None, asso_id=Non
 def can_create_event(user, asso_id=None):
     """Check if a user can create an event."""
     # Assume that admin can create events for any association or for all users
-    apikey = request.headers.get('X-API-KEY')
+    apikey = request.headers.get("X-API-KEY")
     if apikey and is_valid_apikey(apikey):
         return True
     if user.is_admin:
         return True
     # Associations can only create events for themselves
-    if user.is_asso and user.user_id == asso_id:
+    if user.is_asso and (asso_id is None or user.user_id == asso_id):
         return True
     return False

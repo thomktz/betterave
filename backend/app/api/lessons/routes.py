@@ -10,26 +10,26 @@ from app.operations.lesson_operations import (
 )
 from app.decorators import require_authentication
 
-@api.route('/')
+@api.route("/")
 class LessonList(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @api.marshal_list_with(fullcalendar_lesson_model)
     def get(self):
         """List all lessons"""
         return get_all_lessons()
 
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication("admin", "teacher")
     @api.expect(lesson_post_model)
     def post(self):
         """Create a new lesson"""
         return add_lesson(api.payload), 201
 
-@api.route('/<int:lesson_id>')
-@api.response(404, 'Lesson not found')
+@api.route("/<int:lesson_id>")
+@api.response(404, "Lesson not found")
 class LessonResource(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @api.marshal_with(fullcalendar_lesson_model)
     def get(self, lesson_id):
@@ -37,23 +37,23 @@ class LessonResource(Resource):
         lesson = get_lesson_by_id(lesson_id)
         if lesson:
             return lesson
-        api.abort(404, 'Lesson not found')
+        api.abort(404, "Lesson not found")
 
-    @api.doc(security='apikey')
-    @require_authentication('admin', 'teacher')
+    @api.doc(security="apikey")
+    @require_authentication("admin", "teacher")
     @api.expect(lesson_post_model)
-    @api.response(204, 'Lesson successfully updated')
+    @api.response(204, "Lesson successfully updated")
     def put(self, lesson_id):
         """Update a lesson given its identifier"""
         if update_lesson(lesson_id, api.payload):
             return None, 204
-        api.abort(400, 'Could not update lesson.')
+        api.abort(400, "Could not update lesson.")
 
-    @api.doc(security='apikey')
-    @require_authentication('admin', 'teacher')
-    @api.response(204, 'Lesson successfully deleted')
+    @api.doc(security="apikey")
+    @require_authentication("admin", "teacher")
+    @api.response(204, "Lesson successfully deleted")
     def delete(self, lesson_id):
         """Delete a lesson given its identifier"""
         if delete_lesson(lesson_id):
             return None, 204
-        api.abort(404, 'Lesson not found or could not be deleted')
+        api.abort(404, "Lesson not found or could not be deleted")

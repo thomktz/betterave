@@ -4,9 +4,9 @@ from app.models.enums import UserLevel, UserType
 
 
 association_subscriptions = db.Table(
-    'association_subscriptions',
-    db.Column('subscriber_id', db.Integer, db.ForeignKey('user.user_id')),
-    db.Column('asso_id', db.Integer, db.ForeignKey('user.user_id'))
+    "association_subscriptions",
+    db.Column("subscriber_id", db.Integer, db.ForeignKey("user.user_id")),
+    db.Column("asso_id", db.Integer, db.ForeignKey("user.user_id"))
 )
 
 class User(db.Model, UserMixin):
@@ -27,17 +27,17 @@ class User(db.Model, UserMixin):
     website = db.Column(db.String, nullable=True)
 
     # Relationships
-    groups = db.relationship('ClassGroup', secondary="group_enrollment", back_populates='students')
-    class_groups = db.relationship('UserClassGroup', back_populates='user', lazy='dynamic')
-    messages = db.relationship('Message', back_populates='user')
-    lessons_taught = db.relationship('Lesson', back_populates='teacher', lazy='dynamic')
-    attended_events = db.relationship('Event', secondary='event_attendance', back_populates='attending_users')
+    groups = db.relationship("ClassGroup", secondary="group_enrollment", back_populates="students")
+    class_groups = db.relationship("UserClassGroup", back_populates="user", lazy="dynamic")
+    messages = db.relationship("Message", back_populates="user")
+    lessons_taught = db.relationship("Lesson", back_populates="teacher", lazy="dynamic")
+    attended_events = db.relationship("Event", secondary="event_attendance", back_populates="attending_users")
     subscriptions = db.relationship(
-        'User', 
+        "User", 
         secondary=association_subscriptions,
         primaryjoin=(user_id == association_subscriptions.c.subscriber_id),
         secondaryjoin=(user_id == association_subscriptions.c.asso_id),
-        backref=db.backref('subscribers', lazy='dynamic')
+        backref=db.backref("subscribers", lazy="dynamic")
     )
     
     def get_user_type(self):
@@ -49,13 +49,13 @@ class User(db.Model, UserMixin):
     def as_dict(self):
         """Convert the SQLAlchemy object into a dictionary."""
         return {
-            'user_id': self.user_id,
-            'email': self.email,
-            'name': self.name,
-            'surname': self.surname,
-            'profile_pic': self.profile_pic,
-            'level': self.level.value,
-            'user_type': self.user_type.value,
+            "user_id": self.user_id,
+            "email": self.email,
+            "name": self.name,
+            "surname": self.surname,
+            "profile_pic": self.profile_pic,
+            "level": self.level.value,
+            "user_type": self.user_type.value,
         }
     
     @property

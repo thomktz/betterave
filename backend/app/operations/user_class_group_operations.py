@@ -115,7 +115,7 @@ def update_user_class_group(user_class_group: UserClassGroup, new_data: dict) ->
     """
     try:
         # Check if secondary_class_group_id is about to be changed
-        new_secondary_group_id = new_data.get('secondary_class_group_id')
+        new_secondary_group_id = new_data.get("secondary_class_group_id")
         if new_secondary_group_id and new_secondary_group_id != user_class_group.secondary_class_group_id:
             # Step 1: Remove the user from the old group
             old_group = ClassGroup.query.get(user_class_group.secondary_class_group_id)

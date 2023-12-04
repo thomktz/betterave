@@ -66,14 +66,14 @@ class ClassGroupResource(Resource):
 
 @api.route("/<int:group_id>/messages")
 class GroupMessages(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @api.marshal_list_with(message_model)
     def get(self, group_id):
         """Get all messages for a specific class group"""
         return [message.as_dict() for message in get_messages_by_group_id(group_id)]
 
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @api.expect(message_post_model)
     def post(self, group_id):
@@ -82,13 +82,13 @@ class GroupMessages(Resource):
         message = add_message_to_group(content, user_id=current_user.user_id, group_id=group_id)
         if message:
             return api.marshal(message.as_dict(), message_model), 201
-        api.abort(400, 'Could not add message to the class')
+        api.abort(400, "Could not add message to the class")
         
 
 @api.route("/messages/<int:message_id>")
 @api.response(404, "Message not found")
 class MessageResource(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication("admin", "teacher")
     @api.response(204, "Message successfully deleted")
     def delete(self, message_id):

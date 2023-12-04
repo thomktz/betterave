@@ -5,17 +5,17 @@ class Lesson(db.Model):
     
     __tablename__ = "lesson"
     lesson_id = db.Column(db.Integer, primary_key=True)
-    group_id = db.Column(db.Integer, db.ForeignKey('class_group.group_id'), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey("class_group.group_id"), nullable=False)
     
     date = db.Column(db.Date, nullable=False)
     start_time = db.Column(db.Time, nullable=False)
     end_time = db.Column(db.Time, nullable=False)
     homework = db.Column(db.String, nullable=True)
     room = db.Column(db.String, nullable=True)
-    teacher_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=True)
-    teacher = db.relationship('User', back_populates='lessons_taught')
-    # References 'class_group' instead of 'class'
-    class_group = db.relationship('ClassGroup', back_populates='lessons')
+    teacher_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=True)
+    teacher = db.relationship("User", back_populates="lessons_taught")
+    # References "class_group" instead of "class"
+    class_group = db.relationship("ClassGroup", back_populates="lessons")
     
     # Ordering methods for comparing lessons
     def __lt__(self, other):

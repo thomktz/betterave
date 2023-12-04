@@ -9,7 +9,7 @@ from app.models import User
 
 def is_valid_apikey(key):
     """Function to check if the API key is valid"""
-    return key == os.getenv('API_KEY')
+    return key == os.getenv("API_KEY")
 
 def with_instance(model_classes: Union[Type[Any], List[Type[Any]]]) -> Callable:
     """
@@ -61,17 +61,17 @@ def require_authentication(*user_types_required):
         def decorated_function(*args, **kwargs):
             # Skip API key check if the user is already authenticated
             if not current_user.is_authenticated:
-                apikey = request.headers.get('X-API-KEY')
+                apikey = request.headers.get("X-API-KEY")
                 if not apikey or not is_valid_apikey(apikey):
-                    abort(401, 'Invalid or missing API key')
+                    abort(401, "Invalid or missing API key")
             
             # Check user type only if user is authenticated
             if current_user.is_authenticated:
-                if not hasattr(current_user, 'user_type'):
-                    abort(500, 'Unable to determine user type')
+                if not hasattr(current_user, "user_type"):
+                    abort(500, "Unable to determine user type")
                 if len(user_types_required) > 0 and (current_user.user_type.value not in user_types_required):
-                    allowed_types = ', '.join(user_types_required)
-                    abort(403, f'You must be one of the following types to perform this action: {allowed_types}')
+                    allowed_types = ", ".join(user_types_required)
+                    abort(403, f"You must be one of the following types to perform this action: {allowed_types}")
             return f(*args, **kwargs)
         return decorated_function
     return decorator
@@ -84,7 +84,7 @@ def current_user_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         # Flask passes the URL parameters as keyword arguments to the decorated function
-        user = kwargs.get('user', None)
+        user = kwargs.get("user", None)
 
         # If the current user is authenticated through Flask-Login's current_user
         if current_user.is_authenticated:
@@ -95,7 +95,7 @@ def current_user_required(f):
                 abort(403, "You do not have permission to access this resource.")
 
         # If not authenticated, check for API key
-        apikey = request.headers.get('X-API-KEY')
+        apikey = request.headers.get("X-API-KEY")
         if apikey and is_valid_apikey(apikey):
             # If valid API key, proceed without checking user_id against current_user
             return f(*args, **kwargs)
@@ -107,19 +107,19 @@ def current_user_required(f):
 def resolve_user(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user_id_or_me = kwargs.get('user_id_or_me', None)
+        user_id_or_me = kwargs.get("user_id_or_me", None)
         if not user_id_or_me:
             return jsonify({"message": "User ID not specified:"}), 400
         if user_id_or_me == "me":
-            # Assuming 'current_user' is a proxy to the current user
+            # Assuming "current_user" is a proxy to the current user
             user = current_user
         else:
             user = User.query.get(int(user_id_or_me))
             if not user:
                 return jsonify({"message": "User not found"}), 404
-        # Replace 'user_id_or_me' with 'user' before calling the actual route function
-        kwargs['user'] = user
-        # Remove 'user_id' to match the expected parameters of the actual route function
-        kwargs.pop('user_id_or_me', None)
+        # Replace "user_id_or_me" with "user" before calling the actual route function
+        kwargs["user"] = user
+        # Remove "user_id" to match the expected parameters of the actual route function
+        kwargs.pop("user_id_or_me", None)
         return f(*args, **kwargs)
     return decorated_function

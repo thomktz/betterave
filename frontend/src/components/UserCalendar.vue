@@ -67,10 +67,12 @@ import interactionPlugin from '@fullcalendar/interaction';
     },
     async mounted() {
       try {
-        const response = await apiClient.get(`/users/me/lessons`);
-        this.calendarOptions.events = response.data;
+        const lessonsResponse = await apiClient.get(`/users/me/lessons`);
+        const eventsResponse = await apiClient.get(`/users/me/events`);
+
+        this.calendarOptions.events = [...lessonsResponse.data, ...eventsResponse.data];
       } catch (error) {
-        console.error("There was an error fetching lessons:", error);
+        console.error("There was an error fetching lessons and events:", error);
       }
     },
     methods : {

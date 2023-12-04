@@ -19,7 +19,7 @@ def add_class(class_id, name, ects_credits, default_teacher_id, level, backgroun
         int: The ID of the newly created class.
     """
     try:
-        ensae_link = kwargs.get('ensae_link', f"https://www.ensae.fr/courses/{class_id}")
+        ensae_link = kwargs.get("ensae_link", f"https://www.ensae.fr/courses/{class_id}")
         
         new_class = Class(
             class_id=class_id,

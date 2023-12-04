@@ -3,7 +3,7 @@ from flask_restx import fields
 from .namespace import api
 
 
-fullcalendar_lesson_model = api.model('Lesson', {
+fullcalendar_lesson_model = api.model("Lesson", {
     "id": fields.String(
         attribute=lambda x: f"lesson_{x.lesson_id}",
         description="A unique identifier for the lesson prefixed with 'lesson_'"
@@ -13,12 +13,12 @@ fullcalendar_lesson_model = api.model('Lesson', {
         description="The identifier of the class group, used for associating events with resources"
     ),
     "start": fields.DateTime(
-        dt_format='iso8601', 
+        dt_format="iso8601", 
         attribute=lambda x: datetime.combine(x.date, x.start_time).isoformat(),
         description="The start time of the lesson in ISO8601 format"
     ),
     "end": fields.DateTime(
-        dt_format='iso8601', 
+        dt_format="iso8601", 
         attribute=lambda x: datetime.combine(x.date, x.end_time).isoformat(),
         description="The end time of the lesson in ISO8601 format"
     ),
@@ -35,7 +35,7 @@ fullcalendar_lesson_model = api.model('Lesson', {
         description="The background color associated with the class for calendar display"
     ),
     "room": fields.String(
-        attribute='room',
+        attribute="room",
         description="The room in which the lesson takes place"
     ),
     "teacher": fields.String(
@@ -43,7 +43,7 @@ fullcalendar_lesson_model = api.model('Lesson', {
         description="The full name of the teacher conducting the lesson"
     ),
     "lesson_id": fields.Integer(
-        attribute='lesson_id',
+        attribute="lesson_id",
         description="The internal unique identifier of the lesson"
     ),
     "class_id": fields.Integer(
@@ -51,12 +51,12 @@ fullcalendar_lesson_model = api.model('Lesson', {
         description="The internal unique identifier of the class"
     ),
     "homework": fields.String(
-        attribute='homework',
+        attribute="homework",
         description="Details of the homework assigned for the lesson"
     ),
 })
 
-lesson_post_model = api.model('LessonPost', {
+lesson_post_model = api.model("LessonPost", {
     "group_id": fields.Integer(
         required=True, 
         description="The identifier of the class group associated with the lesson"

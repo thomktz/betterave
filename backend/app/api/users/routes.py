@@ -46,9 +46,9 @@ from app.api.lessons.models import fullcalendar_lesson_model
 from app.api.events.models import fullcalendar_event_model
 from app.decorators import require_authentication, current_user_required, resolve_user
 
-@api.route('/')
+@api.route("/")
 class UserList(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @api.marshal_list_with(user_model)
     def get(self):
@@ -62,13 +62,13 @@ class UserList(Resource):
         data = api.payload
         user_id = add_user(**data)
         if user_id == -1:
-            api.abort(400, 'Error creating user.')
-        return {'message': 'User created successfully', 'user_id': user_id}, 201
+            api.abort(400, "Error creating user.")
+        return {"message": "User created successfully", "user_id": user_id}, 201
 
-@api.route('/<string:user_id_or_me>')
-@api.response(404, 'User not found')
+@api.route("/<string:user_id_or_me>")
+@api.response(404, "User not found")
 class UserResource(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @resolve_user
     @api.marshal_with(user_model)
@@ -77,32 +77,32 @@ class UserResource(Resource):
         return user
 
     @api.expect(user_post_model)
-    @api.response(204, 'User updated successfully')
-    @api.doc(security='apikey')
+    @api.response(204, "User updated successfully")
+    @api.doc(security="apikey")
     @require_authentication()
     @resolve_user
     @current_user_required
     def put(self, user):
         """Update a user given its identifier"""
         if not update_user(user, api.payload):
-            api.abort(400, 'Error updating user.')
-        return {'message': 'User updated successfully'}, 204
+            api.abort(400, "Error updating user.")
+        return {"message": "User updated successfully"}, 204
 
-    @api.doc(security='apikey')
-    @api.response(204, 'User deleted successfully')
+    @api.doc(security="apikey")
+    @api.response(204, "User deleted successfully")
     @require_authentication("admin")
     def delete(self, user_id_or_me):
         """Delete a user given its identifier"""
         print("Deleting user", user_id_or_me, flush=True)
         if not delete_user(int(user_id_or_me)):
-            api.abort(400, 'Error deleting user.')
-        return {'message': 'User deleted successfully'}, 204
+            api.abort(400, "Error deleting user.")
+        return {"message": "User deleted successfully"}, 204
 
-@api.route('/<string:user_id_or_me>/classgroups')
-@api.response(404, 'User not found')
-@api.response(200, 'Success')
+@api.route("/<string:user_id_or_me>/classgroups")
+@api.response(404, "User not found")
+@api.response(200, "Success")
 class UserClassGroupsResource(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @resolve_user
     @current_user_required
@@ -132,9 +132,9 @@ class UserClassGroupsResource(Resource):
 
         return user_details
 
-@api.route('/<string:user_id_or_me>/lessons')
+@api.route("/<string:user_id_or_me>/lessons")
 class UserLessons(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @resolve_user
     @current_user_required
@@ -154,9 +154,9 @@ class UserLessons(Resource):
 
         return lessons
 
-@api.route('/<string:user_id_or_me>/lessons/future')
+@api.route("/<string:user_id_or_me>/lessons/future")
 class UserFutureLessons(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @resolve_user
     @current_user_required
@@ -176,9 +176,9 @@ class UserFutureLessons(Resource):
 
         return future_lessons
     
-@api.route('/associations')
+@api.route("/associations")
 class AssociationList(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @api.marshal_list_with(asso_model)
     def get(self):
@@ -186,9 +186,9 @@ class AssociationList(Resource):
         associations = get_all_assos()
         return associations
     
-@api.route('/associations/<string:user_id_or_me>')
+@api.route("/associations/<string:user_id_or_me>")
 class UserAssociationList(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @resolve_user
     @current_user_required
@@ -198,12 +198,12 @@ class UserAssociationList(Resource):
 
         marshalled = api.marshal(associations, asso_model)
         for marshalled_asso, asso in zip(marshalled, associations):
-            marshalled_asso['subscribed'] = (user in asso.subscribers)
+            marshalled_asso["subscribed"] = (user in asso.subscribers)
         return marshalled
     
-@api.route('/<string:user_id_or_me>/subscribe/<int:asso_id>')
+@api.route("/<string:user_id_or_me>/subscribe/<int:asso_id>")
 class SubscribeAssociation(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @resolve_user
     @current_user_required
@@ -219,9 +219,9 @@ class SubscribeAssociation(Resource):
         else:
             api.abort(400, "Could not subscribe user to the association")
 
-@api.route('/<string:user_id_or_me>/unsubscribe/<int:asso_id>')
+@api.route("/<string:user_id_or_me>/unsubscribe/<int:asso_id>")
 class UnsubscribeAssociation(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @resolve_user
     @current_user_required
@@ -237,9 +237,9 @@ class UnsubscribeAssociation(Resource):
         else:
             api.abort(400, "Could not unsubscribe user from the association")
 
-@api.route('/<string:user_id_or_me>/enroll/<int:class_id>')
+@api.route("/<string:user_id_or_me>/enroll/<int:class_id>")
 class EnrollClass(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @resolve_user
     @current_user_required
@@ -265,9 +265,9 @@ class EnrollClass(Resource):
         else:
             api.abort(400, "Could not enroll user in the class")
 
-@api.route('/<string:user_id_or_me>/unenroll/<int:class_id>')
+@api.route("/<string:user_id_or_me>/unenroll/<int:class_id>")
 class UnenrollClass(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @resolve_user
     @current_user_required
@@ -281,9 +281,9 @@ class UnenrollClass(Resource):
         else:
             api.abort(400, "Could not unenroll user from the class")
 
-@api.route('/<string:user_id_or_me>/events')
+@api.route("/<string:user_id_or_me>/events")
 class UserEvents(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @resolve_user
     @current_user_required
@@ -301,9 +301,9 @@ class UserEvents(Resource):
 
         return events
 
-@api.route('/<string:user_id_or_me>/events/future')
+@api.route("/<string:user_id_or_me>/events/future")
 class UserFutureEvents(Resource):
-    @api.doc(security='apikey')
+    @api.doc(security="apikey")
     @require_authentication()
     @resolve_user
     @current_user_required

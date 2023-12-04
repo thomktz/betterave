@@ -12,12 +12,12 @@ class Class(db.Model):
     level = db.Column(db.Enum(UserLevel), nullable=False)
     background_color = db.Column(db.String, nullable=True)
     
-    default_teacher_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
-    default_teacher = db.relationship('User', foreign_keys=[default_teacher_id])
+    default_teacher_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
+    default_teacher = db.relationship("User", foreign_keys=[default_teacher_id])
     
     # Relationship to link ClassGroup
-    groups = db.relationship('ClassGroup', back_populates='class_ref', lazy='dynamic')
-    user_groups = db.relationship('UserClassGroup', back_populates='class_', lazy='dynamic')
+    groups = db.relationship("ClassGroup", back_populates="class_ref", lazy="dynamic")
+    user_groups = db.relationship("UserClassGroup", back_populates="class_", lazy="dynamic")
 
     def main_group(self):
         """Retrieve the main group for this class."""

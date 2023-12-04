@@ -102,7 +102,8 @@ export default {
       start_time: '',
       end_time: '',
       description: '',
-      location: ''
+      location: '',
+      participants: ''
     });
 
     const selectedParticipant = ref(null);
@@ -143,6 +144,7 @@ export default {
         toast.error('Please fill all fields');
         return '';
       }
+      console.log("Submitting event data:", eventData.value)
       emit('submitEvent', eventData.value);
 
       // Reset the form
@@ -156,6 +158,7 @@ export default {
         location: '',
         participants: ''
       };
+      selectedParticipant.value = null;
       // Force re-render of the timepickers
       startTimePickerKey.value++;
       endTimePickerKey.value++;
