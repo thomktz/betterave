@@ -7,9 +7,11 @@ from flask import jsonify, request
 from flask_restx import abort
 from app.models import User
 
+
 def is_valid_apikey(key):
     """Function to check if the API key is valid"""
     return key == os.getenv("API_KEY")
+
 
 def with_instance(model_classes: Union[Type[Any], List[Type[Any]]]) -> Callable:
     """
@@ -36,11 +38,16 @@ def with_instance(model_classes: Union[Type[Any], List[Type[Any]]]) -> Callable:
                         raise ValueError(f"{model_class.__name__} with ID {arg} not found.")
                     new_args[i] = instance
                 elif not isinstance(arg, model_class):
-                    raise ValueError(f"Argument at position {i} must be an instance of {model_class.__name__} or an integer ID.")
+                    raise ValueError(
+                        f"Argument at position {i} must be an instance of {model_class.__name__} or an integer ID."
+                    )
 
             return func(*new_args, **kwargs)
+
         return wrapper
+
     return decorator
+
 
 def require_authentication(*user_types_required):
     """
@@ -56,6 +63,7 @@ def require_authentication(*user_types_required):
     Returns:
         A decorated function that requires authentication to access the route.
     """
+
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -64,23 +72,30 @@ def require_authentication(*user_types_required):
                 apikey = request.headers.get("X-API-KEY")
                 if not apikey or not is_valid_apikey(apikey):
                     abort(401, "Invalid or missing API key")
-            
+
             # Check user type only if user is authenticated
             if current_user.is_authenticated:
                 if not hasattr(current_user, "user_type"):
                     abort(500, "Unable to determine user type")
                 if len(user_types_required) > 0 and (current_user.user_type.value not in user_types_required):
                     allowed_types = ", ".join(user_types_required)
-                    abort(403, f"You must be one of the following types to perform this action: {allowed_types}")
+                    abort(
+                        403,
+                        f"You must be one of the following types to perform this action: {allowed_types}",
+                    )
             return f(*args, **kwargs)
+
         return decorated_function
+
     return decorator
+
 
 def current_user_required(f):
     """
-    Decorator that ensures the current user is authenticated and is either the user specified by the user_id 
+    Decorator that ensures the current user is authenticated and is either the user specified by the user_id
     in the route or an admin. If the API key is provided, it also validates the key.
     """
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         # Flask passes the URL parameters as keyword arguments to the decorated function
@@ -102,7 +117,9 @@ def current_user_required(f):
 
         # If neither authenticated nor valid API key provided, deny access
         abort(401, "Unauthorized access")
+
     return decorated_function
+
 
 def resolve_user(f):
     @wraps(f)
@@ -122,4 +139,5 @@ def resolve_user(f):
         # Remove "user_id" to match the expected parameters of the actual route function
         kwargs.pop("user_id_or_me", None)
         return f(*args, **kwargs)
+
     return decorated_function

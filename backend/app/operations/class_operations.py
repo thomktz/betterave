@@ -3,6 +3,7 @@ from extensions import db
 from app.models import UserLevel, Class
 from app.decorators import with_instance
 
+
 def add_class(class_id, name, ects_credits, default_teacher_id, level, background_color, **kwargs) -> int:
     """
     Add a class to the database.
@@ -20,7 +21,7 @@ def add_class(class_id, name, ects_credits, default_teacher_id, level, backgroun
     """
     try:
         ensae_link = kwargs.get("ensae_link", f"https://www.ensae.fr/courses/{class_id}")
-        
+
         new_class = Class(
             class_id=class_id,
             name=name,
@@ -38,6 +39,7 @@ def add_class(class_id, name, ects_credits, default_teacher_id, level, backgroun
         db.session.rollback()
         print(f"Error adding class: {str(e)}")
         return -1
+
 
 @with_instance(Class)
 def update_class(class_instance: Class, new_data: dict) -> bool:
@@ -62,8 +64,8 @@ def update_class(class_instance: Class, new_data: dict) -> bool:
         db.session.rollback()
         print(f"Error modifying class: {str(e)}")
         return False
-    
-    
+
+
 @with_instance(Class)
 def delete_class(class_instance: Class) -> bool:
     """
@@ -84,13 +86,16 @@ def delete_class(class_instance: Class) -> bool:
         print(f"Error deleting class: {str(e)}")
         return False
 
+
 def get_class_by_id(class_id: int) -> Class:
     """Get a class by its ID."""
     return db.session.get(Class, class_id)
 
+
 def get_all_classes() -> list:
     """Return all classes in the database."""
     return Class.query.all()
+
 
 def get_classes_from_level(level: UserLevel) -> list:
     """Return all classes of a given level."""

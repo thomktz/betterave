@@ -6,9 +6,10 @@ from app.operations.lesson_operations import (
     add_lesson,
     get_lesson_by_id,
     update_lesson,
-    delete_lesson
+    delete_lesson,
 )
 from app.decorators import require_authentication
+
 
 @api.route("/")
 class LessonList(Resource):
@@ -25,6 +26,7 @@ class LessonList(Resource):
     def post(self):
         """Create a new lesson"""
         return add_lesson(api.payload), 201
+
 
 @api.route("/<int:lesson_id>")
 @api.response(404, "Lesson not found")

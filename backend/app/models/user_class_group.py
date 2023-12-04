@@ -1,8 +1,9 @@
 from extensions import db
 
+
 class UserClassGroup(db.Model):
     __tablename__ = "user_class_group"
-    
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
     class_id = db.Column(db.Integer, db.ForeignKey("class.class_id"), nullable=False)

@@ -17,11 +17,7 @@ def add_class_group(name: str, class_id: int, is_main_group: bool) -> int:
         int: The ID of the newly created class group, or -1 if an error occurs.
     """
     try:
-        new_group = ClassGroup(
-            name=name,
-            class_id=class_id,
-            is_main_group=is_main_group
-        )
+        new_group = ClassGroup(name=name, class_id=class_id, is_main_group=is_main_group)
         db.session.add(new_group)
         db.session.commit()
         return new_group.group_id
@@ -29,6 +25,7 @@ def add_class_group(name: str, class_id: int, is_main_group: bool) -> int:
         db.session.rollback()
         print(f"Error adding class group: {str(e)}")
         return -1
+
 
 @with_instance(ClassGroup)
 def update_class_group(group: ClassGroup, new_data: dict) -> bool:
@@ -52,6 +49,7 @@ def update_class_group(group: ClassGroup, new_data: dict) -> bool:
         db.session.rollback()
         print(f"Error modifying class group: {str(e)}")
         return False
+
 
 @with_instance(ClassGroup)
 def delete_class_group(group: ClassGroup) -> bool:
@@ -86,6 +84,7 @@ def get_class_group_by_id(group_id: int) -> ClassGroup:
     """
     return db.session.get(ClassGroup, group_id)
 
+
 def get_all_class_groups() -> list[ClassGroup]:
     """
     Return all class groups in the database.
@@ -94,6 +93,7 @@ def get_all_class_groups() -> list[ClassGroup]:
         list[ClassGroup]: A list of class group objects.
     """
     return ClassGroup.query.all()
+
 
 @with_instance([User, ClassGroup])
 def enroll_student_in_group(student: User, group: ClassGroup) -> bool:
@@ -118,6 +118,7 @@ def enroll_student_in_group(student: User, group: ClassGroup) -> bool:
         print(f"Error enrolling student: {str(e)}")
         return False
 
+
 @with_instance([User, ClassGroup])
 def unenroll_student_from_group(student: User, group: ClassGroup) -> bool:
     """
@@ -140,7 +141,8 @@ def unenroll_student_from_group(student: User, group: ClassGroup) -> bool:
         db.session.rollback()
         print(f"Error unenrolling student: {str(e)}")
         return False
-    
+
+
 def get_class_group_by_name(class_id, name):
     """Return a class group by its name."""
     return ClassGroup.query.filter_by(class_id=class_id, name=name).first()

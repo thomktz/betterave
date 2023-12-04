@@ -1,10 +1,14 @@
 import pytest
-from backend.app.operations import lesson_operations, user_operations
 from app.models import UserType, UserLevel
 from datetime import date, time
 from app.operations.class_operations import add_class
 from app.operations.class_group_operations import add_class_group, delete_class_group
-from app.operations.lesson_operations import add_lesson, update_lesson, delete_lesson, get_lesson_by_id
+from app.operations.lesson_operations import (
+    add_lesson,
+    update_lesson,
+    delete_lesson,
+    get_lesson_by_id,
+)
 from app.operations.user_operations import add_user
 
 # Constants
@@ -22,11 +26,13 @@ STUDENT_NAME = ("Alice", "Smith")
 HOMEWORK = "Solve problem set 4"
 ROOM = "A1"
 
+
 @pytest.fixture
 def setup_teacher(test_client):
     """Creates a user and returns their ID."""
     student_id = add_user("John", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
     return student_id
+
 
 @pytest.fixture
 def setup_class(test_client, setup_teacher):
@@ -37,9 +43,10 @@ def setup_class(test_client, setup_teacher):
         ects_credits=ECTS_CREDITS,
         default_teacher_id=setup_teacher,
         level=LEVEL,
-        background_color=BACKGROUND_COLOR
+        background_color=BACKGROUND_COLOR,
     )
     return class_id
+
 
 @pytest.fixture
 def setup_group(test_client, setup_class):
@@ -47,6 +54,7 @@ def setup_group(test_client, setup_class):
     group_id = add_class_group(name=GROUP_NAME, class_id=setup_class, is_main_group=IS_MAIN_GROUP)
     yield group_id
     delete_class_group(group_id)
+
 
 @pytest.fixture
 def setup_lesson(test_client, setup_group, setup_teacher):
@@ -58,10 +66,11 @@ def setup_lesson(test_client, setup_group, setup_teacher):
         end_time=END_TIME,
         homework=HOMEWORK,
         room=ROOM,
-        teacher_id=setup_teacher
+        teacher_id=setup_teacher,
     )
     yield lesson_id
     delete_lesson(lesson_id)
+
 
 def test_add_lesson(test_client, setup_group, setup_teacher):
     """Test adding a new lesson."""
@@ -72,18 +81,20 @@ def test_add_lesson(test_client, setup_group, setup_teacher):
         end_time=END_TIME,
         homework=HOMEWORK,
         room=ROOM,
-        teacher_id=setup_teacher
+        teacher_id=setup_teacher,
     )
     assert lesson_id is not None
     assert lesson_id > 0
 
+
 def test_update_lesson(test_client, setup_lesson):
     """Test modifying a lesson."""
     new_homework = "Solve problem set 5"
-    success = update_lesson(setup_lesson, {'homework': new_homework})
+    success = update_lesson(setup_lesson, {"homework": new_homework})
     assert success is True
     modified_lesson = get_lesson_by_id(setup_lesson)
     assert modified_lesson.homework == new_homework
+
 
 def test_delete_lesson(test_client, setup_lesson):
     """Test removing a lesson."""

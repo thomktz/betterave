@@ -8,15 +8,13 @@ from app.operations.class_operations import (
     get_all_classes,
     update_class,
     delete_class,
-    get_classes_from_level
+    get_classes_from_level,
 )
-from app.operations.message_operations import (
-    get_class_messages,
-    add_class_message
-)
+from app.operations.message_operations import get_class_messages, add_class_message
 from app.api.class_groups.models import message_model, message_post_model
 from app.models import UserLevel
 from app.decorators import require_authentication
+
 
 @api.route("/")
 class ClassList(Resource):
@@ -33,6 +31,7 @@ class ClassList(Resource):
     def post(self):
         """Create a new class"""
         return add_class(api.payload), 201
+
 
 @api.route("/<int:class_id>")
 @api.response(404, "Class not found")
@@ -63,7 +62,8 @@ class ClassResource(Resource):
         """Delete a class given its identifier"""
         delete_class(class_id)
         return None, 204
-    
+
+
 @api.route("/level/<level_or_me>")
 @api.response(404, "Level not found")
 class ClassLevelResource(Resource):
@@ -83,6 +83,7 @@ class ClassLevelResource(Resource):
             return classes
         except ValueError:  # If "level" is not a valid UserLevel
             api.abort(404, f"Invalid level {level_or_me}")
+
 
 @api.route("/<int:class_id>/messages")
 class ClassMessages(Resource):

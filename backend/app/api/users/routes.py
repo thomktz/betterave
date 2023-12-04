@@ -1,20 +1,18 @@
-from datetime import datetime
 from flask_restx import Resource
 from .models import (
-    user_model, 
-    user_post_model, 
-    user_classgroups_model, 
+    user_model,
+    user_post_model,
+    user_classgroups_model,
     asso_model,
-    class_group_model
+    class_group_model,
 )
 from .namespace import api
-from app.operations.user_operations import ( 
+from app.operations.user_operations import (
     get_all_users,
     add_user,
     get_user_by_id,
     update_user,
     delete_user,
-    authenticate_user
 )
 from app.operations.lesson_operations import (
     get_student_lessons,
@@ -46,6 +44,7 @@ from app.api.lessons.models import fullcalendar_lesson_model
 from app.api.events.models import fullcalendar_event_model
 from app.decorators import require_authentication, current_user_required, resolve_user
 
+
 @api.route("/")
 class UserList(Resource):
     @api.doc(security="apikey")
@@ -64,6 +63,7 @@ class UserList(Resource):
         if user_id == -1:
             api.abort(400, "Error creating user.")
         return {"message": "User created successfully", "user_id": user_id}, 201
+
 
 @api.route("/<string:user_id_or_me>")
 @api.response(404, "User not found")
@@ -98,6 +98,7 @@ class UserResource(Resource):
             api.abort(400, "Error deleting user.")
         return {"message": "User deleted successfully"}, 204
 
+
 @api.route("/<string:user_id_or_me>/classgroups")
 @api.response(404, "User not found")
 @api.response(200, "Success")
@@ -123,14 +124,17 @@ class UserClassGroupsResource(Resource):
                     "class_ects": class_group.class_.ects_credits,
                     "primary_class_group_id": class_group.primary_class_group_id,
                     "secondary_class_group_id": class_group.secondary_class_group_id,
-                    "secondary_class_group_name": class_group.secondary_class_group.name if class_group.secondary_class_group else "",
-                    "all_groups": [group.name for group in class_group.class_.groups if not group.is_main_group]
+                    "secondary_class_group_name": class_group.secondary_class_group.name
+                    if class_group.secondary_class_group
+                    else "",
+                    "all_groups": [group.name for group in class_group.class_.groups if not group.is_main_group],
                 }
                 for class_group in user.class_groups
-            ]
+            ],
         }
 
         return user_details
+
 
 @api.route("/<string:user_id_or_me>/lessons")
 class UserLessons(Resource):
@@ -154,6 +158,7 @@ class UserLessons(Resource):
 
         return lessons
 
+
 @api.route("/<string:user_id_or_me>/lessons/future")
 class UserFutureLessons(Resource):
     @api.doc(security="apikey")
@@ -175,7 +180,8 @@ class UserFutureLessons(Resource):
             future_lessons = []
 
         return future_lessons
-    
+
+
 @api.route("/associations")
 class AssociationList(Resource):
     @api.doc(security="apikey")
@@ -185,7 +191,8 @@ class AssociationList(Resource):
         """Get a list of all associations"""
         associations = get_all_assos()
         return associations
-    
+
+
 @api.route("/associations/<string:user_id_or_me>")
 class UserAssociationList(Resource):
     @api.doc(security="apikey")
@@ -198,9 +205,10 @@ class UserAssociationList(Resource):
 
         marshalled = api.marshal(associations, asso_model)
         for marshalled_asso, asso in zip(marshalled, associations):
-            marshalled_asso["subscribed"] = (user in asso.subscribers)
+            marshalled_asso["subscribed"] = user in asso.subscribers
         return marshalled
-    
+
+
 @api.route("/<string:user_id_or_me>/subscribe/<int:asso_id>")
 class SubscribeAssociation(Resource):
     @api.doc(security="apikey")
@@ -218,6 +226,7 @@ class SubscribeAssociation(Resource):
             return {"message": "User subscribed successfully to the association"}, 200
         else:
             api.abort(400, "Could not subscribe user to the association")
+
 
 @api.route("/<string:user_id_or_me>/unsubscribe/<int:asso_id>")
 class UnsubscribeAssociation(Resource):
@@ -237,6 +246,7 @@ class UnsubscribeAssociation(Resource):
         else:
             api.abort(400, "Could not unsubscribe user from the association")
 
+
 @api.route("/<string:user_id_or_me>/enroll/<int:class_id>")
 class EnrollClass(Resource):
     @api.doc(security="apikey")
@@ -255,8 +265,10 @@ class EnrollClass(Resource):
                 "class_ects": class_group.class_.ects_credits,
                 "primary_class_group_id": class_group.primary_class_group_id,
                 "secondary_class_group_id": class_group.secondary_class_group_id,
-                "secondary_class_group_name": class_group.secondary_class_group.name if class_group.secondary_class_group else "",
-                "all_groups": [group.name for group in class_group.class_.groups if not group.is_main_group]
+                "secondary_class_group_name": class_group.secondary_class_group.name
+                if class_group.secondary_class_group
+                else "",
+                "all_groups": [group.name for group in class_group.class_.groups if not group.is_main_group],
             }
         elif message == "Already enrolled in class":
             api.abort(400, "User already enrolled in the class")
@@ -264,6 +276,7 @@ class EnrollClass(Resource):
             api.abort(400, "Class has no main group")
         else:
             api.abort(400, "Could not enroll user in the class")
+
 
 @api.route("/<string:user_id_or_me>/unenroll/<int:class_id>")
 class UnenrollClass(Resource):
@@ -280,6 +293,7 @@ class UnenrollClass(Resource):
             api.abort(400, "User not enrolled in the class")
         else:
             api.abort(400, "Could not unenroll user from the class")
+
 
 @api.route("/<string:user_id_or_me>/events")
 class UserEvents(Resource):
@@ -301,6 +315,7 @@ class UserEvents(Resource):
 
         return events
 
+
 @api.route("/<string:user_id_or_me>/events/future")
 class UserFutureEvents(Resource):
     @api.doc(security="apikey")
@@ -311,7 +326,7 @@ class UserFutureEvents(Resource):
     def get(self, user):
         """
         Get a list of future events for a specific user
-        """        
+        """
         if user.is_asso:
             future_events = get_association_future_events(user)
         elif user.is_admin:

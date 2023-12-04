@@ -2,9 +2,8 @@ from flask_restx import Resource
 from flask_login import login_user, current_user, logout_user
 from .namespace import api
 from .models import login_model, login_status_model
-from app.api.users.models import user_model
 from app.operations.user_operations import check_password, get_user_by_email
-from app.decorators import require_authentication
+
 
 @api.route("/login")
 class LoginUser(Resource):
@@ -23,6 +22,7 @@ class LoginUser(Resource):
             return {"message": user.user_type.value.capitalize() + " login successful"}, 200
         api.abort(401, "Invalid email or password")
 
+
 @api.route("/logout")
 class LogoutUser(Resource):
     def post(self):
@@ -30,11 +30,15 @@ class LogoutUser(Resource):
         logout_user()
         return {"message": "Logged out successfully", "status": "success"}, 200
 
+
 @api.route("/check-auth")
 class CheckAuthentication(Resource):
     @api.marshal_with(login_status_model)
     def get(self):
         """Check if user is authenticated"""
         if current_user.is_authenticated:
-            return {"status": "authenticated", "role": current_user.user_type.value}, 200
+            return {
+                "status": "authenticated",
+                "role": current_user.user_type.value,
+            }, 200
         api.abort(401, "User not authenticated")

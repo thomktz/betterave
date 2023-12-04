@@ -1,9 +1,10 @@
 from extensions import db
 from app.models.enums import UserLevel
 
+
 class Class(db.Model):
     """SQLAlchemy object representing an ENSAE course."""
-    
+
     __tablename__ = "class"
     class_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -11,10 +12,10 @@ class Class(db.Model):
     ensae_link = db.Column(db.String, nullable=False)
     level = db.Column(db.Enum(UserLevel), nullable=False)
     background_color = db.Column(db.String, nullable=True)
-    
+
     default_teacher_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
     default_teacher = db.relationship("User", foreign_keys=[default_teacher_id])
-    
+
     # Relationship to link ClassGroup
     groups = db.relationship("ClassGroup", back_populates="class_ref", lazy="dynamic")
     user_groups = db.relationship("UserClassGroup", back_populates="class_", lazy="dynamic")
@@ -22,7 +23,7 @@ class Class(db.Model):
     def main_group(self):
         """Retrieve the main group for this class."""
         return self.groups.filter_by(is_main_group=True).first()
-    
+
     def secondary_groups(self):
         """Retrieve the secondary groups for this class."""
         return self.groups.filter_by(is_main_group=False).all()

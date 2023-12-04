@@ -1,16 +1,21 @@
 from flask_restx import Resource
 from .namespace import api
-from .models import fullcalendar_event_model, event_post_model, event_attendees_post_model
+from .models import (
+    fullcalendar_event_model,
+    event_post_model,
+    event_attendees_post_model,
+)
 from app.operations.event_operations import (
     add_event,
     add_attendees_to_event,
     can_create_event,
     get_all_events,
     delete_event,
-    get_event_by_id
+    get_event_by_id,
 )
 from app.decorators import require_authentication
 from flask_login import current_user
+
 
 @api.route("/")
 class EventList(Resource):
@@ -37,6 +42,7 @@ class EventList(Resource):
                 api.abort(400, "Could not create the event")
         api.abort(403, "Permission denied")
 
+
 @api.route("/<int:event_id>")
 class EventResource(Resource):
     @api.doc(security="apikey")
@@ -46,7 +52,7 @@ class EventResource(Resource):
         if delete_event(event_id):
             return {"message": "Event deleted successfully"}, 200
         api.abort(400, "Could not delete the event")
-        
+
 
 @api.route("/<int:event_id>/attendees")
 class EventAttendees(Resource):
@@ -61,4 +67,3 @@ class EventAttendees(Resource):
         if add_attendees_to_event(event_id, user_ids, user_level, asso_id):
             return {"message": "Attendees added successfully"}, 200
         api.abort(400, "Could not add attendees to the event")
-

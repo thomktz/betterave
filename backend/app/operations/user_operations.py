@@ -16,9 +16,11 @@ def hash_password(password: str) -> str:
     """Hash a given password."""
     return bcrypt.generate_password_hash(password).decode("utf-8")
 
+
 def check_password(hashed_password: str, password: str) -> bool:
     """Check if a given password matches a hashed password."""
     return bcrypt.check_password_hash(hashed_password, password)
+
 
 def authenticate_user(email: str, password: str) -> bool:
     """Authenticate a user using their email and password."""
@@ -27,12 +29,13 @@ def authenticate_user(email: str, password: str) -> bool:
         return False
     return check_password(user.hashed_password, password)
 
+
 def add_user(
-    name: str, 
-    surname: str, 
-    profile_pic: str, 
-    user_type: str, 
-    level: str = "N/A", 
+    name: str,
+    surname: str,
+    profile_pic: str,
+    user_type: str,
+    level: str = "N/A",
     email_override: str = None,
     password_override: str = None,
     linkedin: str = None,
@@ -57,7 +60,7 @@ def add_user(
     try:
         if email_override:
             email = email_override
-            password = email_override.split("@")[0] # Take the part before the @ as password
+            password = email_override.split("@")[0]  # Take the part before the @ as password
         else:
             email = f"{name.lower()}.{surname.replace(' ', '-').lower()}@ensae.fr"
             password = f"{name[0].lower()}{surname.replace(' ', '-').lower()}"
@@ -79,7 +82,7 @@ def add_user(
         # Add the user to the session first
         db.session.add(new_user)
         db.session.commit()
-        
+
         # Update the user's attendance to events
         update_event_attendance(new_user)
 
@@ -88,6 +91,7 @@ def add_user(
         db.session.rollback()
         print(f"Error adding user: {str(e)}")
         return -1
+
 
 @with_instance(User)
 def update_event_attendance(user: User):
@@ -102,26 +106,27 @@ def update_event_attendance(user: User):
         if event in user.attended_events:
             if event.participant_type == "Subscribers":
                 user.attended_events.remove(event)
-            
+
             elif event.participant_type == "All users":
                 continue
-            
+
             if event.participant_type != user.level.value:
                 user.attended_events.remove(event)
             continue
-            
+
         # If not, should the user be added to the event?
         if event.participant_type == "Subscribers":
             if event.association in user.subscriptions:
                 user.attended_events.append(event)
-            
+
         elif event.participant_type == "All users":
             user.attended_events.append(event)
-        
+
         elif event.participant_type == user.level.value:
             user.attended_events.append(event)
-    
+
     db.session.commit()
+
 
 @with_instance(User)
 def update_user(user: User, new_data: dict) -> bool:
@@ -151,7 +156,7 @@ def update_user(user: User, new_data: dict) -> bool:
             user.class_groups = []
             user.groups = []
         db.session.commit()
-        
+
         # Update the user's attendance to events
         update_event_attendance(user)
         return True
@@ -159,6 +164,7 @@ def update_user(user: User, new_data: dict) -> bool:
         db.session.rollback()
         print(f"Error modifying user: {str(e)}")
         return False
+
 
 @with_instance(User)
 def delete_user(user: User) -> bool:
@@ -175,7 +181,7 @@ def delete_user(user: User) -> bool:
         # Delete all UserClassGroup associations
         for ucg in user.class_groups:
             db.session.delete(ucg)
-        
+
         db.session.delete(user)
         db.session.commit()
         return True
@@ -184,22 +190,27 @@ def delete_user(user: User) -> bool:
         print(f"Error deleting user: {str(e)}")
         return False
 
+
 def get_user_by_id(user_id: int) -> User:
     """Get a user by their ID."""
     return db.session.get(User, user_id)
+
 
 def get_user_by_email(email: str) -> User:
     """Get a user by their email."""
     return User.query.filter_by(email=email).first()
 
+
 def get_all_users() -> list[User]:
     """Return all users in the database."""
     return User.query.all()
+
 
 @with_instance(User)
 def get_user_profile_pic(user: User) -> str:
     """Get the profil picture of a particular user."""
     return user.profile_pic
+
 
 def get_user_by_name(name, surname):
     # Use ilike for case-insensitive search

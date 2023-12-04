@@ -7,14 +7,15 @@ from app.operations.class_group_operations import (
     add_class_group,
     get_class_group_by_id,
     update_class_group,
-    delete_class_group
+    delete_class_group,
 )
 from app.operations.message_operations import (
     get_messages_by_group_id,
     add_message_to_group,
-    delete_message
+    delete_message,
 )
 from app.decorators import require_authentication
+
 
 @api.route("/")
 class ClassGroupList(Resource):
@@ -31,6 +32,7 @@ class ClassGroupList(Resource):
     def post(self):
         """Create a new class group"""
         return add_class_group(api.payload), 201
+
 
 @api.route("/<int:group_id>")
 @api.response(404, "Class group not found")
@@ -64,6 +66,7 @@ class ClassGroupResource(Resource):
             return None, 204
         api.abort(404, "Class group not found or could not be deleted")
 
+
 @api.route("/<int:group_id>/messages")
 class GroupMessages(Resource):
     @api.doc(security="apikey")
@@ -83,7 +86,7 @@ class GroupMessages(Resource):
         if message:
             return api.marshal(message.as_dict(), message_model), 201
         api.abort(400, "Could not add message to the class")
-        
+
 
 @api.route("/messages/<int:message_id>")
 @api.response(404, "Message not found")

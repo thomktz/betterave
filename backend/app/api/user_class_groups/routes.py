@@ -6,10 +6,11 @@ from app.operations.user_class_group_operations import (
     get_user_class_group_by_id,
     update_user_class_group,
     delete_user_class_group,
-    get_ucg_by_user_and_class
+    get_ucg_by_user_and_class,
 )
 from app.operations.class_group_operations import get_class_group_by_name
 from app.decorators import require_authentication
+
 
 @api.route("/")
 class UserClassGroupList(Resource):
@@ -19,6 +20,7 @@ class UserClassGroupList(Resource):
     def post(self):
         """Create a new user-class group relationship"""
         return add_user_class_group(api.payload), 201
+
 
 @api.route("/<int:id>")
 @api.response(404, "User-Class Group relationship not found")
@@ -42,6 +44,7 @@ class UserClassGroupResource(Resource):
             return None, 204
         api.abort(404, "User-Class Group relationship not found or could not be deleted")
 
+
 @api.route("/<int:user_id>/<int:class_id>")
 @api.response(404, "User-Class Group relationship not found")
 class UserClassGroupDetail(Resource):
@@ -54,7 +57,7 @@ class UserClassGroupDetail(Resource):
         """Update the secondary class group associated with the user-class group relationship"""
         data = api.payload
         secondary_class_group_name = data.get("secondary_class_group_name")
-        
+
         # Logic to update the user-class group relationship
         secondary_class_group = get_class_group_by_name(class_id, secondary_class_group_name)
         if not secondary_class_group:
@@ -69,7 +72,10 @@ class UserClassGroupDetail(Resource):
             return {"message": "No changes were made to the User-Class Group relationship"}, 204
 
         # Perform the update
-        success = update_user_class_group(user_class_group, {"secondary_class_group_id": secondary_class_group.group_id})
+        success = update_user_class_group(
+            user_class_group,
+            {"secondary_class_group_id": secondary_class_group.group_id},
+        )
         if success:
             updated_user_class_group = get_user_class_group_by_id(user_class_group.id)
             return api.marshal(updated_user_class_group, user_class_group_model), 200

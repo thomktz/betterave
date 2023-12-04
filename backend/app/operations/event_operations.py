@@ -5,7 +5,17 @@ from extensions import db
 from app.models import Event, User, UserLevel
 from app.decorators import is_valid_apikey, with_instance
 
-def add_event(asso_id, name, date, start_time, end_time, participants, description=None, location=None):
+
+def add_event(
+    asso_id,
+    name,
+    date,
+    start_time,
+    end_time,
+    participants,
+    description=None,
+    location=None,
+):
     """Add an event to the database."""
     try:
         if isinstance(date, str):
@@ -14,7 +24,7 @@ def add_event(asso_id, name, date, start_time, end_time, participants, descripti
             start_time = datetime.strptime(start_time, "%H:%M").time()
         if isinstance(end_time, str):
             end_time = datetime.strptime(end_time, "%H:%M").time()
-        
+
         if participants == "Subscribers":
             attending_users = User.query.get(asso_id).subscribers
         elif participants == "All users":
@@ -22,7 +32,7 @@ def add_event(asso_id, name, date, start_time, end_time, participants, descripti
         else:
             # Participants is a UserLevel
             attending_users = User.query.filter_by(level=UserLevel(participants)).all()
-        
+
         new_event = Event(
             asso_id=asso_id,
             name=name,
@@ -32,7 +42,7 @@ def add_event(asso_id, name, date, start_time, end_time, participants, descripti
             description=description,
             location=location,
             attending_users=attending_users,
-            participant_type=participants
+            participant_type=participants,
         )
         db.session.add(new_event)
         db.session.commit()
@@ -41,6 +51,7 @@ def add_event(asso_id, name, date, start_time, end_time, participants, descripti
         db.session.rollback()
         print(f"Error adding event: {str(e)}")
         return -1
+
 
 def update_event(event_id, new_data: dict) -> bool:
     """Modify event information in the database."""
@@ -58,6 +69,7 @@ def update_event(event_id, new_data: dict) -> bool:
         print(f"Error modifying event: {str(e)}")
         return False
 
+
 def delete_event(event_id: int) -> bool:
     """Remove an event from the database."""
     try:
@@ -71,38 +83,46 @@ def delete_event(event_id: int) -> bool:
         db.session.rollback()
         print(f"Error deleting event: {str(e)}")
         return False
-    
+
+
 def get_event_by_id(event_id: int) -> Event:
     """Get an event by its ID."""
     return db.session.get(Event, event_id)
 
+
 def get_all_events() -> list[Event]:
     """Return all events in the database."""
     return Event.query.all()
+
 
 @with_instance(User)
 def get_association_events(asso: User) -> list[Event]:
     """Get all events organized by a particular association."""
     return Event.query.filter_by(asso_id=asso.user_id).all()
 
+
 @with_instance(User)
 def get_user_events(user: User) -> list[Event]:
     """Get all events a particular user is attending."""
     return user.attended_events
 
+
 def get_all_future_events() -> list[Event]:
     """Get all future events."""
     return Event.query.filter(Event.date >= datetime.now().date()).all()
+
 
 @with_instance(User)
 def get_association_future_events(asso: User) -> list[Event]:
     """Get all future events organized by a particular association."""
     return Event.query.filter_by(asso_id=asso.user_id).filter(Event.date >= datetime.now().date()).all()
 
+
 @with_instance(User)
 def get_user_future_events(user: User) -> list[Event]:
     """Get all future events a particular user is attending."""
     return user.attended_events.filter(Event.date >= datetime.now().date()).all()
+
 
 def add_attendees_to_event(event_id, user_ids=None, user_level=None, asso_id=None):
     """Add users to an event. If no users are specified, add all users."""
@@ -132,6 +152,7 @@ def add_attendees_to_event(event_id, user_ids=None, user_level=None, asso_id=Non
 
     db.session.commit()
     return True
+
 
 def can_create_event(user, asso_id=None):
     """Check if a user can create an event."""
