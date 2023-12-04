@@ -2,7 +2,6 @@
   <div class="event-creation-panel">
     <v-container class="create-event-container">
       <v-form @submit.prevent="handleCreateEvent">
-        
         <v-text-field
           label="Event Name"
           v-model="eventData.name"
@@ -24,8 +23,8 @@
           width="290px"
           @click:outside="showDatePicker = false"
         >
-          <v-date-picker 
-            v-model="eventData.date" 
+          <v-date-picker
+            v-model="eventData.date"
             @update:model-value="showDatePicker = false"
             :first-day-of-week="1"
           ></v-date-picker>
@@ -73,37 +72,37 @@
 </template>
 
 <script>
-import { ref, computed, watch } from 'vue';
-import { toast } from '@/apiConfig';
-import VueTimepicker from 'vue3-timepicker';
-import 'vue3-timepicker/dist/VueTimepicker.css';
+import { ref, computed, watch } from "vue";
+import { toast } from "@/apiConfig";
+import VueTimepicker from "vue3-timepicker";
+import "vue3-timepicker/dist/VueTimepicker.css";
 
 export default {
   components: {
-    VueTimepicker
+    VueTimepicker,
   },
   props: {
     user_id: {
       type: Number,
-      required: true
+      required: true,
     },
     user_type: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props, { emit }) {
     const startTimePickerKey = ref(0);
     const endTimePickerKey = ref(0);
     const eventData = ref({
       asso_id: props.user_id,
-      name: '',
+      name: "",
       date: null,
-      start_time: '',
-      end_time: '',
-      description: '',
-      location: '',
-      participants: ''
+      start_time: "",
+      end_time: "",
+      description: "",
+      location: "",
+      participants: "",
     });
 
     const selectedParticipant = ref(null);
@@ -124,12 +123,16 @@ export default {
       return props.user_type !== "admin";
     });
 
-
     const formatDate = (dateStr) => {
-      if (!dateStr) return '';
+      if (!dateStr) return "";
       const date = new Date(dateStr);
-      const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
-      return date.toLocaleDateString('en-US', options);
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      };
+      return date.toLocaleDateString("en-US", options);
     };
 
     const formattedDate = computed(() => {
@@ -140,23 +143,29 @@ export default {
 
     const handleCreateEvent = () => {
       // Ensure that all fields are filled, display toast if not
-      if (!eventData.value.name || !eventData.value.date || !eventData.value.start_time || !eventData.value.end_time || !selectedParticipant.value) {
-        toast.error('Please fill all fields');
-        return '';
+      if (
+        !eventData.value.name ||
+        !eventData.value.date ||
+        !eventData.value.start_time ||
+        !eventData.value.end_time ||
+        !selectedParticipant.value
+      ) {
+        toast.error("Please fill all fields");
+        return "";
       }
-      console.log("Submitting event data:", eventData.value)
-      emit('submitEvent', eventData.value);
+      console.log("Submitting event data:", eventData.value);
+      emit("submitEvent", eventData.value);
 
       // Reset the form
       eventData.value = {
         asso_id: props.user_id,
-        name: '',
+        name: "",
         date: null,
-        start_time: '',
-        end_time: '',
-        description: '',
-        location: '',
-        participants: ''
+        start_time: "",
+        end_time: "",
+        description: "",
+        location: "",
+        participants: "",
       };
       selectedParticipant.value = null;
       // Force re-render of the timepickers
@@ -164,19 +173,20 @@ export default {
       endTimePickerKey.value++;
     };
 
-    return { eventData, 
-      showDatePicker, 
-      handleCreateEvent, 
-      formatDate, 
-      formattedDate, 
-      startTimePickerKey, 
+    return {
+      eventData,
+      showDatePicker,
+      handleCreateEvent,
+      formatDate,
+      formattedDate,
+      startTimePickerKey,
       endTimePickerKey,
       participantOptions,
       isDropdownDisabled,
-      selectedParticipant
-     };
-  }
-}
+      selectedParticipant,
+    };
+  },
+};
 </script>
 
 <style>
@@ -213,7 +223,7 @@ export default {
 }
 .time-picker input {
   color: var(--v-input-text-color);
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 .time-picker .vue__time-picker-input.is-empty::placeholder {
   color: var(--v-input-text-color);
@@ -237,7 +247,7 @@ export default {
   align-items: center !important;
   text-align: center !important;
   box-shadow: none !important;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 .create-event-button:hover {
   background-color: darken(var(--v-input-background-color), 10%) !important;
@@ -247,4 +257,3 @@ export default {
   margin-top: 22px !important;
 }
 </style>
-

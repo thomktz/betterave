@@ -1,16 +1,23 @@
 <template>
-    <div class="nextclasses-column">
-      <h2>{{ title }}</h2>
-      <ul>
-        <li v-for="(item, index) in nextLessons" :key="item.id">
-          <div class="date-indicator" v-if="isFirstClassOfDay(nextLessons, index)">
-            {{ formatDate(item.start) }}
+  <div class="nextclasses-column">
+    <h2>{{ title }}</h2>
+    <ul>
+      <li v-for="(item, index) in nextLessons" :key="item.id">
+        <div
+          class="date-indicator"
+          v-if="isFirstClassOfDay(nextLessons, index)"
+        >
+          {{ formatDate(item.start) }}
+        </div>
+        <div
+          :style="getEventStyle(item)"
+          class="event-item"
+          @click="goToClass(item.class_id)"
+        >
+          <div class="event-header">
+            <div class="event-start-time">{{ formatEventTime(item) }}</div>
+            <div class="event-room">Room {{ item.room }}</div>
           </div>
-          <div :style="getEventStyle(item)" class="event-item" @click="goToClass(item.class_id)">
-            <div class="event-header">
-                <div class="event-start-time">{{ formatEventTime(item) }}</div>
-                <div class="event-room">Room {{ item.room }}</div>
-            </div>
           <div class="event-content">{{ item.title }}</div>
         </div>
       </li>
@@ -19,26 +26,26 @@
 </template>
 
 <script>
-import { apiClient } from '@/apiConfig';
+import { apiClient } from "@/apiConfig";
 
 export default {
   props: {
     user: {
       type: Object,
-      required: true
+      required: true,
     },
     title: {
       type: String,
-      required: true
+      required: true,
     },
   },
-  data () {
+  data() {
     return {
       nextLessons: [],
       classesToDisplay: 20,
     };
   },
-  async mounted () {
+  async mounted() {
     // Get lessons
     const response = await apiClient.get(`/users/me/lessons/future`);
     this.nextLessons = response.data;
@@ -49,30 +56,43 @@ export default {
     },
     getEventStyle(item) {
       return {
-        backgroundColor: item.backgroundColor || '#4868bf' // Default color
+        backgroundColor: item.backgroundColor || "#4868bf", // Default color
       };
     },
     formatEventTime(item) {
       // 'HH:mm' format
       const eventTime = new Date(item.start);
-      return eventTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      return eventTime.toLocaleTimeString("fr-FR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     },
     isFirstClassOfDay(list, index) {
       if (index === 0) {
         return true;
       } else {
-        const currentStartTime = new Date(list[index].start).setHours(0, 0, 0, 0);
-        const previousStartTime = new Date(list[index - 1].start).setHours(0, 0, 0, 0);
+        const currentStartTime = new Date(list[index].start).setHours(
+          0,
+          0,
+          0,
+          0,
+        );
+        const previousStartTime = new Date(list[index - 1].start).setHours(
+          0,
+          0,
+          0,
+          0,
+        );
         return currentStartTime !== previousStartTime;
       }
     },
     formatDate(date) {
       // Format de la date au format 'dd/mm/yyyy'
       const eventDate = new Date(date);
-      const options = { weekday: 'long', month: 'long', day: 'numeric' };
-      return eventDate.toLocaleDateString('en-US', options);
+      const options = { weekday: "long", month: "long", day: "numeric" };
+      return eventDate.toLocaleDateString("en-US", options);
     },
-  }
+  },
 };
 </script>
 
@@ -118,10 +138,11 @@ li {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  font-size: 0.7rem
+  font-size: 0.7rem;
 }
 
-.event-start-time, .event-room {
+.event-start-time,
+.event-room {
   margin: 0;
 }
 
@@ -130,23 +151,22 @@ li {
   font-size: 0.8rem;
 }
 
-  
-  .date-indicator {
-    display: flex;
-    align-items: center;
-    padding: 0;
-    font-size: 0.8rem;
-    position: relative;
-    margin-top: 12px;
-    margin-bottom: -5px;
-    background-color: transparent;
+.date-indicator {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  font-size: 0.8rem;
+  position: relative;
+  margin-top: 12px;
+  margin-bottom: -5px;
+  background-color: transparent;
 }
 
 .date-indicator::after {
-    content: "";
-    flex-grow: 1;
-    height: 1px;
-    background-color: #b0b0b0;
-    margin-left: 10px;
+  content: "";
+  flex-grow: 1;
+  height: 1px;
+  background-color: #b0b0b0;
+  margin-left: 10px;
 }
-  </style>
+</style>

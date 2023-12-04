@@ -3,7 +3,9 @@
     <h2>{{ title }}</h2>
     <ul>
       <li v-for="item in list" :key="item.id">
-        <div :style="getEventStyle(item)" class="event-item">{{ item.text, item.start }}</div>
+        <div :style="getEventStyle(item)" class="event-item">
+          {{ (item.text, item.start) }}
+        </div>
       </li>
     </ul>
   </div>
@@ -14,23 +16,22 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     list: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   methods: {
     getEventStyle(item) {
       return {
-        backgroundColor: item.color || '#4868bf' // If color is not provided, use a default color (#FFD700 is golden)
+        backgroundColor: item.color || "#4868bf", // If color is not provided, use a default color (#FFD700 is golden)
       };
-    }
-  }
-}
+    },
+  },
+};
 </script>
-  
 
 <style scoped>
 .info-column {
@@ -44,10 +45,10 @@ export default {
 }
 
 h2 {
-font-size: 1.5rem;
-margin-bottom: 20px;
-border-bottom: 1px solid #b0b0b0; /* Add this line */
-padding-bottom: 10px; /* Add some padding to space out the border from the text */
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #b0b0b0; /* Add this line */
+  padding-bottom: 10px; /* Add some padding to space out the border from the text */
 }
 
 ul {
