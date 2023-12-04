@@ -139,8 +139,8 @@ def transform_time(original_time):
         # Parse the original time using the original format
         original_datetime = datetime.strptime(original_time, '%H:%M')
 
-        # Format the time to match the new format '%H:%M:%S'
-        new_time_format = original_datetime.strftime('%H:%M:%S')
+        # Format the time to match the new format '%H:%M'
+        new_time_format = original_datetime.strftime('%H:%M')
 
         return new_time_format
     except ValueError:

@@ -11,7 +11,6 @@ from app.decorators import with_instance
 from app.models import UserLevel, UserType, User
 
 
-
 def hash_password(password: str) -> str:
     """Hash a given password."""
     return bcrypt.generate_password_hash(password).decode("utf-8")
@@ -99,13 +98,20 @@ def update_user(user: User, new_data: dict) -> bool:
         bool: True if the user was successfully modified, False otherwise.
     """
     try:
+        reset_class_groups = False
         for key, value in new_data.items():
             if hasattr(user, key):
                 if key == "level":
                     value = UserLevel(value)
+                    reset_class_groups = True
                 elif key == "user_type":
                     value = UserType(value)
                 setattr(user, key, value)
+        if reset_class_groups:
+            for ucg in user.class_groups:
+                db.session.delete(ucg)
+            user.class_groups = []
+            user.groups = []
         db.session.commit()
         return True
     except SQLAlchemyError as e:

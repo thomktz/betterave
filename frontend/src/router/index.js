@@ -5,8 +5,8 @@ import Photochart from '../views/Photochart.vue'
 import ClassPage from '../views/ClassPage.vue'
 import MainLayout from '../views/MainLayout.vue'
 import AssoList from '../views/AssoList.vue';
+import StudentControls from '../views/controls/StudentControls.vue'
 import AssoControls from '../views/controls/AssoControls.vue'
-import TeacherControls from '../views/controls/TeacherControls.vue'
 import AdminControls from '../views/controls/AdminControls.vue'
 import EditClasses from '../views/controls/EditClasses.vue'
 import { apiClient } from '@/apiConfig'
@@ -37,16 +37,15 @@ const routes = [
         component: AssoList,
       },
       {
+        path: '/controls/student',
+        name: 'student-controls',
+        component: StudentControls,
+      },
+      {
         path: '/controls/asso',
         name: 'asso-controls',
         component: AssoControls,
         meta: { requiresAuth: true, role: 'asso' }
-      },
-      {
-        path: '/controls/teacher',
-        name: 'teacher-controls',
-        component: TeacherControls,
-        meta: { requiresAuth: true, role: 'teacher' }
       },
       {
         path: '/controls/admin',
@@ -95,8 +94,8 @@ router.beforeEach(async (to, from, next) => {
         return;
       }
 
-      // If the route requires a role, check if the user has it.
-      if (to.meta.role && userRole !== to.meta.role) {
+      // If the route requires a role, check if the user has it or user is admin
+      if (to.meta.role && userRole !== to.meta.role && userRole !== 'admin') {
         // If the user does not have the role, redirect to the homepage or an error page.
         next({ name: 'homepage' }); // or your error route name
         return;

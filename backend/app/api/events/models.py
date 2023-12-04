@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask_restx import fields
 from .namespace import api
 
@@ -30,16 +31,12 @@ fullcalendar_event_model = api.model('Event', {
         description="The end time of the event in ISO8601 format"
     ),
     "title": fields.String(
-        attribute=lambda x: x.association.name if x.association else "Unnamed Event",
+        attribute=lambda x: f"{x.association.name} - {x.name}" if x.association else "Unnamed Event",
         description="The name of the association or the main title of the event"
     ),
     "type": fields.String(
         attribute='description',
         description="A brief description or subtitle for the event"
-    ),
-    "backgroundColor": fields.String(
-        attribute=lambda x: x.association.background_color if x.association and x.association.background_color else "#FFFFFF",
-        description="The background color for the event, defaulting to white if not specified"
     ),
     "room": fields.String(
         attribute='location',

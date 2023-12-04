@@ -308,7 +308,7 @@ class UserFutureEvents(Resource):
     @resolve_user
     @current_user_required
     @api.marshal_list_with(fullcalendar_event_model)
-    def get(self, user_id):
+    def get(self, user):
         """
         Get a list of future events for a specific user
         """        

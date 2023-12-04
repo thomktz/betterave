@@ -3,6 +3,7 @@
     <UserClassesTable
       :classes="classes"
       :available-classes.sync="availableClasses"
+      :asAdmin="asAdmin"
       @request-classes="fetchClasses"
       @enroll-class="enrollInClass"
       @update-class-group="updateClassGroup"
@@ -29,6 +30,7 @@ export default {
       name: '',
       surname: '',
       level: null,
+      asAdmin: null,
     }
   },
   async mounted () {
@@ -41,6 +43,10 @@ export default {
     this.level = this.classesInfo.level;
 
     this.$emit('updateTitle', `${this.name} ${this.surname} Classes`);
+
+    // Fetch the type of the current user (not the selected one!)
+    const response2 = await apiClient.get(`/users/me`);
+    this.asAdmin = (response2.data.user_type === 'admin');
   },
   methods: {
     async fetchClasses() {

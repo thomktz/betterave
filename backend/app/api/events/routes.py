@@ -6,6 +6,7 @@ from app.operations.event_operations import (
     add_attendees_to_event,
     can_create_event,
     get_all_events,
+    delete_event,
     get_event_by_id
 )
 from app.decorators import require_authentication
@@ -35,6 +36,17 @@ class EventList(Resource):
             else:
                 api.abort(400, 'Could not create the event')
         api.abort(403, 'Permission denied')
+
+@api.route('/<int:event_id>')
+class EventResource(Resource):
+    @api.doc(security='apikey')
+    @require_authentication("admin", "asso")
+    def delete(self, event_id):
+        """Delete an event"""
+        if delete_event(event_id):
+            return {"message": "Event deleted successfully"}, 200
+        api.abort(400, 'Could not delete the event')
+        
 
 @api.route('/<int:event_id>/attendees')
 class EventAttendees(Resource):

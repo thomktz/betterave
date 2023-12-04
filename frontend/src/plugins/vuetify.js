@@ -6,9 +6,7 @@ import {
   VDataTableServer,
   VDataTableVirtual,
 } from "vuetify/components/VDataTable";
-
-
-// Vuetify
+import { VDatePicker } from 'vuetify/components/VDatePicker'
 import { createVuetify } from 'vuetify'
 
 export default createVuetify({
@@ -16,6 +14,7 @@ export default createVuetify({
     VDataTable,
     VDataTableServer,
     VDataTableVirtual,
+    VDatePicker
   },
 })
 

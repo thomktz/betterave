@@ -12,9 +12,9 @@ def add_event(asso_id, name, date, start_time, end_time, description=None, locat
         if isinstance(date, str):
             date = datetime.strptime(date, "%Y-%m-%d").date()
         if isinstance(start_time, str):
-            start_time = datetime.strptime(start_time, "%H:%M:%S").time()
+            start_time = datetime.strptime(start_time, "%H:%M").time()
         if isinstance(end_time, str):
-            end_time = datetime.strptime(end_time, "%H:%M:%S").time()
+            end_time = datetime.strptime(end_time, "%H:%M").time()
         
         new_event = Event(
             asso_id=asso_id,

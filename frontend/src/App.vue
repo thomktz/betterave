@@ -23,6 +23,10 @@ export default {
   --primary-text-color: #000;
   --secondary-text-color: #5f5f5f;
   --text-bubble-color: #cdcdcd;
+  /* Replicate the Vuetify colors */
+  --v-input-border-color: rgba(50, 50, 50, 0.5);
+  --v-input-background-color: rgba(50, 50, 50, 0.05);
+  --v-input-text-color: rgba(20, 20, 20, 0.65);
 }
 
 /* Dark Theme */
@@ -33,6 +37,11 @@ export default {
   --primary-text-color: #f5f5f5;
   --secondary-text-color: #bbbbbb;
   --text-bubble-color: #353535;
+  /* Replicate the Vuetify colors */
+  --v-input-border-color: rgba(200, 200, 200, 0.5);
+  --v-input-background-color: rgba(245, 245, 245, 0.05);
+  --v-input-text-color: rgba(245, 245, 245, 0.65);
+  
 }
 
 /* General styles applicable to the entire app */

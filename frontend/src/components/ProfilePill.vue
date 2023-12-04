@@ -8,7 +8,9 @@
       <router-link to="/" class="dropdown-link">Home</router-link>
       <router-link to="/photochart" class="dropdown-link">Trombinoscope</router-link>
       <router-link to="/assolist" class="dropdown-link">Associations</router-link>
-      <button v-if="user.user_type !== 'student'" @click="goToControls">Controls</button>
+      <button v-if="user.user_type == 'admin'" @click="goToAdminControls">Manage students</button>
+      <button v-if="user.user_type == 'asso' || user.user_type == 'admin'" @click="goToAssoControls">Manage events</button>
+      <button v-if="user.user_type == 'student'" @click="goToStudentControls">Manage courses</button>
       <button @click="logout">Logout</button>
     </div>
 </div>
@@ -36,25 +38,15 @@ import { apiClient, toast } from '@/apiConfig';
           this.$router.push({ name: 'Login' });
         });
       },
-      goToControls() {
-        switch(this.user.user_type) {
-          case 'student':
-            // For students, maybe do nothing or show a message
-            break;
-          case 'asso':
-            this.$router.push({ name: 'asso-controls' });
-            break;
-          case 'teacher':
-            this.$router.push({ name: 'teacher-controls' });
-            break;
-          case 'admin':
-            this.$router.push({ name: 'admin-controls' });
-            break;
-          default:
-            console.error("Unknown user type");
-            break;
-        }
+      goToAdminControls() {
+        this.$router.push({ name: 'admin-controls' });
       },
+      goToAssoControls() {
+        this.$router.push({ name: 'asso-controls' });
+      },
+      goToStudentControls() {
+        this.$router.push({ name: 'student-controls' });
+      }
     }
   }
   </script>

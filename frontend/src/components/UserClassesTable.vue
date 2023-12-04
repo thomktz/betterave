@@ -35,6 +35,7 @@
             :label="getGroupName(item)"
             density="compact"
             hide-details="true"
+            :disabled="!asAdmin"
           ></v-select>
         </template>
           
@@ -79,6 +80,7 @@
     props: {
       classes: Array,
       availableClasses: Array,
+      asAdmin: Boolean,
     },
     emits: ['request-classes', 'enroll-class', 'update-class-group', 'delete-class'],
     data() {

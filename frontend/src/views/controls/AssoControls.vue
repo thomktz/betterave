@@ -1,18 +1,166 @@
 <template>
-    <v-container class="fill-height" fluid>
-    </v-container>
+  <v-container class="fill-height" fluid>
+    <div class="main-container">
+      <div class="events-list">
+        <v-list v-if="events.length > 0" dense>
+          <v-list-item
+            v-for="event in events"
+            :key="event.id"
+            class="event-pill"
+          >
+            <div class="event-content">
+              <h3 class="event-title">{{ event.title }}</h3>
+              <p class="event-subtitle">{{ formatEventTimes(event.start, event.end) }}</p>
+            </div>
+            <v-icon
+              class="delete-icon"
+              @click="deleteEvent(event)"
+            >
+              mdi-delete
+            </v-icon>
+          </v-list-item>
+        </v-list>
+        <div v-else class="no-events">
+          No events yet.
+        </div>
+      </div>
+      <CreateEvent
+        v-if="user_id"
+        :user_id="user_id"
+        class="create-event-panel"
+        @submitEvent="submitEvent"
+      >
+      </CreateEvent>
+    </div>
+  </v-container>
 </template>
 
-<script>
-export default {
-    setup () {
-        
 
-        return {}
+<script>
+import CreateEvent from '@/components/CreateEvent.vue';
+import { apiClient } from '@/apiConfig';
+export default {
+  components: {
+    CreateEvent
+  },
+  data () {
+    return {
+      user_id: null,
+      events: [] // Placeholder for events data
     }
+  },
+  async mounted () {
+    this.$emit('updateTitle', `Association Controls`);
+
+    // Fetch the type of the current user (not the selected one!)
+    const response = await apiClient.get(`/users/me`);
+    this.user_id = response.data.user_id;
+
+    // Fetch events
+    const eventsResponse = await apiClient.get('/users/me/events/future');
+    this.events = eventsResponse.data; // Assume the response has the data in this format
+  },
+  methods: {
+    formatEventTimes(start, end) {
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+      return `${startDate.toLocaleDateString('en-US', options)} - ${endDate.toLocaleDateString('en-US', options)}`;
+    },
+    async submitEvent(eventData) {
+      const data = {
+        asso_id: this.user_id,
+        name: eventData.name,
+        date: eventData.date.toISOString().slice(0, 10),
+        start_time: eventData.start_time,
+        end_time: eventData.end_time,
+        description: eventData.description,
+        location: eventData.location
+      }
+      console.log('Submitting event:', data);
+      try {
+        const response = await apiClient.post('/events/', data);
+        this.events.push(response.data);
+      } catch (error) {
+        console.error('Error adding event:', error);
+      }
+    },
+    async deleteEvent(event) {
+      try {
+        await apiClient.delete(`/events/${event.event_id}`);
+        this.events = this.events.filter(e => e.event_id !== event.event_id);
+      } catch (error) {
+        console.error('Error deleting event:', error);
+        // Handle error
+      }
+    }
+  }
 }
 </script>
 
 <style>
+.main-container {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  width: 100%;
+}
 
+.events-list {
+  flex: 0 0 45%;
+  background-color: var(--foreground-color);
+  min-height: 100px;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 15px;
+  overflow-y: auto;
+}
+.v-list {
+  background-color: var(--foreground-color) !important;
+}
+
+.event-pill {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 10px !important;
+  padding: 10px !important;
+  border: 1px solid var(--text-bubble-color) !important;
+  border-radius: 20px !important;
+  background-color: var(--v-input-background-color) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.event-content {
+  flex-grow: 1;
+}
+
+.event-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+.event-subtitle {
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.delete-icon {
+  margin-left: 16px; /* Or any other spacing you prefer */
+  cursor: pointer;
+}
+
+.no-events {
+  text-align: center;
+  color: var(--secondary-text-color);
+  font-style: italic;
+}
+.create-event-panel {
+  flex: 0 0 45%;
+
+  padding: 20px;
+  border-radius: 15px;
+}
 </style>
