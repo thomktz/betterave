@@ -152,7 +152,7 @@ class UserLessons(Resource):
 
         args = parser.parse_args()
         limit = args.get("limit") # taking back the limit argument presents in the URL
-    
+
         if user.is_student:
             lessons = get_student_lessons(user,limit)
         elif user.is_teacher:
