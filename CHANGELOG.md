@@ -22,6 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Switched to HH:MM format for time inputs
 
+## [3.1.1] - 2023-12-09
+
+### Added
+
+- New 'limit' parameter to lessons and events routes
+
 ## [3.1.0] - 2023-11-11
 
 ### Added

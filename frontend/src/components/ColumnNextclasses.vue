@@ -28,6 +28,8 @@
 <script>
 import { apiClient } from "@/apiConfig";
 
+const limit = 50;
+
 export default {
   props: {
     user: {
@@ -47,7 +49,9 @@ export default {
   },
   async mounted() {
     // Get lessons
-    const response = await apiClient.get(`/users/me/lessons/future`);
+    const response = await apiClient.get("/users/me/lessons/future", {
+      params: { limit: limit },
+    });
     this.nextLessons = response.data;
   },
   methods: {

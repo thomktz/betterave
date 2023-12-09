@@ -96,15 +96,25 @@ def get_all_events() -> list[Event]:
 
 
 @with_instance(User)
-def get_association_events(asso: User) -> list[Event]:
+def get_association_events(asso: User, limit: int = None) -> list[Event]:
     """Get all events organized by a particular association."""
-    return Event.query.filter_by(asso_id=asso.user_id).all()
+    events = (
+        Event.query.filter_by(asso_id=asso.user_id).limit(limit).all()
+        if limit is not None
+        else Event.query.filter_by(asso_id=asso.user_id).all()
+    )
+    return events
 
 
 @with_instance(User)
-def get_user_events(user: User) -> list[Event]:
+def get_user_events(user: User, limit: int = None) -> list[Event]:
     """Get all events a particular user is attending."""
-    return user.attended_events
+    if limit is not None:
+        event = user.attended_events[:limit]
+    else:
+        event = user.attended_events
+
+    return event
 
 
 def get_all_future_events() -> list[Event]:
@@ -113,15 +123,27 @@ def get_all_future_events() -> list[Event]:
 
 
 @with_instance(User)
-def get_association_future_events(asso: User) -> list[Event]:
+def get_association_future_events(asso: User, limit: int = None) -> list[Event]:
     """Get all future events organized by a particular association."""
-    return Event.query.filter_by(asso_id=asso.user_id).filter(Event.date >= datetime.now().date()).all()
+    if limit is not None:
+        future_events = (
+            Event.query.filter_by(asso_id=asso.user_id).filter(Event.date >= datetime.now().date()).limit(limit).all()
+        )
+    else:
+        future_events = Event.query.filter_by(asso_id=asso.user_id).filter(Event.date >= datetime.now().date()).all()
+
+    return future_events
 
 
 @with_instance(User)
-def get_user_future_events(user: User) -> list[Event]:
+def get_user_future_events(user: User, limit: int = None) -> list[Event]:
     """Get all future events a particular user is attending."""
-    return user.attended_events.filter(Event.date >= datetime.now().date()).all()
+    future_events = (
+        user.attended_events.filter(Event.date >= datetime.now().date()).limit(limit).all()
+        if limit is not None
+        else user.attended_events.filter(Event.date >= datetime.now().date()).all()
+    )
+    return future_events
 
 
 def add_attendees_to_event(event_id, user_ids=None, user_level=None, asso_id=None):
