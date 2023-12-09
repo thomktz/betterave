@@ -46,6 +46,10 @@ from app.api.lessons.models import fullcalendar_lesson_model
 from app.api.events.models import fullcalendar_event_model
 from app.decorators import require_authentication, current_user_required, resolve_user
 
+# Parser for URL parameters.
+parser = reqparse.RequestParser()
+parser.add_argument('limit', type=int, required=False, default=50, help='Limit the number of lessons/events returned')
+
 @api.route('/')
 class UserList(Resource):
     @api.doc(security='apikey')
@@ -131,11 +135,6 @@ class UserClassGroupsResource(Resource):
         }
 
         return user_details
-    
-
-# Parser for query parameters in the URl, in order to take the limit parameters, which permits to only show X next courses
-parser = reqparse.RequestParser()
-parser.add_argument('limit', type=int, required=False, default=50, help='Limit the number of lessons/events returned')
 
 @api.route('/<string:user_id_or_me>/lessons')
 class UserLessons(Resource):
@@ -143,20 +142,14 @@ class UserLessons(Resource):
     @require_authentication()
     @resolve_user
     @current_user_required
-    @api.expect(parser)
     @api.marshal_list_with(fullcalendar_lesson_model)
     def get(self, user):
-        """
-        Get a list of lessons for a specific student or teacher
-        """
-
-        args = parser.parse_args()
-        limit = args.get("limit") # taking back the limit argument presents in the URL
+        """Get a list of lessons for a specific student or teacher."""
 
         if user.is_student:
-            lessons = get_student_lessons(user, limit)
+            lessons = get_student_lessons(user)
         elif user.is_teacher:
-            lessons = get_teacher_lessons(user, limit)
+            lessons = get_teacher_lessons(user)
         elif user.is_admin:
             lessons = get_all_lessons()
         else:
@@ -302,23 +295,16 @@ class UserEvents(Resource):
     @require_authentication()
     @resolve_user
     @current_user_required
-    @api.expect(parser)
     @api.marshal_list_with(fullcalendar_event_model)
     def get(self, user):
-        """
-        Get a list of events for a specific user
-        """
-
-        args = parser.parse_args()
-        limit = args.get("limit") # taking back the limit argument presents in the URL
-    
-
+        """Get a list of events for a specific user."""
+        
         if user.is_asso:
-            events = get_association_events(user, limit)
+            events = get_association_events(user)
         elif user.is_admin:
             events = get_all_events()
         else:
-            events = get_user_events(user, limit)
+            events = get_user_events(user)
 
         return events
 

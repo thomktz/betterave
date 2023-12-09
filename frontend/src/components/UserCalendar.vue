@@ -69,7 +69,7 @@ const limit = 50;
     },
     async mounted() {
       try {
-        const response = await apiClient.get(`/users/me/lessons`, { params: {limit: limit} });
+        const response = await apiClient.get(`/users/me/lessons`);
         this.calendarOptions.events = response.data;
       } catch (error) {
         console.error("There was an error fetching lessons:", error);
