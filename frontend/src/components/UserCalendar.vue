@@ -12,6 +12,8 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 
+const limit = 50; 
+
   export default {
     name: 'UserCalendar',
     components: {

@@ -10,6 +10,7 @@ from app.operations.lesson_operations import (
 )
 from app.decorators import require_authentication
 
+
 @api.route('/')
 class LessonList(Resource):
     @api.doc(security='apikey')
