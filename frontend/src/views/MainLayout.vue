@@ -1,19 +1,32 @@
 <template>
   <div>
     <header class="header">
-
       <div class="logos-block">
         <!-- Betterave Logo with Link to Home page -->
         <router-link to="/">
-          <img src="/betterave-logo.png" alt="Betterave Logo" class="betterave-logo" title="Home page" />
+          <img
+            src="/betterave-logo.png"
+            alt="Betterave Logo"
+            class="betterave-logo"
+            title="Home page"
+          />
         </router-link>
-        
+
         <!-- ENSAE Logo with Link to ENSAE website -->
-        <a href="https://www.ensae.fr/" target="_blank" rel="noopener noreferrer">
-          <img src="/logo_ensae.png" alt="ENSAE Logo" class="ensae-logo" title="ENSAE website" />
+        <a
+          href="https://www.ensae.fr/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="/logo_ensae.png"
+            alt="ENSAE Logo"
+            class="ensae-logo"
+            title="ENSAE website"
+          />
         </a>
       </div>
-      
+
       <h1>{{ headerTitle }}</h1>
 
       <div class="right-section">
@@ -26,10 +39,10 @@
 </template>
 
 <script>
-import { apiClient } from '@/apiConfig';
-import { ref } from 'vue';
-import ProfilePill from '@/components/ProfilePill.vue';
-import DarkModeToggle from '@/components/DarkModeToggle.vue';
+import { apiClient } from "@/apiConfig";
+import { ref } from "vue";
+import ProfilePill from "@/components/ProfilePill.vue";
+import DarkModeToggle from "@/components/DarkModeToggle.vue";
 
 export default {
   components: {
@@ -40,21 +53,21 @@ export default {
     return {
       user: {},
       headerTitle: ref("Welcome to Betterave!"),
-      darkMode: false
+      darkMode: false,
     };
   },
   async mounted() {
     // Handle dark mode
-    const storedPreference = localStorage.getItem('darkMode');
+    const storedPreference = localStorage.getItem("darkMode");
     if (storedPreference !== null) {
-      this.darkMode = storedPreference === 'true';
+      this.darkMode = storedPreference === "true";
     } else {
-      this.darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      this.darkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
     }
-    document.documentElement.setAttribute('data-dark-mode', this.darkMode);
-    this.$vuetify.theme.name = this.darkMode ? 'dark' : 'light';
+    document.documentElement.setAttribute("data-dark-mode", this.darkMode);
+    this.$vuetify.theme.name = this.darkMode ? "dark" : "light";
     try {
-      const response = await apiClient.get('/users/me');
+      const response = await apiClient.get("/users/me");
       this.user = response.data;
     } catch (error) {
       console.error("There was an error fetching user data:", error);
@@ -66,16 +79,16 @@ export default {
     },
     toggleDarkMode() {
       this.darkMode = !this.darkMode;
-      document.documentElement.setAttribute('data-dark-mode', this.darkMode);
-      localStorage.setItem('darkMode', this.darkMode); 
+      document.documentElement.setAttribute("data-dark-mode", this.darkMode);
+      localStorage.setItem("darkMode", this.darkMode);
 
       // Update the Vuetify theme
-      this.$vuetify.theme.name = this.darkMode ? 'dark' : 'light';
-    }
-  }
+      this.$vuetify.theme.name = this.darkMode ? "dark" : "light";
+    },
+  },
 };
 </script>
-  
+
 <style>
 .header {
   display: flex;
@@ -87,10 +100,9 @@ export default {
 }
 
 .betterave-logo {
-  height: 70px; 
+  height: 70px;
   width: auto;
   margin-left: 15px;
-
 }
 
 .ensae-logo {
@@ -104,15 +116,15 @@ export default {
 }
 
 .right-section {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 20px;
 }
 
 h1 {
   font-size: 2rem;
-  font-weight: 700; 
+  font-weight: 700;
 }
 
 .fill-height {
@@ -123,4 +135,3 @@ h1 {
   align-items: center;
 }
 </style>
-  

@@ -23,7 +23,6 @@ services:
         ipv4_address: 172.16.0.3
     volumes:
       - './frontend:/app'
-      - '/app/node_modules'
     ports:
       - 8080:8080
 

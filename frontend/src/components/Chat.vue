@@ -1,100 +1,121 @@
 <template>
   <section class="msger">
     <main class="msger-chat" ref="chatContainer">
-      <div 
-        v-for="message in messages" 
-        :key="message.id" 
-        :class="message.sender_details.user_id === user_id ? 'msg right-msg' : 'msg left-msg'"
-        @mouseover="showDate(message)" 
+      <div
+        v-for="message in messages"
+        :key="message.id"
+        :class="
+          message.sender_details.user_id === user_id
+            ? 'msg right-msg'
+            : 'msg left-msg'
+        "
+        @mouseover="showDate(message)"
         @mouseleave="hideDate()"
       >
-        <img :src="'/' + message.sender_details.profile_pic" :alt="message.sender_details.name" class="msg-img" />
+        <img
+          :src="'/' + message.sender_details.profile_pic"
+          :alt="message.sender_details.name"
+          class="msg-img"
+        />
         <div class="whole-message">
-          <div class="msg-name">{{ message.sender_details.name }} {{ message.sender_details.surname }}</div>
+          <div class="msg-name">
+            {{ message.sender_details.name }}
+            {{ message.sender_details.surname }}
+          </div>
           <div class="msg-text">{{ message.content }}</div>
-          <div class="msg-date" v-show="hoveredMessageId === message.id">{{ formatDate(message.timestamp) }}</div>
+          <div class="msg-date" v-show="hoveredMessageId === message.id">
+            {{ formatDate(message.timestamp) }}
+          </div>
         </div>
       </div>
     </main>
     <form class="msger-inputarea" @submit.prevent="sendMessage">
-      <input type="text" v-model="newMessage" class="msger-input" placeholder="Enter your message..." @keyup.enter="sendMessage">
+      <input
+        type="text"
+        v-model="newMessage"
+        class="msger-input"
+        placeholder="Enter your message..."
+        @keyup.enter="sendMessage"
+      />
       <button type="submit" class="msger-send-btn">Send</button>
     </form>
   </section>
 </template>
-  
-  <script>
-import { apiClient } from '@/apiConfig';
-  import { format } from 'date-fns';
 
+<script>
+import { apiClient } from "@/apiConfig";
+import { format } from "date-fns";
 
-  export default {
-    props: {
-      class_id: {
-        type: String,
-        required: true,
-      },
-      user_id: {
-        type: Number,
-        required: true,
-      },
+export default {
+  props: {
+    class_id: {
+      type: String,
+      required: true,
     },
-    data() {
-      return {
-        messages: [],
-        newMessage: '',
-        hoveredMessageId: null,
-        
-      };
+    user_id: {
+      type: Number,
+      required: true,
     },
-    mounted() {
-      this.fetchClassMessages();
+  },
+  data() {
+    return {
+      messages: [],
+      newMessage: "",
+      hoveredMessageId: null,
+    };
+  },
+  mounted() {
+    this.fetchClassMessages();
+    this.scrollToBottom();
+  },
+  methods: {
+    formatDate(isoString) {
+      return format(new Date(isoString), "yyyy-MM-dd HH:mm");
+    },
+    showDate(message) {
+      this.hoveredMessageId = message.id;
+    },
+    hideDate() {
+      this.hoveredMessageId = null;
+    },
+    scrollToBottom() {
+      this.$nextTick(() => {
+        this.$refs.chatContainer.scrollTop =
+          this.$refs.chatContainer.scrollHeight;
+      });
+    },
+    async fetchClassMessages() {
+      try {
+        const response = await apiClient.get(
+          `/classes/${this.class_id}/messages`,
+        );
+
+        if (response.data && Array.isArray(response.data)) {
+          this.messages = response.data;
+        }
+      } catch (error) {
+        console.error("There was an error fetching class messages:", error);
+      }
       this.scrollToBottom();
     },
-    methods: {
-      formatDate(isoString) {
-        return format(new Date(isoString), 'yyyy-MM-dd HH:mm');
-      },
-      showDate(message) {
-        this.hoveredMessageId = message.id;
-      },
-      hideDate() {
-        this.hoveredMessageId = null;
-      },
-      scrollToBottom() {
-        this.$nextTick(() => {
-          this.$refs.chatContainer.scrollTop = this.$refs.chatContainer.scrollHeight;
-        });
-      },
-      async fetchClassMessages() {
-        try {
-          const response = await apiClient.get(`/classes/${this.class_id}/messages`);
-          
-          if (response.data && Array.isArray(response.data)) {
-            this.messages = response.data;
-          }
-        } catch (error) {
-          console.error("There was an error fetching class messages:", error);
-        }
-        this.scrollToBottom();
-      },
-      async sendMessage() {
-        if (!this.newMessage.trim()) return;  // Don't send empty messages
-        try {
-          const response = await apiClient.post(`/classes/${this.class_id}/messages`, 
-            { content: this.newMessage }, 
-          );
-          this.newMessage = ''
-        } catch (error) {
-          console.error("There was an error sending the message:", error);
-        }
-        this.fetchClassMessages()
-      },
+    async sendMessage() {
+      if (!this.newMessage.trim()) return; // Don't send empty messages
+      try {
+        const response = await apiClient.post(
+          `/classes/${this.class_id}/messages`,
+          { content: this.newMessage },
+        );
+        this.newMessage = "";
+      } catch (error) {
+        console.error("There was an error sending the message:", error);
+      }
+      this.fetchClassMessages();
     },
-  };
-  </script>
-  
-  <style scoped>
+  },
+};
+</script>
+
+<style scoped>
 /* General styling */
 .msger {
   display: flex;
@@ -102,7 +123,7 @@ import { apiClient } from '@/apiConfig';
   height: 100%;
   border-radius: 5px;
   overflow: hidden;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 /* Chat styling */
@@ -208,7 +229,7 @@ import { apiClient } from '@/apiConfig';
 
 .msger-input {
   flex: 1;
-  background: var(--text-bubble-color );
+  background: var(--text-bubble-color);
 }
 
 .msger-send-btn {
@@ -235,13 +256,13 @@ import { apiClient } from '@/apiConfig';
   color: var(--secondary-text-color);
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.3s, visibility 0.3s;
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
 }
 
 .msg:hover .msg-date {
   opacity: 1;
   visibility: visible;
 }
-
-
 </style>

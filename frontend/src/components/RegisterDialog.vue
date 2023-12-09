@@ -6,41 +6,45 @@
         <v-container>
           <v-row>
             <v-col cols="12" sm="6">
-              <v-text-field 
-                label="First Name" 
-                v-model="name" 
+              <v-text-field
+                label="First Name"
+                v-model="name"
                 placeholder="John"
                 :rules="nameRules"
                 required
-                prepend-icon="mdi-account">
+                prepend-icon="mdi-account"
+              >
               </v-text-field>
             </v-col>
             <v-col cols="12" sm="6">
-              <v-text-field 
-                label="Last Name" 
+              <v-text-field
+                label="Last Name"
                 placeholder="Doe"
-                v-model="surname" 
+                v-model="surname"
                 :rules="surnameRules"
                 required
-                prepend-icon="mdi-account-outline">
+                prepend-icon="mdi-account-outline"
+              >
               </v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-text-field 
-                label="Email" 
+              <v-text-field
+                label="Email"
                 v-model="email"
                 disabled
-                prepend-icon="mdi-email">
+                prepend-icon="mdi-email"
+              >
               </v-text-field>
             </v-col>
             <v-col cols="12" sm="6">
-              <v-text-field 
-                label="Password" 
-                v-model="password" 
-                type="password" 
+              <v-text-field
+                label="Password"
+                v-model="password"
+                type="password"
                 :rules="passwordRules"
                 required
-                prepend-icon="mdi-lock">
+                prepend-icon="mdi-lock"
+              >
               </v-text-field>
             </v-col>
             <v-col cols="12" sm="6">
@@ -49,7 +53,8 @@
                 :items="['1A', '2A', '3A']"
                 v-model="level"
                 required
-                prepend-icon="mdi-school">
+                prepend-icon="mdi-school"
+              >
               </v-select>
             </v-col>
             <!-- Additional fields like LinkedIn, Website, etc., can be added here -->
@@ -65,88 +70,89 @@
   </v-dialog>
 </template>
 
-  
-  
-  <script>
-import { apiClient, toast } from '@/apiConfig';
+<script>
+import { apiClient, toast } from "@/apiConfig";
 
-
-  export default {
-    data() {
-      return {
-        dialog: false,
-        name: '',
-        surname: '',
-        email: '',
-        password: '',
-        level: '',
-        nameRules: [
-          v => !!v || 'Name is required',
-          v => (v && v.length >= 2) || 'Name must be at least 2 characters',
-          v => (v && v.length <= 20) || 'Name must be less than 20 characters',
-          v => /^[A-Z][a-z]*$/.test(v) || 'First letter must be capitalized, others lowercase'
-        ],
-        surnameRules: [
-          v => !!v || 'Surname is required',
-          v => (v && v.length >= 2) || 'Surname must be at least 2 characters',
-          v => (v && v.length <= 20) || 'Surname must be less than 20 characters',
-          v => /^[A-Z][a-z]*$/.test(v) || 'First letter must be capitalized, others lowercase'
-        ],
-        passwordRules: [
-          v => !!v || 'Password is required',
-          v => (v && v.length >= 4) || 'Password must be at least 4 characters',
-        ],
-      };
+export default {
+  data() {
+    return {
+      dialog: false,
+      name: "",
+      surname: "",
+      email: "",
+      password: "",
+      level: "",
+      nameRules: [
+        (v) => !!v || "Name is required",
+        (v) => (v && v.length >= 2) || "Name must be at least 2 characters",
+        (v) => (v && v.length <= 20) || "Name must be less than 20 characters",
+        (v) =>
+          /^[A-Z][a-z]*$/.test(v) ||
+          "First letter must be capitalized, others lowercase",
+      ],
+      surnameRules: [
+        (v) => !!v || "Surname is required",
+        (v) => (v && v.length >= 2) || "Surname must be at least 2 characters",
+        (v) =>
+          (v && v.length <= 20) || "Surname must be less than 20 characters",
+        (v) =>
+          /^[A-Z][a-z]*$/.test(v) ||
+          "First letter must be capitalized, others lowercase",
+      ],
+      passwordRules: [
+        (v) => !!v || "Password is required",
+        (v) => (v && v.length >= 4) || "Password must be at least 4 characters",
+      ],
+    };
+  },
+  watch: {
+    name(newVal) {
+      this.updateEmail();
     },
-    watch: {
-      name(newVal) {
-        this.updateEmail();
-      },
-      surname(newVal) {
-        this.updateEmail();
+    surname(newVal) {
+      this.updateEmail();
+    },
+  },
+  methods: {
+    updateEmail() {
+      const formattedName = this.name.toLowerCase().replace(/ /g, "-");
+      const formattedSurname = this.surname.toLowerCase().replace(/ /g, "-");
+      this.email = `${formattedName}.${formattedSurname}@ensae.fr`;
+    },
+    open() {
+      this.dialog = true;
+    },
+    close() {
+      this.name = "";
+      this.surname = "";
+      this.email = "";
+      this.password = "";
+      this.level = "";
+
+      this.dialog = false;
+    },
+    async register() {
+      try {
+        const response = await apiClient.post("/users/", {
+          name: this.name,
+          surname: this.surname,
+          profile_pic: "default_profile_pic.png",
+          user_type: "student",
+          level: this.level,
+          email_override: this.email,
+          password_override: this.password,
+        });
+
+        // Manually display a success toast
+        toast.success("User created successfully");
+        this.close();
+      } catch (error) {
+        // Error handling is already taken care of by the apiClient interceptor
+        console.error("Error creating user:", error);
       }
     },
-    methods: {
-      updateEmail() {
-        const formattedName = this.name.toLowerCase().replace(/ /g, '-');
-        const formattedSurname = this.surname.toLowerCase().replace(/ /g, '-');
-        this.email = `${formattedName}.${formattedSurname}@ensae.fr`;
-      },
-      open() {
-        this.dialog = true;
-      },
-      close() {
-        this.name = '';
-        this.surname = '';
-        this.email = '';
-        this.password = '';
-        this.level = '';
+  },
+};
+</script>
 
-        this.dialog = false;
-      },
-      async register() {
-        try {
-          const response = await apiClient.post('/users/', {
-            name: this.name,
-            surname: this.surname,
-            profile_pic: "default_profile_pic.png",
-            user_type: "student",
-            level: this.level,
-            email_override: this.email,
-            password_override: this.password,
-          });
-
-          // Manually display a success toast
-          toast.success('User created successfully');
-          this.close();
-        } catch (error) {
-          // Error handling is already taken care of by the apiClient interceptor
-          console.error('Error creating user:', error);
-        }
-      }
-    }
-  };
-  </script>
-  
-    <style scoped>
-    </style>
+<style scoped></style>
