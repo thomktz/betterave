@@ -98,7 +98,7 @@ def get_student_lessons(user: User, limit : int = None, sort: bool = True) -> li
         lessons.extend(all_lessons)
     
     if limit is not None:
-        return sorted(lessons[:limit]) if sort else lessons[:limit]
+        return sorted(lessons)[:limit] if sort else lessons[:limit]
     else :
         return sorted(lessons) if sort else lessons
 
@@ -111,13 +111,13 @@ def get_student_future_lessons(user: User, limit: int = None, sort: bool = True)
     for group in user.groups:
         all_lesson=group.lessons
         group_lessons = [lesson for lesson in all_lesson if lesson.date >= date]
-
-    if limit is not None :
-        future_lessons.extend(group_lessons[:limit])
-    else:
         future_lessons.extend(group_lessons)
+    
+    if limit is not None:
+        return sorted(future_lessons)[:limit] if sort else future_lessons[:limit]
+    else :
+        return sorted(future_lessons) if sort else future_lessons
 
-    return sorted(future_lessons) if sort else future_lessons
 
 @with_instance(User)
 def get_teacher_lessons(teacher: User, limit : int = None, sort: bool = True) -> list[Lesson]:

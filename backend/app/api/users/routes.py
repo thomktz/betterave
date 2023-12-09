@@ -154,9 +154,9 @@ class UserLessons(Resource):
         limit = args.get("limit") # taking back the limit argument presents in the URL
 
         if user.is_student:
-            lessons = get_student_lessons(user,limit)
+            lessons = get_student_lessons(user, limit)
         elif user.is_teacher:
-            lessons = get_teacher_lessons(user,limit)
+            lessons = get_teacher_lessons(user, limit)
         elif user.is_admin:
             lessons = get_all_lessons()
         else:
@@ -181,9 +181,9 @@ class UserFutureLessons(Resource):
     
 
         if user.is_student:
-            future_lessons = get_student_future_lessons(user,limit)
+            future_lessons = get_student_future_lessons(user, limit)
         elif user.is_teacher:
-            future_lessons = get_teacher_future_lessons(user,limit)
+            future_lessons = get_teacher_future_lessons(user, limit)
         elif user.is_admin:
             future_lessons = get_all_future_lessons()
         else:
@@ -314,11 +314,11 @@ class UserEvents(Resource):
     
 
         if user.is_asso:
-            events = get_association_events(user,limit)
+            events = get_association_events(user, limit)
         elif user.is_admin:
             events = get_all_events()
         else:
-            events = get_user_events(user,limit)
+            events = get_user_events(user, limit)
 
         return events
 
@@ -339,10 +339,10 @@ class UserFutureEvents(Resource):
         limit = args.get("limit") # taking back the limit argument presents in the URL
     
         if user.is_asso:
-            future_events = get_association_future_events(user,limit)
+            future_events = get_association_future_events(user, limit)
         elif user.is_admin:
             future_events = get_all_future_events()
         else:
-            future_events = get_user_future_events(user,limit)
+            future_events = get_user_future_events(user, limit)
 
         return future_events

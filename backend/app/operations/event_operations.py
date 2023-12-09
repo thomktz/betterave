@@ -80,7 +80,11 @@ def get_association_events(asso: User, limit : int = None ) -> list[Event]:
 @with_instance(User)
 def get_user_events(user: User, limit : int = None) -> list[Event]:
     """Get all events a particular user is attending."""
-    event = user.attended_events[:limit] if limit is not None else user.attended_events
+    if limit is not None :
+        event = user.attended_events[:limit]
+    else : 
+        event = user.attended_events
+
     return event
 
 def get_all_future_events() -> list[Event]:
@@ -88,9 +92,13 @@ def get_all_future_events() -> list[Event]:
     return Event.query.filter(Event.date >= datetime.now().date()).all()
 
 @with_instance(User)
-def get_association_future_events(asso: User,limit : int = None ) -> list[Event]:
+def get_association_future_events(asso: User, limit : int = None ) -> list[Event]:
     """Get all future events organized by a particular association."""
-    future_events = Event.query.filter_by(asso_id=asso.user_id).filter(Event.date >= datetime.now().date()).limit(limit).all() if limit is not None else Event.query.filter_by(asso_id=asso.user_id).filter(Event.date >= datetime.now().date()).all()
+    if limit is not None:
+        future_events = Event.query.filter_by(asso_id=asso.user_id).filter(Event.date >= datetime.now().date()).limit(limit).all() 
+    else :
+        future_events = Event.query.filter_by(asso_id=asso.user_id).filter(Event.date >= datetime.now().date()).all()
+
     return future_events
 
 @with_instance(User)
