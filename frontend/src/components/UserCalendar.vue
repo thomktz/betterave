@@ -12,6 +12,8 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 
+const limit = 50; 
+
   export default {
     name: 'UserCalendar',
     components: {
@@ -67,7 +69,7 @@ import interactionPlugin from '@fullcalendar/interaction';
     },
     async mounted() {
       try {
-        const response = await apiClient.get(`/users/me/lessons`);
+        const response = await apiClient.get(`/users/me/lessons`, { params: {limit: limit} });
         this.calendarOptions.events = response.data;
       } catch (error) {
         console.error("There was an error fetching lessons:", error);
