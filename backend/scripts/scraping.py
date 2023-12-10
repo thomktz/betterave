@@ -16,6 +16,10 @@ URL_3A = BASE_URL + "/troisieme-annee/catalogue-des-cours-de-troisieme-annee-du-
 PATH_OCTOBER = "data/edt_october.html"
 PATH_NOV = "data/edt_november.html"
 PATH_DEC = "data/edt_december.html"
+PATH_JAN = "data/edt_january.html"
+PATH_FEB = "data/edt_february.html"
+PATH_MAR = "data/edt_march.html"
+PATH_APR = "data/edt_april.html"
 
 
 # Classes names that need to be mapped
@@ -375,9 +379,13 @@ if __name__ == "__main__":
     event_data_oct = scrap_events_data(PATH_OCTOBER)
     event_data_nov = scrap_events_data(PATH_NOV)
     event_data_dec = scrap_events_data(PATH_DEC)
+    event_data_jan = scrap_events_data(PATH_JAN)
+    event_data_feb = scrap_events_data(PATH_FEB)
+    event_data_mar = scrap_events_data(PATH_MAR)
+    event_data_apr = scrap_events_data(PATH_APR)
 
     # Concatenate html
-    event_data = event_data_oct + event_data_nov + event_data_dec
+    event_data = event_data_oct + event_data_nov + event_data_dec + event_data_jan + event_data_feb + event_data_mar + event_data_apr
     event_data_by_classes = combine_lessons(event_data)
 
     # Create a special events json
