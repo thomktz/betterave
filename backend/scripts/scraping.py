@@ -12,8 +12,9 @@ URL_1A = BASE_URL + "/premiere-annee-du-cycle-ingenieur"
 URL_2A = BASE_URL + "/deuxieme-annee"
 URL_3A = BASE_URL + "/troisieme-annee/catalogue-des-cours-de-troisieme-annee-du-cycle-ingenieur"
 
-# Data paths
-PATH_OCTOBER = "data/edt_october.html"
+# We can't directly scrape the schedule from pamplemousse because we would have to be logged in
+# It is much easier to just save the html files and scrape them locally
+PATH_OCT = "data/edt_october.html"
 PATH_NOV = "data/edt_november.html"
 PATH_DEC = "data/edt_december.html"
 PATH_JAN = "data/edt_january.html"
@@ -25,7 +26,7 @@ PATH_APR = "data/edt_april.html"
 # Classes names that need to be mapped
 MAPPING = {
     "Sport - S1": "Sport",
-    "Introduction à l'informatique - 1A-Eco": "Introduction à l’informatique",
+    "Introduction à l'informatique - 1A-Eco": "Introduction à l'informatique",
     "Algorithmes et programmation": "Algorithmes et programmation / Python",
     "Bases de données": "Introduction aux bases de données",
     "Estimation non paramétrique ": "Estimation non paramétrique",
@@ -42,7 +43,7 @@ MAPPING = {
     # "Financial Instruments 2A":"Financial instruments",
     "Macroeconometrics: Advanced Time-Series Analysis ": "Macroeconometrics: Advanced Time-Series Analysis",
     "Économétrie 1": "Econométrie 1",
-    "Séminaire d'économie": "Séminaire d’économie",
+    "Séminaire d'économie": "Séminaire d'économie",
     "Ethics and responsibility in data science": "Ethics and responsibility in data science- group 1",
     "Ethics and responsibility in data science- group 2 ": "Ethics and responsibility in data science- group 2",
     "Machine learning for Portfolio Management and Trading ": "Machine learning for Portfolio Management and Trading",
@@ -376,7 +377,7 @@ def replace_unicode_escapes(obj) -> dict:
 
 if __name__ == "__main__":
     # Scrap data
-    event_data_oct = scrap_events_data(PATH_OCTOBER)
+    event_data_oct = scrap_events_data(PATH_OCT)
     event_data_nov = scrap_events_data(PATH_NOV)
     event_data_dec = scrap_events_data(PATH_DEC)
     event_data_jan = scrap_events_data(PATH_JAN)
@@ -385,7 +386,15 @@ if __name__ == "__main__":
     event_data_apr = scrap_events_data(PATH_APR)
 
     # Concatenate html
-    event_data = event_data_oct + event_data_nov + event_data_dec + event_data_jan + event_data_feb + event_data_mar + event_data_apr
+    event_data = (
+        event_data_oct
+        + event_data_nov
+        + event_data_dec
+        + event_data_jan
+        + event_data_feb
+        + event_data_mar
+        + event_data_apr
+    )
     event_data_by_classes = combine_lessons(event_data)
 
     # Create a special events json
