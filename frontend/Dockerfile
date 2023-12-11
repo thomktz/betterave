@@ -2,13 +2,17 @@ FROM node:lts-alpine
 
 WORKDIR /app
 
-ENV PATH /app/node_modules/.bin:$PATH
+# Install Vue CLI globally
+RUN npm install -g @vue/cli@5.0.8
 
-RUN npm install @vue/cli@5.0.8 -g
+# Add Vue CLI to PATH
+ENV PATH /usr/local/share/.config/yarn/global/node_modules/.bin:$PATH
 
+# Copy package.json and package-lock.json
 COPY package.json .
 COPY package-lock.json .
 
+# Install dependencies
 RUN npm install
 
 CMD ["npm", "run", "serve"]
