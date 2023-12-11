@@ -237,13 +237,13 @@ def scrap_events_data(path: str) -> list:
 
             # Create an event dictionary
             event_dict = {
-                "class_id": "TBD",
+                "class_id": -1,
                 "name": name,
-                "ects": "TBD",
+                "ects": 0,
                 "lesson_info": [event_info],
                 "backgroundColor": background_color,
                 "teacher_name": "TBD",
-                "level": "TBD",
+                "level": "N/A",
             }
 
             # Assign first teacher to global teacher for now
@@ -288,7 +288,6 @@ def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
     mapping : dict
         Dict with classes names that need to be mapped.
     """
-    classes_unclassified = []
     courses_ensae_dict = {
         key: value
         for d in (
@@ -298,6 +297,8 @@ def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
         )
         for key, value in d.items()
     }
+
+    out_data = []
 
     # Match classes for class_id, ects and link with scraping from ensae.fr
     for entry in event_data:
@@ -356,8 +357,13 @@ def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
                         entry["teacher_name"][0] = entry["teacher_name"][0].capitalize()
                         entry["teacher_name"] = entry["teacher_name"][::-1]
 
-        if entry["class_id"] == "TBD":
-            classes_unclassified.append(entry["name"])
+                # We found the class, so we can break the loop
+                break
+
+        # If we never break the loop, it means we didn't find the class
+        else:
+            # Skip to the next entry
+            continue
 
         if len(entry["teacher_name"]) > 2:
             # In reality, avoid having more than 2 spaces in a name when creating the databse.
@@ -366,11 +372,14 @@ def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
             # We'll just take the first two names and hope for the best.
             entry["teacher_name"] = entry["teacher_name"][:2]
 
-        # Fix "TBD" UserLevels
-        if entry["level"] == "TBD":
-            entry["level"] = "N/A"
+        # Ensure that the class_id was found
+        if entry["class_id"] == -1:
+            continue
 
-    return (event_data, classes_unclassified)
+        # Add the entry to the output data
+        out_data.append(entry)
+
+    return out_data
 
 
 def replace_unicode_escapes(obj) -> dict:
@@ -416,8 +425,7 @@ if __name__ == "__main__":
     ]
 
     # Get result
-    final_classes_data, classes_unclassified = match_id_ects(event_data_by_classes_filtered)
-    # print(classes_unclassified)
+    final_classes_data = match_id_ects(event_data_by_classes_filtered)
 
     # Save result
     json_data = json.dumps(final_classes_data, indent=4)
