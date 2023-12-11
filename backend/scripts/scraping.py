@@ -366,6 +366,10 @@ def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
             # We'll just take the first two names and hope for the best.
             entry["teacher_name"] = entry["teacher_name"][:2]
 
+        # Fix "TBD" UserLevels
+        if entry["level"] == "TBD":
+            entry["level"] = "N/A"
+
     return (event_data, classes_unclassified)
 
 
