@@ -344,6 +344,8 @@ def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
                     entry["ects"] = float(ects_value)
                 else:
                     print("ECTS information not found.")
+                    # If ECTS not found, we set it to 0
+                    entry["ects"] = 0.0
 
                 teacher_element = ensae_soup.find("h4", string="Enseignant")
                 if teacher_element:
@@ -357,9 +359,12 @@ def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
         if entry["class_id"] == "TBD":
             classes_unclassified.append(entry["name"])
 
-        # Exceptions bc of len(name)
-        if entry["teacher_name"] == ["David", "Olivier", "Zerbib"]:
-            entry["teacher_name"] = ["Olivier", "Zerbib"]
+        if len(entry["teacher_name"]) > 2:
+            # In reality, avoid having more than 2 spaces in a name when creating the databse.
+            # This happens multiple times, and there are no general rules to parse
+            # which name is the first name and which is the last name.
+            # We'll just take the first two names and hope for the best.
+            entry["teacher_name"] = entry["teacher_name"][:2]
 
     return (event_data, classes_unclassified)
 
