@@ -28,7 +28,6 @@ MAPPING = {
     "Sport - S1": "Sport",
     "Introduction à l'informatique - 1A-Eco": "Introduction à l'informatique",
     "Algorithmes et programmation": "Algorithmes et programmation / Python",
-    "Bases de données": "Introduction aux bases de données",
     "Estimation non paramétrique ": "Estimation non paramétrique",
     "Theory of Industrial Organization ": "Theory of Industrial Organization",
     # "Anglais 2A - S1":"Anglais",
