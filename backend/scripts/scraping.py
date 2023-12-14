@@ -12,18 +12,22 @@ URL_1A = BASE_URL + "/premiere-annee-du-cycle-ingenieur"
 URL_2A = BASE_URL + "/deuxieme-annee"
 URL_3A = BASE_URL + "/troisieme-annee/catalogue-des-cours-de-troisieme-annee-du-cycle-ingenieur"
 
-# Data paths
-PATH_OCTOBER = "data/edt_october.html"
+# We can't directly scrape the schedule from pamplemousse because we would have to be logged in
+# It is much easier to just save the html files and scrape them locally
+PATH_OCT = "data/edt_october.html"
 PATH_NOV = "data/edt_november.html"
 PATH_DEC = "data/edt_december.html"
+PATH_JAN = "data/edt_january.html"
+PATH_FEB = "data/edt_february.html"
+PATH_MAR = "data/edt_march.html"
+PATH_APR = "data/edt_april.html"
 
 
 # Classes names that need to be mapped
 MAPPING = {
     "Sport - S1": "Sport",
-    "Introduction à l'informatique - 1A-Eco": "Introduction à l’informatique",
+    "Introduction à l'informatique - 1A-Eco": "Introduction à l'informatique",
     "Algorithmes et programmation": "Algorithmes et programmation / Python",
-    "Bases de données": "Introduction aux bases de données",
     "Estimation non paramétrique ": "Estimation non paramétrique",
     "Theory of Industrial Organization ": "Theory of Industrial Organization",
     # "Anglais 2A - S1":"Anglais",
@@ -38,7 +42,7 @@ MAPPING = {
     # "Financial Instruments 2A":"Financial instruments",
     "Macroeconometrics: Advanced Time-Series Analysis ": "Macroeconometrics: Advanced Time-Series Analysis",
     "Économétrie 1": "Econométrie 1",
-    "Séminaire d'économie": "Séminaire d’économie",
+    "Séminaire d'économie": "Séminaire d'économie",
     "Ethics and responsibility in data science": "Ethics and responsibility in data science- group 1",
     "Ethics and responsibility in data science- group 2 ": "Ethics and responsibility in data science- group 2",
     "Machine learning for Portfolio Management and Trading ": "Machine learning for Portfolio Management and Trading",
@@ -232,13 +236,13 @@ def scrap_events_data(path: str) -> list:
 
             # Create an event dictionary
             event_dict = {
-                "class_id": "TBD",
+                "class_id": -1,
                 "name": name,
-                "ects": "TBD",
+                "ects": 0,
                 "lesson_info": [event_info],
                 "backgroundColor": background_color,
                 "teacher_name": "TBD",
-                "level": "TBD",
+                "level": "N/A",
             }
 
             # Assign first teacher to global teacher for now
@@ -283,7 +287,6 @@ def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
     mapping : dict
         Dict with classes names that need to be mapped.
     """
-    classes_unclassified = []
     courses_ensae_dict = {
         key: value
         for d in (
@@ -293,6 +296,8 @@ def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
         )
         for key, value in d.items()
     }
+
+    out_data = []
 
     # Match classes for class_id, ects and link with scraping from ensae.fr
     for entry in event_data:
@@ -339,6 +344,8 @@ def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
                     entry["ects"] = float(ects_value)
                 else:
                     print("ECTS information not found.")
+                    # If ECTS not found, we set it to 0
+                    entry["ects"] = 0.0
 
                 teacher_element = ensae_soup.find("h4", string="Enseignant")
                 if teacher_element:
@@ -349,14 +356,29 @@ def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
                         entry["teacher_name"][0] = entry["teacher_name"][0].capitalize()
                         entry["teacher_name"] = entry["teacher_name"][::-1]
 
-        if entry["class_id"] == "TBD":
-            classes_unclassified.append(entry["name"])
+                # We found the class, so we can break the loop
+                break
 
-        # Exceptions bc of len(name)
-        if entry["teacher_name"] == ["David", "Olivier", "Zerbib"]:
-            entry["teacher_name"] = ["Olivier", "Zerbib"]
+        # If we never break the loop, it means we didn't find the class
+        else:
+            # Skip to the next entry
+            continue
 
-    return (event_data, classes_unclassified)
+        if len(entry["teacher_name"]) > 2:
+            # In reality, avoid having more than 2 spaces in a name when creating the databse.
+            # This happens multiple times, and there are no general rules to parse
+            # which name is the first name and which is the last name.
+            # We'll just take the first two names and hope for the best.
+            entry["teacher_name"] = entry["teacher_name"][:2]
+
+        # Ensure that the class_id was found
+        if entry["class_id"] == -1:
+            continue
+
+        # Add the entry to the output data
+        out_data.append(entry)
+
+    return out_data
 
 
 def replace_unicode_escapes(obj) -> dict:
@@ -372,12 +394,24 @@ def replace_unicode_escapes(obj) -> dict:
 
 if __name__ == "__main__":
     # Scrap data
-    event_data_oct = scrap_events_data(PATH_OCTOBER)
+    event_data_oct = scrap_events_data(PATH_OCT)
     event_data_nov = scrap_events_data(PATH_NOV)
     event_data_dec = scrap_events_data(PATH_DEC)
+    event_data_jan = scrap_events_data(PATH_JAN)
+    event_data_feb = scrap_events_data(PATH_FEB)
+    event_data_mar = scrap_events_data(PATH_MAR)
+    event_data_apr = scrap_events_data(PATH_APR)
 
     # Concatenate html
-    event_data = event_data_oct + event_data_nov + event_data_dec
+    event_data = (
+        event_data_oct
+        + event_data_nov
+        + event_data_dec
+        + event_data_jan
+        + event_data_feb
+        + event_data_mar
+        + event_data_apr
+    )
     event_data_by_classes = combine_lessons(event_data)
 
     # Create a special events json
@@ -390,8 +424,7 @@ if __name__ == "__main__":
     ]
 
     # Get result
-    final_classes_data, classes_unclassified = match_id_ects(event_data_by_classes_filtered)
-    # print(classes_unclassified)
+    final_classes_data = match_id_ects(event_data_by_classes_filtered)
 
     # Save result
     json_data = json.dumps(final_classes_data, indent=4)
