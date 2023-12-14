@@ -13,3 +13,30 @@ class_model = api.model(
         "default_teacher_id": fields.Integer(required=True, description="The ID of the default teacher for the class"),
     },
 )
+
+homework_model = api.model(
+    "Homework",
+    {
+        "homework_id": fields.Integer(readonly=True, description="The unique identifier of a homework"),
+        "class_id": fields.Integer(required=True, description="The ID of the class the homework belongs to"),
+        "class_name": fields.String(readonly=True, description="The name of the class the homework belongs to"),
+        "content": fields.String(required=True, description="The content/description of the homework"),
+        "due_date": fields.Date(required=True, description="The due date of the homework"),
+        "due_time": fields.String(
+            required=False,
+            description="The due time of the homework (expected format HH:MM)",
+        ),
+    },
+)
+
+homework_post_model = api.model(
+    "HomeworkPost",
+    {
+        "content": fields.String(required=True, description="The content/description of the new homework"),
+        "due_date": fields.Date(required=True, description="The due date of the new homework"),
+        "due_time": fields.String(
+            required=False,
+            description="The due time of the homework (expected format HH:MM)",
+        ),
+    },
+)

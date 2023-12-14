@@ -41,7 +41,6 @@ message_model = api.model(
     },
 )
 
-
 message_post_model = api.model(
     "MessagePost",
     {

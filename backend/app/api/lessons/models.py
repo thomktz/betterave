@@ -66,11 +66,11 @@ lesson_post_model = api.model(
         "date": fields.Date(required=True, description="The date on which the lesson will take place"),
         "start_time": fields.String(
             required=True,
-            description="The start time of the lesson (expected format HH:MM:SS)",
+            description="The start time of the lesson (expected format HH:MM)",
         ),
         "end_time": fields.String(
             required=True,
-            description="The end time of the lesson (expected format HH:MM:SS)",
+            description="The end time of the lesson (expected format HH:MM)",
         ),
         "room": fields.String(description="The room in which the lesson is scheduled to take place"),
         "teacher_id": fields.Integer(description="The identifier of the teacher conducting the lesson"),

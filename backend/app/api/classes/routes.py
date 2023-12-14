@@ -1,6 +1,6 @@
 from flask_restx import Resource
 from flask_login import current_user
-from .models import class_model
+from .models import class_model, homework_model, homework_post_model
 from .namespace import api
 from app.operations.class_operations import (
     add_class,
@@ -12,6 +12,7 @@ from app.operations.class_operations import (
 )
 from app.operations.message_operations import get_class_messages, add_class_message
 from app.api.class_groups.models import message_model, message_post_model
+from app.operations.homework_operations import get_class_homework, add_homework_to_class
 from app.models import UserLevel
 from app.decorators import require_authentication
 
@@ -107,3 +108,26 @@ class ClassMessages(Resource):
         if message:
             return api.marshal(message.as_dict(), message_model), 201
         api.abort(400, "Could not add message to the class")
+
+
+@api.route("/<int:class_id>/homework")
+class GroupHomework(Resource):
+    @api.doc(security="apikey")
+    @require_authentication()
+    @api.marshal_list_with(homework_model)
+    def get(self, class_id):
+        """Get all homework for a specific class group."""
+        return [hmw.as_dict() for hmw in get_class_homework(class_id)]
+
+    @api.doc(security="apikey")
+    @require_authentication("admin", "teacher")
+    @api.expect(homework_post_model)
+    def post(self, class_id):
+        """Post a new homework to a specific class group."""
+        content = api.payload.get("content")
+        due_date = api.payload.get("due_date")
+        due_time = api.payload.get("due_time")
+        hmw = add_homework_to_class(content, class_id=class_id, due_date=due_date, due_time=due_time)
+        if hmw:
+            return api.marshal(hmw.as_dict(), homework_model), 201
+        api.abort(400, "Could not add homework to the class")

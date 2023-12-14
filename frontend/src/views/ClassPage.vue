@@ -1,5 +1,5 @@
 <template>
-  <v-container class="fill-height" fluid>
+  <div class="fill-height" fluid>
     <div class="content-section">
       <!-- Left Container -->
       <div class="info-container">
@@ -16,7 +16,10 @@
 
       <!-- Middle Container -->
       <div class="info-container">
-        <!-- Content for the middle container -->
+        <div class="class-header">
+          <h1>Homework</h1>
+        </div>
+        <Homework :class_id="class_id"></Homework>
       </div>
 
       <!-- Right Container -->
@@ -24,28 +27,33 @@
         <Chat :class_id="class_id" :user_id="user_id"></Chat>
       </div>
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script>
 import Chat from "@/components/Chat.vue";
 import { apiClient } from "@/apiConfig";
+import Homework from "@/components/Homework.vue";
 
 export default {
   components: {
+    Homework,
     Chat,
   },
   data() {
     return {
       classDetails: {},
-      class_id: this.$route.params.class_id,
+      class_id: parseInt(this.$route.params.class_id),
       user_id: NaN,
+      newHomework: {
+        content: "",
+        due_date: null,
+      },
     };
   },
   async mounted() {
-    const class_id = this.$route.params.class_id;
     try {
-      const response = await apiClient.get(`/classes/${class_id}`);
+      const response = await apiClient.get(`/classes/${this.class_id}`);
       this.classDetails = response.data;
       this.$emit("updateTitle", this.classDetails.name);
     } catch (error) {
