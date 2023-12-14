@@ -49,7 +49,7 @@ import { format } from "date-fns";
 export default {
   props: {
     class_id: {
-      type: String,
+      type: Number,
       required: true,
     },
     user_id: {

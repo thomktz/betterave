@@ -1,6 +1,6 @@
 from flask_restx import Resource
 from flask_login import current_user
-from .models import class_group_model, message_model, message_post_model, homework_model, homework_post_model
+from .models import class_group_model, message_model, message_post_model
 from .namespace import api
 from app.operations.class_group_operations import (
     get_all_class_groups,
@@ -14,7 +14,6 @@ from app.operations.message_operations import (
     add_message_to_group,
     delete_message,
 )
-from app.operations.homework_operations import get_homeworks_by_group_id, add_homework_to_group
 from app.decorators import require_authentication
 
 
@@ -100,24 +99,3 @@ class MessageResource(Resource):
         if delete_message(message_id):
             return None, 204
         api.abort(404, "Message not found")
-
-
-@api.route("/<int:group_id>/homeworks")
-class GroupHomeworks(Resource):
-    @api.doc(security="apikey")
-    @require_authentication()
-    @api.marshal_list_with(homework_model)
-    def get(self, group_id):
-        """Get all homeworks for a specific class group."""
-        return [hmw.as_dict() for hmw in get_homeworks_by_group_id(group_id)]
-
-    @api.doc(security="apikey")
-    @require_authentication("admin", "teacher")
-    @api.expect(homework_post_model)
-    def post(self, group_id):
-        """Post a new homework to a specific class group."""
-        content = api.payload.get("content")
-        hmw = add_homework_to_group(content, user_id=current_user.user_id, group_id=group_id)
-        if hmw:
-            return api.marshal(hmw.as_dict(), homework_model), 201
-        api.abort(400, "Could not add homework to the class")

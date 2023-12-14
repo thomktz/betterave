@@ -3,6 +3,7 @@
 import random
 import json
 import numpy as np
+import pandas as pd
 from main import app
 from extensions import db
 from app.operations.user_operations import add_user, get_user_by_name
@@ -14,7 +15,10 @@ from app.operations.class_group_operations import (
     enroll_student_in_group,
     get_class_group_by_name,
 )
+from app.operations.event_operations import add_event
 from app.operations.user_class_group_operations import add_user_class_group
+from app.operations.asso_operations import subscribe_to_asso
+from app.operations.message_operations import add_class_message
 from app.models import UserLevel
 
 CLASSES_PER_STUDENT = 10
@@ -163,6 +167,7 @@ def initialize_database():
                     level=class_dict["level"],
                 )
             )
+
             # Add main class group
             add_class_group(
                 name="Cours",
@@ -182,7 +187,17 @@ def initialize_database():
                         is_main_group=False,
                     )
 
-        # 7 - Enroll students in groups
+            # 7 - Add welcome message
+            add_class_message(
+                content=(
+                    f"Welcome to class '{class_dict['name']}'! "
+                    + "Here, you can ask questions to your teacher and other enrolled students."
+                ),
+                class_id=class_dict["class_id"],
+                user_id=admin_ids[0],
+            )
+
+        # 8 - Enroll students in groups
         for level in UserLevel:
             students = get_students_from_level(level)
             level_classes = get_classes_from_level(level)
@@ -209,7 +224,7 @@ def initialize_database():
                         secondary_class_group_id=secondary_group.group_id if secondary_group else None,
                     )
 
-        # 8 - Add lessons
+        # 9 - Add lessons
         print("Adding lessons to class groups...")
         for class_dict in classes:
             for lesson in class_dict["lesson_info"]:
@@ -225,6 +240,39 @@ def initialize_database():
                         teacher_id=get_user_by_name(*teacher).user_id,
                     )
                 )
+
+        # 10 - Subscribe all students and admin to all assos by default
+        print("Subscribing students to assos...")
+        for user_id in student_ids + admin_ids:
+            for asso_id in asso_ids:
+                subscribe_to_asso(user_id, asso_id)
+
+        # 11 - Add association events
+        print("Adding asso events...")
+        # Tribu meeting every monday at 18h
+        asso_id = asso_ids[0]
+        date_range = pd.date_range(start="2023-09-01", end="2024-04-30", freq="W-MON")
+        for date in date_range:
+            add_event(
+                asso_id,
+                "Réunion",
+                date,
+                "18:00",
+                "19:00",
+                "Subscribers",
+            )
+        # EJE meeting every tuesday at 17h
+        asso_id = asso_ids[1]
+        date_range = pd.date_range(start="2023-09-01", end="2024-04-30", freq="W-TUE")
+        for date in date_range:
+            add_event(
+                asso_id,
+                "Réunion",
+                date,
+                "17:00",
+                "18:00",
+                "Subscribers",
+            )
 
 
 if __name__ == "__main__":

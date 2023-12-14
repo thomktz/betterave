@@ -16,48 +16,16 @@
 
       <!-- Middle Container -->
       <div class="info-container">
-        <Homework :group_id="classDetails.group_id"></Homework>
-
-        <v-card>
-          <v-card-title>Add New Homework</v-card-title>
-          <v-card-text>
-            <v-form @submit.prevent="addHomework">
-              <v-text-field
-                v-model="newHomework.content"
-                label="Homework Content"
-                required
-              ></v-text-field>
-              <v-date-picker
-                v-model="newHomework.due_date"
-                label="Due Date"
-                required
-              ></v-date-picker>
-              <v-btn type="submit">Add Homework</v-btn>
-            </v-form>
-          </v-card-text>
-        </v-card>
+        <div class="class-header">
+          <h1>Homework</h1>
+        </div>
+        <Homework :class_id="class_id"></Homework>
       </div>
 
       <!-- Right Container -->
       <div class="info-container">
         <Chat :class_id="class_id" :user_id="user_id"></Chat>
       </div>
-      <p><strong>ECTS Credits:</strong> {{ classDetails.ects_credits }}</p>
-      <p><strong>Tutor:</strong> {{ classDetails.teacher }}</p>
-      <p>
-        <a :href="classDetails.ensae_link" target="_blank">View ENSAE Link</a>
-      </p>
-      <!-- Other information related to class -->
-    </div>
-
-    <!-- Middle Container -->
-    <div class="info-container">
-      <!-- Content for the middle container -->
-    </div>
-
-    <!-- Right Container -->
-    <div class="info-container">
-      <Chat :class_id="class_id" :user_id="user_id"></Chat>
     </div>
   </div>
 </template>
@@ -75,7 +43,7 @@ export default {
   data() {
     return {
       classDetails: {},
-      class_id: this.$route.params.class_id,
+      class_id: parseInt(this.$route.params.class_id),
       user_id: NaN,
       newHomework: {
         content: "",
@@ -84,9 +52,8 @@ export default {
     };
   },
   async mounted() {
-    const class_id = this.$route.params.class_id;
     try {
-      const response = await apiClient.get(`/classes/${class_id}`);
+      const response = await apiClient.get(`/classes/${this.class_id}`);
       this.classDetails = response.data;
       this.$emit("updateTitle", this.classDetails.name);
     } catch (error) {
