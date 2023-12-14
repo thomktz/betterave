@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.1] - 2023-12-14
+
+### Added
+
+- Months January to April to the Lessons data
+
+### Changed
+
+- CHanged scraping mechanism - no more "TBD"
+- Dockerfile and scripts tweaks
+
 ## [3.2.0] - 2023-12-01 <-DB reset needed->
 
 ### Added
@@ -42,14 +53,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Visual overhaul to the EditClasses page
 - Redo readme
 
-# [3.0.1] - 2023-11-10
+## [3.0.1] - 2023-11-10
 
 ### Added
 
 - Special error handling on check-auth failure -> Don't show toast
 - Always logout user when loading login page
 
-# [3.0.0] - 2023-11-09
+## [3.0.0] - 2023-11-09
 
 Major API changes, from flask to flask-restx
 
@@ -69,7 +80,7 @@ Major API changes, from flask to flask-restx
 
 - Flask routes
 
-# [2.1.0] - 2023-11-08
+## [2.1.0] - 2023-11-08
 
 ### Added
 
