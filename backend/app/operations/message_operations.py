@@ -8,6 +8,7 @@ def get_messages_by_group_id(group_id: int):
     """Retrieve messages for a specific class."""
     return Message.query.filter_by(group_id=group_id).all()
 
+
 def add_message_to_group(content: str, group_id: int, user_id: int):
     """Add a message to a specific class."""
     msg = Message(content=content, group_id=group_id, user_id=user_id)
@@ -15,8 +16,9 @@ def add_message_to_group(content: str, group_id: int, user_id: int):
     db.session.commit()
 
     print(msg.as_dict(), flush=True)
-    
+
     return msg
+
 
 @with_instance(Message)
 def delete_message(message: Message):
@@ -27,12 +29,13 @@ def delete_message(message: Message):
         return True
     return False
 
+
 @with_instance(Class)
 def get_class_messages(class_: Class):
     """Retrieve messages for a specific class."""
     return get_messages_by_group_id(class_.main_group().group_id)
 
-    
+
 def add_class_message(content, class_id, user_id):
     """Add a message to a specific class's main group."""
     class_ = get_class_by_id(class_id)

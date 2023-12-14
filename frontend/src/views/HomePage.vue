@@ -17,10 +17,10 @@
 </template>
 
 <script>
-import { apiClient } from '@/apiConfig';
-import UserCalendar from '@/components/UserCalendar.vue';
-import InfoColumn from '@/components/InfoColumn.vue';
-import ColumnNextclasses from '@/components/ColumnNextclasses.vue';
+import { apiClient } from "@/apiConfig";
+import UserCalendar from "@/components/UserCalendar.vue";
+import InfoColumn from "@/components/InfoColumn.vue";
+import ColumnNextclasses from "@/components/ColumnNextclasses.vue";
 
 export default {
   components: {
@@ -31,22 +31,26 @@ export default {
   data() {
     return {
       user: {
-        name: '',
-        email: ''
+        name: "",
+        email: "",
       },
-      homeworkList: [{ id: 1, text: "Algebra homework" }, { id: 2, text: "Essay on WW2" }],
-      notifications: [{ id: 1, text: "Meeting tomorrow" }, { id: 2, text: "Homework due" }]
+      homeworkList: [
+        { id: 1, text: "Algebra homework" },
+        { id: 2, text: "Essay on WW2" },
+      ],
+      notifications: [
+        { id: 1, text: "Meeting tomorrow" },
+        { id: 2, text: "Homework due" },
+      ],
     };
   },
   async mounted() {
-    const response = await apiClient.get('/users/me');
+    const response = await apiClient.get("/users/me");
     this.user = response.data;
-    this.$emit('updateTitle', "Hello, " + this.user.name + "!");
+    this.$emit("updateTitle", "Hello, " + this.user.name + "!");
   },
-  methods: {
-
-  }
-}
+  methods: {},
+};
 </script>
 
 <style scoped>

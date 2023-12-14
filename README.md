@@ -1,16 +1,14 @@
-*Projet Infrastructures et systèmes logiciels*
+_Projet Infrastructures et systèmes logiciels_
 
 ## **Better**ave: Pamplemousse 2.0
+
 - Calendar management
 - Class groupchats
 - Homework
 - Association notification and events
 - Trombinoscope
-  
+
 <img width="1728" alt="image" src="https://github.com/thomktz/betterave/assets/60552083/ce64adce-a47b-4d20-8f25-34d51f73d60b">
-
-
-
 
 ## Setup for development
 
@@ -29,17 +27,21 @@
 ```bash
 docker compose up --build
 ```
+
 Or, if you want to run the containers in the background:
+
 ```bash
 docker compose up --build -d
 ```
 
 To shut down the containers:
+
 ```bash
 docker compose down
 ```
 
-And to see the logs, 
+And to see the logs,
+
 ```bash
 docker compose logs
 ```

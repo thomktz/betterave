@@ -1,22 +1,19 @@
 // Styles
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
+import "@mdi/font/css/materialdesignicons.css";
+import "vuetify/styles";
 import {
   VDataTable,
   VDataTableServer,
   VDataTableVirtual,
-} from "vuetify/labs/VDataTable";
-
-
-// Vuetify
-import { createVuetify } from 'vuetify'
+} from "vuetify/components/VDataTable";
+import { VDatePicker } from "vuetify/components/VDatePicker";
+import { createVuetify } from "vuetify";
 
 export default createVuetify({
   components: {
     VDataTable,
     VDataTableServer,
     VDataTableVirtual,
+    VDatePicker,
   },
-})
-
-
+});

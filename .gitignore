@@ -4,6 +4,3 @@ __pycache__/
 
 # Database
 *.db
-
-# Local dev settings
-.pre-commit-config.yaml

@@ -8,50 +8,54 @@
     </div>
 
     <div class="trombinoscope">
-        <div v-for="student in filteredStudents" :key="student.id" class="student">
-          <img :src="student.profile_pic" :alt="student.name" />
-          <p>{{ student.name }} {{ student.surname }}</p>
-        </div>
+      <div
+        v-for="student in filteredStudents"
+        :key="student.id"
+        class="student"
+      >
+        <img :src="student.profile_pic" :alt="student.name" />
+        <p>{{ student.name }} {{ student.surname }}</p>
+      </div>
     </div>
-    </v-spacer>
-  </template>
-  
-  <script>
-  import { apiClient } from '@/apiConfig';
+  </v-spacer>
+</template>
 
-  export default {
-    data() {
-      return {
-        students: [],
-        classes: ['1A', '2A', '3A'], // List of classes
-        selectedClass: 'all', // Current selected class
-      };
-    },
-    computed: {
-      filteredStudents() {
-        if (this.selectedClass === 'all') {
-          return this.students;
-        } else {
-          return this.students.filter((student) => student.level === this.selectedClass);
-        }
-      },
-    },
-    async mounted() {
-      this.$emit('updateTitle', "Trombinoscope"); // Update the title in the header
-      try {
-        const response = await apiClient.get('/users');
-        this.students = response.data;
-      } catch (error) {
-        console.error("There was an error fetching student data:", error);
+<script>
+import { apiClient } from "@/apiConfig";
+
+export default {
+  data() {
+    return {
+      students: [],
+      classes: ["1A", "2A", "3A"], // List of classes
+      selectedClass: "all", // Current selected class
+    };
+  },
+  computed: {
+    filteredStudents() {
+      if (this.selectedClass === "all") {
+        return this.students;
+      } else {
+        return this.students.filter(
+          (student) => student.level === this.selectedClass,
+        );
       }
     },
-    methods: { },
-  }
+  },
+  async mounted() {
+    this.$emit("updateTitle", "Trombinoscope"); // Update the title in the header
+    try {
+      const response = await apiClient.get("/users");
+      this.students = response.data;
+    } catch (error) {
+      console.error("There was an error fetching student data:", error);
+    }
+  },
+  methods: {},
+};
+</script>
 
-  
-  </script>
-  
-  <style scoped>
+<style scoped>
 .trombi-grid {
   display: flex;
   flex-direction: column;
@@ -67,18 +71,18 @@
 }
 
 .trombinoscope {
-  flex: 1; 
-  overflow-y: auto; 
+  flex: 1;
+  overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   grid-auto-rows: 250px;
   gap: 20px;
   align-content: flex-start;
-  padding-bottom: 30px; 
+  padding-bottom: 30px;
 }
 
-.custom-select::after { 
-  content: '▼'; 
+.custom-select::after {
+  content: "▼";
   position: absolute;
   top: 50%;
   right: 15px;
@@ -104,9 +108,9 @@
   border-radius: 40px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;
-  padding: 0; 
-  position: relative; 
-  overflow: hidden; 
+  padding: 0;
+  position: relative;
+  overflow: hidden;
 }
 
 .student::after {
@@ -115,46 +119,50 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 50%; 
+  height: 50%;
   background: linear-gradient(transparent, rgba(0, 0, 0, 1));
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 .student:hover img {
   transform: scale(1.1);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .student:hover::after {
-  opacity: 0; 
+  opacity: 0;
 }
 
 .student:hover p {
-  opacity: 0; 
+  opacity: 0;
 }
 
-.student::after, .student p {
+.student::after,
+.student p {
   transition: opacity 0.3s;
 }
 
 img {
-  width: 100%; 
-  height: 100%; 
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  display: block; 
-  transition: transform 0.3s, box-shadow 0.3s;
+  display: block;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 p {
-  position: absolute; 
-  bottom: 10px; 
+  position: absolute;
+  bottom: 10px;
   left: 50%;
-  transform: translateX(-50%); 
-  margin: 0; 
+  transform: translateX(-50%);
+  margin: 0;
   color: #fff;
-  font-weight: bold; 
+  font-weight: bold;
   z-index: 2;
 }
-  </style>
-    
+</style>
