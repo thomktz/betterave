@@ -17,7 +17,7 @@ class Grade(db.Model):
         """Get the grade's ID."""
         return str(self.grade_id)
 
-    def get_content(self):
+    def get_grade(self):
         """Get the grade"""
         return str(self.grade)
     
