@@ -6,6 +6,7 @@ import ClassPage from "../views/ClassPage.vue";
 import MainLayout from "../views/MainLayout.vue";
 import AssoList from "../views/AssoList.vue";
 import StudentControls from "../views/controls/StudentControls.vue";
+import StudentGrades from "../views/controls/StudentGrades.vue";
 import AssoControls from "../views/controls/AssoControls.vue";
 import AdminControls from "../views/controls/AdminControls.vue";
 import EditClasses from "../views/controls/EditClasses.vue";
@@ -41,6 +42,12 @@ const routes = [
         name: "student-controls",
         component: StudentControls,
       },
+      {
+        path: "/controls/student",
+        name: "student-grades",
+        component: StudentGrades,
+      }
+      ,
       {
         path: "/controls/asso",
         name: "asso-controls",
