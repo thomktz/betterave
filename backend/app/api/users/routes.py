@@ -35,6 +35,11 @@ from app.operations.event_operations import (
     get_all_future_events,
     get_user_future_events,
 )
+from app.operations.notification_operations import (
+    get_all_notifications,
+    get_user_notifications,
+    get_association_notifications,
+)
 from app.operations.user_class_group_operations import (
     enroll_user_in_class,
     unenroll_user_from_class,
@@ -337,3 +342,20 @@ class UserFutureEvents(Resource):
             future_events = get_user_future_events(user, limit)
 
         return future_events
+    
+@api.route("/<string:user_id_or_me>/notifications")
+class UserEvents(Resource):
+    @api.doc(security="apikey")
+    @require_authentication()
+    @resolve_user
+    @current_user_required
+    def get(self, user):
+        """Get a list of notifications for a specific user."""
+        if user.is_asso:
+            notifications = get_association_notifications(user)
+        elif user.is_admin:
+            notifications = get_all_notifications()
+        else:
+            notifications = get_user_notifications(user)
+
+        return notifications
