@@ -55,7 +55,7 @@
       try {
         const response = await apiClient.get(`/classes/${this.class_id}`);
         this.classDetails = response.data;
-        this.$emit("updateTitle", this.classDetails.name);
+        this.$emit("updateTitle", this.classDetails.name + " Professor page");
       } catch (error) {
         console.error("Error fetching class details:", error);
       }

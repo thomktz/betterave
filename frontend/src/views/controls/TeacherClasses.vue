@@ -3,7 +3,7 @@
     <div class="content-container">
       <div class="class-list-container">
         <ul v-if="classes.length">
-          <li v-for="classItem in classes" :key="classItem.id">
+          <li v-for="classItem in classes" :key="classItem.id" @click="goToClass(classItem.class_id)">
             <span class="class-name">{{ classItem.name }}</span>
           </li>
         </ul>
@@ -45,6 +45,11 @@ export default {
     // Mettre à jour le titre avec le nom et le prénom de l'utilisateur
     this.$emit("updateTitle", this.user.name + " " + this.user.surname  + " Classes");
   },
+  methods: {
+    goToClass(class_id) {
+      this.$router.push(`/class/${class_id}/prof`);
+    },
+  },
 };
 </script>
 
@@ -74,6 +79,7 @@ li {
   align-items: center;
   height: 70px;
   border-bottom: 1px solid #b0b0b0;
+  cursor: pointer; /* Ajout de la propriété cursor pour indiquer que l'élément est cliquable */
   transition: background-color 0.2s ease;
 }
 
