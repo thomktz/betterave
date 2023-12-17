@@ -3,7 +3,7 @@
     <div class="content-container">
       <div class="class-list-container">
         <ul v-if="classes.length">
-          <li v-for="classes" :key="classItem.class_id">
+          <li v-for="classItem in classes" :key="classItem.id">
             <span class="class-name">{{ classItem.name }}</span>
           </li>
         </ul>
@@ -21,16 +21,29 @@ export default {
     return {
       user_id: "me",
       classes: [],
+      name: "",
+      surname: "",
     };
   },
   async mounted() {
-    this.$emit("updateTitle", "Classes");
+    // Récupérer les informations de l'utilisateur
+    try {
+      const userResponse = await apiClient.get("/users/me");
+      this.user = userResponse.data;
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+
+    // Récupérer les cours de l'enseignant
     try {
       const response = await apiClient.get(`/classes/teacherclasses/${this.user_id}`);
       this.classes = response.data;
     } catch (error) {
       console.error("Error fetching teacher classes:", error);
     }
+
+    // Mettre à jour le titre avec le nom et le prénom de l'utilisateur
+    this.$emit("updateTitle", this.user.name + " " + this.user.surname  + " Classes");
   },
 };
 </script>
