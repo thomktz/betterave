@@ -55,7 +55,7 @@ export default {
     try {
       const response = await apiClient.get(`/classes/${this.class_id}`);
       this.classDetails = response.data;
-      this.$emit("updateTitle", this.classDetails.name);
+      this.$emit("updateTitle", `${this.name} ${this.surname} Classes`);
     } catch (error) {
       console.error("Error fetching class details:", error);
     }

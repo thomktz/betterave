@@ -7,6 +7,7 @@ from .models import (
     class_group_model,
 )
 from .namespace import api
+from app.operations.class_operations import (get_classes_from_teacher)
 from app.operations.user_operations import (
     get_all_users,
     add_user,
@@ -102,6 +103,40 @@ class UserResource(Resource):
             api.abort(400, "Error deleting user.")
         return {"message": "User deleted successfully"}, 204
 
+
+@api.route("/<string:user_id_or_me>/classgroups")
+@api.response(404, "User not found")
+@api.response(200, "Success")
+class UserClassGroupsResource(Resource):
+    @api.doc(security="apikey")
+    @require_authentication()
+    @resolve_user
+    @current_user_required
+    @api.marshal_with(user_classgroups_model)
+    def get(self, user):
+        """Get detailed information about a user by their ID, including class associations."""
+        user_details = {
+            "id": user.user_id,
+            "name": user.name,
+            "surname": user.surname,
+            "level": user.level.value,
+            "classgroups": [
+                {
+                    "class_id": class_group.class_id,
+                    "class_name": class_group.class_.name,
+                    "class_ects": class_group.class_.ects_credits,
+                    "primary_class_group_id": class_group.primary_class_group_id,
+                    "secondary_class_group_id": class_group.secondary_class_group_id,
+                    "secondary_class_group_name": class_group.secondary_class_group.name
+                    if class_group.secondary_class_group
+                    else "",
+                    "all_groups": [group.name for group in class_group.class_.groups if not group.is_main_group],
+                }
+                for class_group in user.class_groups
+            ],
+        }
+        return user_details
+    
 
 @api.route("/<string:user_id_or_me>/classgroups")
 @api.response(404, "User not found")

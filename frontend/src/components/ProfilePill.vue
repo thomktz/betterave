@@ -36,8 +36,8 @@
       <button v-if="user.user_type == 'student'" @click="goToStudentGrades">
         Grades 
       </button>
-      <button v-if="user.user_type == 'teacher'" @click="goToTeacherGrades">
-        Grades 
+      <button v-if="user.user_type == 'teacher'" @click="goToTeacherClasses">
+        Classes
       </button>
       
       <button @click="logout">Logout</button>
@@ -78,8 +78,8 @@ export default {
     goToStudentGrades() {
       this.$router.push({ name: "student-grades" });
     },
-    goToTeacherGrades() {
-      this.$router.push({ name: "teacher-grades" });
+    goToTeacherClasses() {
+      this.$router.push({ name: "teacher-classes" });
     },
   },
 };

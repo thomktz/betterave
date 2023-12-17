@@ -100,3 +100,8 @@ def get_all_classes() -> list:
 def get_classes_from_level(level: UserLevel) -> list:
     """Return all classes of a given level."""
     return Class.query.filter_by(level=level).all()
+
+def get_classes_from_teacher(teacher_id: int) -> list:
+    """Return all classes of a given teacher id"""
+    return Class.query.filter_by(default_teacher_id=teacher_id).all()
+

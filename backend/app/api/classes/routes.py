@@ -9,6 +9,7 @@ from app.operations.class_operations import (
     update_class,
     delete_class,
     get_classes_from_level,
+    get_classes_from_teacher
 )
 from app.operations.message_operations import get_class_messages, add_class_message
 from app.api.class_groups.models import message_model, message_post_model
@@ -84,6 +85,24 @@ class ClassLevelResource(Resource):
             return classes
         except ValueError:  # If "level" is not a valid UserLevel
             api.abort(404, f"Invalid level {level_or_me}")
+            
+@api.route("/teacherclasses/<teacher_id_or_me>")
+@api.response(404, "Teacher id not found")
+class ClassTeacherResource(Resource):
+    @api.doc(security="apikey")
+    @require_authentication()
+    @api.marshal_list_with(class_model)
+    def get(self, teacher_id_or_me):
+        """Fetch all classes for a given teacher_id."""
+        try:
+            if teacher_id_or_me == "me":
+                user_id = current_user.user_id
+            classes = get_classes_from_teacher(user_id)
+            if not classes:
+                api.abort(404, f"No classes found for teacher_id {user_id}")
+            return classes
+        except ValueError:  # If "teacher_id" is not a valid teacher_id
+            api.abort(404, f"Invalid level teacher_id {user_id}")
 
 
 @api.route("/<int:class_id>/messages")

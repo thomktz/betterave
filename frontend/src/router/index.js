@@ -7,7 +7,8 @@ import MainLayout from "../views/MainLayout.vue";
 import AssoList from "../views/AssoList.vue";
 import StudentControls from "../views/controls/StudentControls.vue";
 import StudentGrades from "../views/controls/StudentGrades.vue";
-import TeacherGrades from "../views/controls/TeacherGrades.vue";
+import TeacherClasses from "../views/controls/TeacherClasses.vue";
+import ClassPageTeacher from "../views/ClassPageTeacher.vue";
 import AssoControls from "../views/controls/AssoControls.vue";
 import AdminControls from "../views/controls/AdminControls.vue";
 import EditClasses from "../views/controls/EditClasses.vue";
@@ -29,6 +30,12 @@ const routes = [
         component: ClassPage,
       },
       {
+        path: "class/:class_id/prof", // dynamic segment for class id
+        name: "teacher-control-page",
+        component: ClassPageTeacher,
+      }
+      ,
+      {
         path: "/photochart",
         name: "Photochart",
         component: Photochart,
@@ -44,14 +51,14 @@ const routes = [
         component: StudentControls,
       },
       {
-        path: "/controls/student",
+        path: "/controls/studentgrade",
         name: "student-grades",
         component: StudentGrades,
       },
       {
-        path: "/controls/teacher",
-        name: "teacher-grades",
-        component: TeacherGrades,
+        path: "/controls/teacherclasses/", // dynamic segment for teacher_id
+        name: "teacher-classes",
+        component: TeacherClasses,
       }
       ,
       {
