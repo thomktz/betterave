@@ -16,6 +16,7 @@ from app.api import (
     class_groups_ns,
     user_class_groups_ns,
     events_ns,
+    notifications_ns,
 )
 
 
@@ -84,6 +85,7 @@ def create_app():
     api.add_namespace(class_groups_ns, path="/class_groups")
     api.add_namespace(user_class_groups_ns, path="/user_class_groups")
     api.add_namespace(events_ns, path="/events")
+    api.add_namespace(notifications_ns, path="/notifications")
 
     # Load/create the database
     with app.app_context():

@@ -30,6 +30,12 @@
       >
         Manage events
       </button>
+      <button
+        v-if="user.user_type == 'asso' || user.user_type == 'admin'"
+        @click="goToNotificationControls"
+      >
+        Manage notifications
+      </button>
       <button v-if="user.user_type == 'student'" @click="goToStudentControls">
         Manage courses
       </button>
@@ -64,6 +70,9 @@ export default {
     },
     goToAssoControls() {
       this.$router.push({ name: "asso-controls" });
+    },
+    goToNotificationControls() {
+      this.$router.push({ name: "notification-controls" });
     },
     goToStudentControls() {
       this.$router.push({ name: "student-controls" });

@@ -7,6 +7,7 @@ import MainLayout from "../views/MainLayout.vue";
 import AssoList from "../views/AssoList.vue";
 import StudentControls from "../views/controls/StudentControls.vue";
 import AssoControls from "../views/controls/AssoControls.vue";
+import NotificationControls from "../views/controls/NotificationControls.vue";
 import AdminControls from "../views/controls/AdminControls.vue";
 import EditClasses from "../views/controls/EditClasses.vue";
 import { apiClient } from "@/apiConfig";
@@ -45,6 +46,12 @@ const routes = [
         path: "/controls/asso",
         name: "asso-controls",
         component: AssoControls,
+        meta: { requiresAuth: true, role: "asso" },
+      },
+      {
+        path: "/controls/notifications",
+        name: "notification-controls",
+        component: NotificationControls,
         meta: { requiresAuth: true, role: "asso" },
       },
       {
