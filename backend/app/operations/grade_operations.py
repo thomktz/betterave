@@ -5,9 +5,13 @@ from app.decorators import with_instance
 from app.operations.class_operations import get_class_by_id
 
 
-def get_grades_by_group_id(group_id: int):
+def get_grades_by_class_id(class_id: int):
     """Retrieve grades for a specific class."""
-    return sorted(Grade.query.filter_by(group_id=group_id).all())
+    return sorted(Grade.query.filter_by(class_id=class_id).all())
+
+def get_grades_by_student(student_id: int):
+    """Retrieve grades for a specific class."""
+    return sorted(Grade.query.filter_by(student_id=student_id).all())
 
 @with_instance(Grade)
 def delete_grade(grade: Grade):
@@ -17,20 +21,6 @@ def delete_grade(grade: Grade):
         db.session.commit()
         return True
     return False
-
-def add_grade_to_group(student_id: int, grade_value: float, class_id: int):
-    """Add a grade to a specific class."""
-    grade = Grade(student_id=student_id, grade=grade_value, class_id=group_id)
-    db.session.add(grade)
-    db.session.commit()
-    return grade
-
-
-@with_instance(Class)
-def get_class_grades(class_: Class):
-    """Retrieve grades for a specific class."""
-    return get_grades_by_group_id(class_.main_group().group_id)
-
 
 def add_grade_to_student(student_id, class_id, grade_value):
     """Add a grade to a specific student in a class."""
