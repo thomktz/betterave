@@ -4,8 +4,11 @@
       <!-- Left Side Columns -->
       <div class="columns-container">
         <ColumnNextclasses :user="user" title="Next classes" />
-        <InfoColumn title="Homework" :list="homeworkList" />
-        <InfoColumn title="Notifications" :list="notifications" />
+        <!-- Middle Container -->
+        <div class="main-column">
+          <h2>Homework</h2>
+          <Homework></Homework>
+        </div>
       </div>
 
       <!-- Right Side Calendar -->
@@ -21,12 +24,14 @@ import { apiClient } from "@/apiConfig";
 import UserCalendar from "@/components/UserCalendar.vue";
 import InfoColumn from "@/components/InfoColumn.vue";
 import ColumnNextclasses from "@/components/ColumnNextclasses.vue";
+import Homework from "@/components/Homework.vue";
 
 export default {
   components: {
     UserCalendar,
     InfoColumn,
     ColumnNextclasses,
+    Homework,
   },
   data() {
     return {
@@ -53,14 +58,14 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .calendar-box {
   background-color: #f5f5f5;
   border-radius: 10px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
   width: calc(50% - 20px);
   overflow: hidden;
-  height: 70vh;
+  height: 80vh;
 }
 
 .content-container {
@@ -76,6 +81,24 @@ export default {
   display: flex;
   justify-content: space-between;
   width: calc(50% - 20px);
-  height: 70vh;
+  height: 80vh;
+}
+.main-column {
+  flex: 1.5;
+  padding: 20px;
+  background-color: var(--secondary-color-transparent);
+  color: var(--primary-text-color);
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  margin: 0 10px;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1;
+}
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--separator-color);
+  padding-bottom: 10px;
 }
 </style>

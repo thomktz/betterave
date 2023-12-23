@@ -95,8 +95,11 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  background-color: var(--foreground-color);
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* subtle shadow for modern effect */
+  background-color: var(--foreground-color-transparent);
+  border-bottom: 1px solid var(--separator-color);
+  z-index: 20;
+  position: relative;
+  opacity: 1;
 }
 
 .betterave-logo {
@@ -106,8 +109,9 @@ export default {
 }
 
 .ensae-logo {
-  height: 150px;
+  height: 120px;
   width: auto;
+  margin-bottom: -20px;
 }
 
 .logos-block {
@@ -128,7 +132,7 @@ h1 {
 }
 
 .fill-height {
-  min-height: calc(100vh - 150px);
+  min-height: calc(100vh - 100px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;

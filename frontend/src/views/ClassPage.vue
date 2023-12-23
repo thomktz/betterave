@@ -84,7 +84,7 @@ export default {
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
   width: calc(33.333% - 30px); /* Adjusting for the space between containers */
   padding: 20px;
-  height: 70vh;
+  height: 80vh;
 }
 
 .class-header h1 {

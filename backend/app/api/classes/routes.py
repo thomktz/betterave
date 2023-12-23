@@ -9,11 +9,11 @@ from app.operations.class_operations import (
     update_class,
     delete_class,
     get_classes_from_level,
-    get_classes_from_teacher
+    get_classes_from_teacher,
 )
 from app.operations.message_operations import get_class_messages, add_class_message
 from app.api.class_groups.models import message_model, message_post_model
-from app.operations.homework_operations import get_class_homework, add_homework_to_class
+from app.operations.homework_operations import get_class_homework, add_homework_to_class, get_user_homework
 from app.models import UserLevel
 from app.decorators import require_authentication
 
@@ -85,7 +85,8 @@ class ClassLevelResource(Resource):
             return classes
         except ValueError:  # If "level" is not a valid UserLevel
             api.abort(404, f"Invalid level {level_or_me}")
-            
+
+
 @api.route("/teacherclasses/<teacher_id_or_me>")
 @api.response(404, "Teacher id not found")
 class ClassTeacherResource(Resource):
@@ -151,23 +152,34 @@ class GroupHomework(Resource):
             return api.marshal(hmw.as_dict(), homework_model), 201
         api.abort(400, "Could not add homework to the class")
 
-# @api.route("/<int:class_id>/grades")
-# class ClassGradesResource(Resource):
-#     @api.doc(security="apikey")
-#     @require_authentication()
-#     @api.marshal_list_with(grades_model)
-#     def get(self, class_id):
-#         """Get all grades for a specific class."""
-#         return [grade.as_dict() for grade in get_class_grades(class_id)]
 
-#     @api.doc(security="apikey")
-#     @require_authentication("admin", "teacher")
-#     @api.expect(grades_post_model)
-#     def post(self, class_id):
-#         """Post a new grade to a specific class."""
-#         student_id = api.payload.get("student_id")
-#         grade_value = api.payload.get("grade_value")
-#         grade = add_grade_to_student(student_id, class_id, grade_value)
-#         if grade:
-#             return api.marshal(grade.as_dict(), grades_model), 201
-#         api.abort(400, "Could not add grade to the class")
+@api.route("/<int:class_id>/grades")
+class ClassGradesResource(Resource):
+    @api.doc(security="apikey")
+    @require_authentication()
+    @api.marshal_list_with(grades_model)
+    def get(self, class_id):
+        """Get all grades for a specific class."""
+        return [grade.as_dict() for grade in get_class_grades(class_id)]
+
+    @api.doc(security="apikey")
+    @require_authentication("admin", "teacher")
+    @api.expect(grades_post_model)
+    def post(self, class_id):
+        """Post a new grade to a specific class."""
+        student_id = api.payload.get("student_id")
+        grade_value = api.payload.get("grade_value")
+        grade = add_grade_to_class(student_id, class_id=class_id, grade_value=grade_value)
+        if grade:
+            return api.marshal(grade.as_dict(), grades_model), 201
+        api.abort(400, "Could not add grade to the class")
+
+
+@api.route("/homework")
+class Homework(Resource):
+    @api.doc(security="apikey")
+    @require_authentication()
+    @api.marshal_list_with(homework_model)
+    def get(self):
+        """Get all homework for a specific class group."""
+        return [hmw.as_dict() for hmw in get_user_homework(current_user)]
