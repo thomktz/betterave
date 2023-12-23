@@ -25,7 +25,13 @@ class Homework(db.Model):
 
     def __lt__(self, other):
         """Define the '<' operator for Homework objects."""
-        return (self.due_date < other.due_date) or (self.due_date == other.due_date and self.due_time < other.due_time)
+        if self.due_date != other.due_date:
+            return self.due_date < other.due_date
+        if self.due_time is None:
+            return True
+        if other.due_time is None:
+            return False
+        return self.due_time < other.due_time
 
     def as_dict(self):
         """Return the homework as a dictionary."""
