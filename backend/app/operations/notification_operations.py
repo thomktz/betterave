@@ -13,6 +13,7 @@ def add_notification(
     recipient_type
 ):
     """Add a notification to the database."""
+    print("test3")
     try:
         if recipient_type == "Followers":
             recipient_users = User.query.get(sent_by_user_id).followers
@@ -21,6 +22,7 @@ def add_notification(
         elif recipient_type == "UserLevel":
             # Assuming recipient_type is a UserLevel
             recipient_users = User.query.filter_by(level=UserLevel(recipient_users)).all()
+        print("test4")
 
         new_notification = Notification(
             title=title,
@@ -29,8 +31,10 @@ def add_notification(
             recipient_type=recipient_type,
             recipient_users=recipient_users,
         )
+        print("test6")
         db.session.add(new_notification)
         db.session.commit()
+        print("test7")
         return new_notification.notification_id
     except SQLAlchemyError as e:
         db.session.rollback()
@@ -83,11 +87,10 @@ def get_all_notifications() -> list[Notification]:
 @with_instance(User)
 def get_association_notifications(asso: User, limit: int = None) -> list[Notification]:
     """Get all Notifications sended by a particular association."""
-    notifications = (
-        Notification.query.filter_by(asso_id=asso.user_id).limit(limit).all()
-        if limit is not None
-        else Notification.query.filter_by(asso_id=asso.user_id).all()
-    )
+    if limit is not None:
+        notifications = Notification.query.filter_by(sent_by_user_id=asso.user_id).limit(limit).all()
+    else:
+        notifications = Notification.query.filter_by(sent_by_user_id=asso.user_id).all()
     return notifications
 
 

@@ -16,6 +16,7 @@ from app.operations.class_group_operations import (
     get_class_group_by_name,
 )
 from app.operations.event_operations import add_event
+from app.operations.notification_operations import add_notification
 from app.operations.user_class_group_operations import add_user_class_group
 from app.operations.asso_operations import subscribe_to_asso
 from app.operations.message_operations import add_class_message
@@ -273,6 +274,21 @@ def initialize_database():
                 "18:00",
                 "Subscribers",
             )
+            
+         # 12 - Add association events
+        print("Adding notifications ...")
+        # test notif 
+        print("test1")
+        sent_by_user_id = admin_ids[0]
+        print("test2")
+        add_notification(
+            "Test notif",
+            "This is a test to test notifications",
+            sent_by_user_id,
+            "All users",
+        )
+        print("test8")
+
 
 
 if __name__ == "__main__":

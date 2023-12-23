@@ -16,10 +16,10 @@ def subscribe_to_asso(user: User, asso: User) -> bool:
         user.subscriptions.append(asso)
 
         future_events = get_association_future_events(asso)
-        notifications = get_association_notifications(asso)
+        #notifications = get_association_notifications(asso)
         
-        for notif in notifications:
-            notif.recipient_users.append(user)
+        #for notif in notifications:
+            #notif.recipient_users.append(user)
         
         for event in future_events:
             event.attending_users.append(user)
