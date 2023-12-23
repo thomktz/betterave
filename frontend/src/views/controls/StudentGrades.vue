@@ -12,9 +12,9 @@
   </template>
   
   <script>
-  import UserClassesTable from "@/components/UserGrades.vue";
   import { apiClient, toast } from "@/apiConfig";
-  
+  import UserClassesTable from "@/components/UsersTable.vue";
+
   export default {
     components: {
       UserClassesTable,

@@ -9,6 +9,7 @@ import StudentControls from "../views/controls/StudentControls.vue";
 import StudentGrades from "../views/controls/StudentGrades.vue";
 import TeacherClasses from "../views/controls/TeacherClasses.vue";
 import ClassPageTeacher from "../views/ClassPageTeacher.vue";
+import TeacherEditsGrades from "../views/controls/TeacherEditsGrades.vue";
 import AssoControls from "../views/controls/AssoControls.vue";
 import AdminControls from "../views/controls/AdminControls.vue";
 import EditClasses from "../views/controls/EditClasses.vue";
@@ -33,6 +34,11 @@ const routes = [
         path: "class/:class_id/prof", // dynamic segment for class id
         name: "teacher-control-page",
         component: ClassPageTeacher,
+      },
+      {
+        path: "class/:class_id/prof/grades", // dynamic segment for class id
+        name: "teacher-edits-grades",
+        component: TeacherEditsGrades,
       }
       ,
       {

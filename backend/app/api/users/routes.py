@@ -15,6 +15,7 @@ from app.operations.user_operations import (
     update_user,
     delete_user,
 )
+from app.operations.student_operations import (get_students_from_class)
 from app.operations.lesson_operations import (
     get_student_lessons,
     get_teacher_lessons,
@@ -58,6 +59,25 @@ class UserList(Resource):
     def get(self):
         """List all users."""
         return get_all_users()
+
+    @api.expect(user_post_model)
+    def post(self):
+        """Create a new user."""
+        # Extract the fields from the api.payload
+        data = api.payload
+        user_id = add_user(**data)
+        if user_id == -1:
+            api.abort(400, "Error creating user.")
+        return {"message": "User created successfully", "user_id": user_id}, 201
+
+@api.route("/studentlist/<class_id>")
+class ClassListStudents(Resource):
+    @api.doc(security="apikey")
+    @require_authentication()
+    @api.marshal_list_with(user_model)
+    def get(self, class_id):
+        """List all students from a given class_id """
+        return get_students_from_class(class_id)
 
     @api.expect(user_post_model)
     def post(self):
@@ -136,7 +156,6 @@ class UserClassGroupsResource(Resource):
             ],
         }
         return user_details
-    
 
 @api.route("/<string:user_id_or_me>/classgroups")
 @api.response(404, "User not found")
