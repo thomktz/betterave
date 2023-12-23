@@ -150,3 +150,24 @@ class GroupHomework(Resource):
         if hmw:
             return api.marshal(hmw.as_dict(), homework_model), 201
         api.abort(400, "Could not add homework to the class")
+
+@api.route("/<int:class_id>/grades")
+class ClassGradesResource(Resource):
+    @api.doc(security="apikey")
+    @require_authentication()
+    @api.marshal_list_with(grades_model)
+    def get(self, class_id):
+        """Get all grades for a specific class."""
+        return [grade.as_dict() for grade in get_class_grades(class_id)]
+
+    @api.doc(security="apikey")
+    @require_authentication("admin", "teacher")
+    @api.expect(grades_post_model)
+    def post(self, class_id):
+        """Post a new grade to a specific class."""
+        student_id = api.payload.get("student_id")
+        grade_value = api.payload.get("grade_value")
+        grade = add_grade_to_class(student_id, class_id=class_id, grade_value=grade_value)
+        if grade:
+            return api.marshal(grade.as_dict(), grades_model), 201
+        api.abort(400, "Could not add grade to the class")

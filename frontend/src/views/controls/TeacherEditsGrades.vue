@@ -1,6 +1,6 @@
 <template>
   <v-container class="fill-height" fluid>
-    <UsersTable
+    <GradesTable
       :users="users"
       @delete-user="deleteUser"
       @add-user="addUser"
@@ -11,12 +11,12 @@
 
 <script>
 import { apiClient } from "@/apiConfig";
-import UsersTable from "@/components/UsersTable.vue";
+import GradesTable from "@/components/GradesTable.vue";
 import { ref, onMounted } from "vue";
 
 export default {
   components: {
-    UsersTable,
+    GradesTable,
   },
   setup() {
     const users = ref([]); // Create a reactive reference for the users list
