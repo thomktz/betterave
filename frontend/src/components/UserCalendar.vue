@@ -32,7 +32,7 @@ export default {
         slotMinTime: "08:00:00",
         slotMaxTime: "20:00:00",
         hiddenDays: [0, 6],
-        height: "90vh",
+        height: "80vh",
         allDaySlot: false,
         locale: "fr",
         headerToolbar: {

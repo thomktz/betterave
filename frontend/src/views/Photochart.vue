@@ -59,7 +59,7 @@ export default {
 .trombi-grid {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 150px);
+  min-height: calc(100vh - 100px);
   padding: 20px;
 }
 
@@ -93,7 +93,7 @@ export default {
 .custom-select select {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--separator-color);
   border-radius: 5px;
   appearance: none;
   background-color: var(--secondary-color);
@@ -104,7 +104,7 @@ export default {
 
 .student {
   text-align: center;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--separator-color);
   border-radius: 40px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;

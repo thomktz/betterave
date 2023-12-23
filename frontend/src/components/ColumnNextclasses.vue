@@ -1,5 +1,5 @@
 <template>
-  <div class="nextclasses-column">
+  <div class="main-column">
     <h2>{{ title }}</h2>
     <ul>
       <li v-for="(item, index) in nextLessons" :key="item.id">
@@ -101,21 +101,10 @@ export default {
 </script>
 
 <style scoped>
-.nextclasses-column {
-  flex: 1.5;
-  padding: 20px;
-  background-color: var(--secondary-color);
-  color: var(--primary-text-color);
-  border-radius: 10px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-  margin: 0 10px;
-  overflow-y: auto;
-}
-
 h2 {
   font-size: 1.5rem;
   margin-bottom: 20px;
-  border-bottom: 1px solid #b0b0b0;
+  border-bottom: 1px solid var(--separator-color);
   padding-bottom: 10px;
 }
 
@@ -170,7 +159,7 @@ li {
   content: "";
   flex-grow: 1;
   height: 1px;
-  background-color: #b0b0b0;
+  background-color: var(--separator-color);
   margin-left: 10px;
 }
 </style>

@@ -25,7 +25,7 @@
       <v-data-table
         :headers="headers"
         :items="classes"
-        class="elevation-1"
+        class="actual-table"
         density="compact"
       >
         <template v-slot:[`item.secondary_class_group_name`]="{ item }">
@@ -149,6 +149,10 @@ export default {
 .inner-container {
   border-radius: 5px;
   padding: 0;
+}
+.actual-table {
+  position: relative;
+  z-index: 1;
 }
 
 .custom-circle-btn {
