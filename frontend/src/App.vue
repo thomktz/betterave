@@ -69,7 +69,7 @@ export default {
 
 /* Light Theme */
 :root {
-  --background-color: #e8e1e1;
+  --background-color: rgb(225, 200, 182);
   --foreground-color: #e8e1e1;
   --foreground-color-transparent: rgba(245, 245, 245, 0.4);
   --secondary-color: rgba(245, 245, 245, 0.4);
