@@ -1,6 +1,6 @@
 <template>
   <v-container class="fill-height" fluid>
-    <GradesTable :users="usersWithGrades" />
+    <GradesTable :users="usersWithGrades" :classId="classId" />
   </v-container>
 </template>
 

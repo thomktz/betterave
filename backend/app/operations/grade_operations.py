@@ -57,16 +57,16 @@ def add_grade_to_student(student_id, class_id, grade_value):
         # Handle the case where the class or main group doesn't exist.
         return None
     
-def update_student_grade(class_id, student_id, new_grade):
-    """Update the grade for a specific student in a specific class."""
-    try:
-        # Utilisez la fonction d'accès aux données appropriée pour mettre à jour la note
-        db_update_student_grade(class_id, student_id, new_grade)
-        return True
-    except Exception as e:
-        # Gérez l'erreur (log, notification, etc.)
-        print(f"Error updating student grade: {e}")
-        return False
+# def update_student_grade(class_id, student_id, new_grade):
+#     """Update the grade for a specific student in a specific class."""
+#     try:
+#         # Utilisez la fonction d'accès aux données appropriée pour mettre à jour la note
+#         db_update_student_grade(class_id, student_id, new_grade)
+#         return True
+#     except Exception as e:
+#         # Gérez l'erreur (log, notification, etc.)
+#         print(f"Error updating student grade: {e}")
+#         return False
     
 def update_student_grade(class_id, student_id, new_grade):
     """Update the grade for a specific student in a specific class."""
@@ -80,7 +80,6 @@ def update_student_grade(class_id, student_id, new_grade):
 
             # Enregistrez les modifications dans la base de données
             db.session.commit()
-
             return True
         else:
             # Gérer le cas où l'entrée de grade n'existe pas

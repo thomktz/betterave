@@ -101,12 +101,14 @@ class GradesByStudentAndClass(Resource):
     def get(self, class_id, student_id):
         """Get grades for a specific student in a specific class."""
         return get_grades_by_student_and_class_id(student_id, class_id)
-
     @api.expect(grades_model)  # Assuming grades_model contains the required fields for updating a grade
     def put(self, class_id, student_id):
         """Update a student's grade in a specific class."""
         data = api.payload
-        success = update_student_grade(class_id, student_id, **data)
+        if "grade" not in data:
+            api.abort(400, "Missing 'grade' in payload.")
+        new_grade = data.get("grade")
+        success = update_student_grade(class_id, student_id, new_grade)
         if not success:
             api.abort(400, "Error updating grade.")
         return {"message": "Grade updated successfully"}, 200
