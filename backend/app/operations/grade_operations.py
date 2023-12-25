@@ -67,3 +67,27 @@ def update_student_grade(class_id, student_id, new_grade):
         # Gérez l'erreur (log, notification, etc.)
         print(f"Error updating student grade: {e}")
         return False
+    
+def update_student_grade(class_id, student_id, new_grade):
+    """Update the grade for a specific student in a specific class."""
+    try:
+        # Récupérer l'objet Grade à partir de la base de données
+        grade = Grade.query.filter_by(class_id=class_id, student_id=student_id).first()
+
+        if grade:
+            # Mettre à jour la note
+            grade.grade = new_grade
+
+            # Enregistrez les modifications dans la base de données
+            db.session.commit()
+
+            return True
+        else:
+            # Gérer le cas où l'entrée de grade n'existe pas
+            print("Grade entry not found.")
+            return False
+    except Exception as e:
+        # Gérez l'erreur (log, notification, etc.)
+        print(f"Error updating student grade: {e}")
+        db.session.rollback()
+        return False

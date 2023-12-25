@@ -102,15 +102,14 @@ class GradesByStudentAndClass(Resource):
         """Get grades for a specific student in a specific class."""
         return get_grades_by_student_and_class_id(student_id, class_id)
 
-    @api.expect(user_post_model)
-    def post(self, class_id, student_id):
-        """Create a new user."""
-        # Extract the fields from the api.payload
+    @api.expect(grades_model)  # Assuming grades_model contains the required fields for updating a grade
+    def put(self, class_id, student_id):
+        """Update a student's grade in a specific class."""
         data = api.payload
-        user_id = add_user(class_id, **data)
-        if user_id == -1:
-            api.abort(400, "Error creating user.")
-        return {"message": "User created successfully", "user_id": user_id}, 201
+        success = update_student_grade(class_id, student_id, **data)
+        if not success:
+            api.abort(400, "Error updating grade.")
+        return {"message": "Grade updated successfully"}, 200
 
 
 
