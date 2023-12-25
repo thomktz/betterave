@@ -4,14 +4,32 @@ from app.models import Grade, Class
 from app.decorators import with_instance
 from app.operations.class_operations import get_class_by_id
 
+def add_grade(student_id, class_id, grade_value):
+    """Add a grade for a student in a class."""
+    grade = Grade(student_id=student_id, class_id=class_id, grade=grade_value)
 
-def get_grades_by_class_id(class_id: int):
-    """Retrieve grades for a specific class."""
-    return sorted(Grade.query.filter_by(class_id=class_id).all())
+    try:
+        # Add the grade to the database
+        db.session.add(grade)
+        db.session.commit()
+        return grade
+    except Exception as e:
+        # Handle any exceptions, e.g., log the error
+        print(f"Error adding grade: {e}")
+        db.session.rollback()
+        return None
+    
+def get_grades_by_student_and_class_id(student_id: int, class_id: int):
+    """Retrieve grades for a specific student in a specific class."""
+    return sorted(Grade.query.filter_by(student_id=student_id, class_id=class_id).all())
 
-def get_grades_by_student(student_id: int):
-    """Retrieve grades for a specific class."""
-    return sorted(Grade.query.filter_by(student_id=student_id).all())
+# def get_grades_by_class_id(class_id: int):
+#     """Retrieve grades for a specific class."""
+#     return sorted(Grade.query.filter_by(class_id=class_id).all())
+
+# def get_grades_by_student(student_id: int):
+#     """Retrieve grades for a specific class."""
+#     return sorted(Grade.query.filter_by(student_id=student_id).all())
 
 @with_instance(Grade)
 def delete_grade(grade: Grade):
@@ -38,3 +56,14 @@ def add_grade_to_student(student_id, class_id, grade_value):
     else:
         # Handle the case where the class or main group doesn't exist.
         return None
+    
+def update_student_grade(class_id, student_id, new_grade):
+    """Update the grade for a specific student in a specific class."""
+    try:
+        # Utilisez la fonction d'accès aux données appropriée pour mettre à jour la note
+        db_update_student_grade(class_id, student_id, new_grade)
+        return True
+    except Exception as e:
+        # Gérez l'erreur (log, notification, etc.)
+        print(f"Error updating student grade: {e}")
+        return False

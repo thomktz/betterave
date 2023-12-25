@@ -5,6 +5,8 @@ from .models import (
     user_classgroups_model,
     asso_model,
     class_group_model,
+    grades_model,
+    grades_post_model,
 )
 from .namespace import api
 from app.operations.class_operations import (get_classes_from_teacher)
@@ -15,6 +17,7 @@ from app.operations.user_operations import (
     update_user,
     delete_user,
 )
+from app.operations.grade_operations import (get_grades_by_student_and_class_id, update_student_grade)
 from app.operations.student_operations import (get_students_from_class)
 from app.operations.lesson_operations import (
     get_student_lessons,
@@ -88,6 +91,27 @@ class ClassListStudents(Resource):
         if user_id == -1:
             api.abort(400, "Error creating user.")
         return {"message": "User created successfully", "user_id": user_id}, 201
+
+@api.route("/<class_id>/grades/<int:student_id>")
+@api.doc(params={"class_id": "Class ID", "student_id": "Student ID"})
+class GradesByStudentAndClass(Resource):
+    @api.doc(security="apikey")
+    @require_authentication()
+    @api.marshal_list_with(grades_model)
+    def get(self, class_id, student_id):
+        """Get grades for a specific student in a specific class."""
+        return get_grades_by_student_and_class_id(student_id, class_id)
+
+    @api.expect(user_post_model)
+    def post(self, class_id, student_id):
+        """Create a new user."""
+        # Extract the fields from the api.payload
+        data = api.payload
+        user_id = add_user(class_id, **data)
+        if user_id == -1:
+            api.abort(400, "Error creating user.")
+        return {"message": "User created successfully", "user_id": user_id}, 201
+
 
 
 @api.route("/<string:user_id_or_me>")

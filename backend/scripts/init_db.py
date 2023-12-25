@@ -16,6 +16,7 @@ from app.operations.class_group_operations import (
     get_class_group_by_name,
 )
 from app.operations.event_operations import add_event
+from app.operations.grade_operations import add_grade
 from app.operations.user_class_group_operations import add_user_class_group
 from app.operations.asso_operations import subscribe_to_asso
 from app.operations.message_operations import add_class_message
@@ -247,6 +248,7 @@ def initialize_database():
             for asso_id in asso_ids:
                 subscribe_to_asso(user_id, asso_id)
 
+        
         # 11 - Add association events
         print("Adding asso events...")
         # Tribu meeting every monday at 18h
@@ -261,6 +263,7 @@ def initialize_database():
                 "19:00",
                 "Subscribers",
             )
+
         # EJE meeting every tuesday at 17h
         asso_id = asso_ids[1]
         date_range = pd.date_range(start="2023-09-01", end="2024-04-30", freq="W-TUE")
@@ -274,6 +277,13 @@ def initialize_database():
                 "Subscribers",
             )
 
-
+        # 12 - Add grades
+        print("Adding grades...")
+        for student_id in student_ids:
+            for class_id in class_ids:
+                # Set the default grade to 20
+                grade_value = random.randint(0, 20)
+                add_grade(student_id, class_id, grade_value)
+                
 if __name__ == "__main__":
     initialize_database()
