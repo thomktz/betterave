@@ -1,28 +1,24 @@
 <template>
   <v-container class="fill-height">
-    <v-row>
-      <v-col v-for="enrolledClass in classes" :key="enrolledClass.class_id" cols="12">
-        <v-card>
-          <v-card-title>{{ enrolledClass.class_name }}</v-card-title>
-          <v-card-subtitle>ECTS: {{ enrolledClass.class_ects }}</v-card-subtitle>
-          <v-card-text>
-            <strong>Grades:</strong>
-            <v-list>
-              <v-list-item v-for="grade in gradesByClassId[enrolledClass.class_id]" :key="grade.grade_id">
-                {{ grade.grade }}
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+    <StudentGradesTable
+      :classes="classes"
+      :available-classes.sync="availableClasses"
+      @request-classes="fetchClasses"
+      @enroll-class="enrollInClass"
+      @update-class-group="updateClassGroup"
+      @delete-class="deleteClass"
+    />
   </v-container>
 </template>
 
 <script>
 import { apiClient, toast } from "@/apiConfig";
+import StudentGradesTable from "@/components/StudentGradesTable.vue";
 
 export default {
+  components: {
+    StudentGradesTable,
+  },
   data() {
     return {
       user_id: "me",
@@ -36,6 +32,7 @@ export default {
     };
   },
   async mounted() {
+    // Fetch the classes for the selected user
     try {
       const response = await apiClient.get(`/users/${this.user_id}/classgroups`);
       this.classesInfo = response.data;
@@ -46,6 +43,7 @@ export default {
 
       this.$emit("updateTitle", `${this.name} ${this.surname} Grades`);
 
+      // Fetch grades for each class and store them in gradesByClassId
       await this.fetchGradesForClasses();
     } catch (error) {
       console.error("Error fetching classes:", error);
@@ -57,6 +55,7 @@ export default {
         const response = await apiClient.get(`/classes/level/${this.level}`);
         const allAvailableClasses = response.data;
 
+        // Filter out classes that are already enrolled
         this.availableClasses = allAvailableClasses.filter(
           (availableClass) =>
             !this.classes.some(
@@ -69,24 +68,24 @@ export default {
       }
     },
     async fetchGradesForClasses() {
-      try {
-        for (const enrolledClass of this.classes) {
-          const classId = enrolledClass.class_id;
-          const response = await apiClient.get(`/users/${classId}/gradesbis/${this.user_id}`);
-          const grades = response.data;
-          this.gradesByClassId = {
-            ...this.gradesByClassId,
-            [classId]: grades,
-          };
-        }
-      } catch (error) {
-        console.error("Error fetching grades for classes:", error);
-      }
-    },
+  try {
+    // Fetch grades for each class and store them in gradesByClassId
+    for (const enrolledClass of this.classes) {
+      const classId = enrolledClass.class_id;
+      const response = await apiClient.get(`/users/${classId}/gradesbis/${this.user_id}`);
+      const grades = response.data;
+      console.log(`Grades for class ${classId}:`, grades); // Add this log to check grades
+
+      // Use the spread operator to create a new object with the new property
+      this.gradesByClassId = { ...this.gradesByClassId, [classId]: grades.grade };
+    }
+  } catch (error) {
+    console.error("Error fetching grades for classes:", error);
+  }
+}
+
   },
 };
 </script>
 
-<style scoped>
-/* Ajoutez des styles si nécessaire */
-</style>
+<style></style>

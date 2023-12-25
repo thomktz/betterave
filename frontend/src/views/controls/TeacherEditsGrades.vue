@@ -6,7 +6,7 @@
 
 <script>
 import { apiClient } from "@/apiConfig";
-import GradesTable from "@/components/GradesTable2.vue";
+import GradesTable from "@/components/GradesTableTeacher.vue";
 import { ref, onMounted } from "vue";
 
 export default {

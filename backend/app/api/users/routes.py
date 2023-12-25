@@ -112,6 +112,18 @@ class GradesByStudentAndClass(Resource):
         if not success:
             api.abort(400, "Error updating grade.")
         return {"message": "Grade updated successfully"}, 200
+    
+@api.route("/<class_id>/gradesbis/<string:user_id_or_me>")
+@api.doc(params={"class_id": "Class ID", "student_id": "Student ID"})
+class GradesByStudentAndClassBis(Resource):
+    @api.doc(security="apikey")
+    @require_authentication()
+    @resolve_user
+    @current_user_required
+    @api.marshal_list_with(grades_model)
+    def get(self, class_id, user):
+        """Get grades for a specific student in a specific class."""
+        return get_grades_by_student_and_class_id(user.user_id, class_id)
 
 
 
@@ -181,41 +193,6 @@ class UserClassGroupsResource(Resource):
             ],
         }
         return user_details
-
-@api.route("/<string:user_id_or_me>/classgroups")
-@api.response(404, "User not found")
-@api.response(200, "Success")
-class UserClassGroupsResource(Resource):
-    @api.doc(security="apikey")
-    @require_authentication()
-    @resolve_user
-    @current_user_required
-    @api.marshal_with(user_classgroups_model)
-    def get(self, user):
-        """Get detailed information about a user by their ID, including class associations."""
-        user_details = {
-            "id": user.user_id,
-            "name": user.name,
-            "surname": user.surname,
-            "level": user.level.value,
-            "classgroups": [
-                {
-                    "class_id": class_group.class_id,
-                    "class_name": class_group.class_.name,
-                    "class_ects": class_group.class_.ects_credits,
-                    "primary_class_group_id": class_group.primary_class_group_id,
-                    "secondary_class_group_id": class_group.secondary_class_group_id,
-                    "secondary_class_group_name": class_group.secondary_class_group.name
-                    if class_group.secondary_class_group
-                    else "",
-                    "all_groups": [group.name for group in class_group.class_.groups if not group.is_main_group],
-                }
-                for class_group in user.class_groups
-            ],
-        }
-
-        return user_details
-
 
 @api.route("/<string:user_id_or_me>/lessons")
 class UserLessons(Resource):
