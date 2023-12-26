@@ -9,7 +9,6 @@ from .models import (
     grades_post_model,
 )
 from .namespace import api
-from app.operations.class_operations import (get_classes_from_teacher)
 from app.operations.user_operations import (
     get_all_users,
     add_user,
@@ -17,7 +16,10 @@ from app.operations.user_operations import (
     update_user,
     delete_user,
 )
-from app.operations.grade_operations import (get_grades_by_student_and_class_id, update_student_grade)
+from app.operations.grade_operations import (
+    get_grades_by_student_and_class_id,
+    update_student_grade
+)
 from app.operations.student_operations import (get_students_from_class)
 from app.operations.lesson_operations import (
     get_student_lessons,
@@ -47,11 +49,22 @@ from app.operations.user_class_group_operations import (
 )
 from app.api.lessons.models import fullcalendar_lesson_model
 from app.api.events.models import fullcalendar_event_model
-from app.decorators import require_authentication, current_user_required, resolve_user
+from flask_restx import Resource, reqparse
+from app.decorators import (
+    require_authentication,
+    current_user_required,
+    resolve_user,
+)
 
 # Parser for URL parameters.
 parser = reqparse.RequestParser()
-parser.add_argument("limit", type=int, required=False, default=50, help="Limit the number of lessons/events returned")
+parser.add_argument(
+    "limit",
+    type=int,
+    required=False,
+    default=50,
+    help="Limit the number of lessons/events returned",
+)
 
 
 @api.route("/")

@@ -1,8 +1,5 @@
-from datetime import datetime
 from extensions import db
-from app.models import Grade, Class
-from app.decorators import with_instance
-from app.operations.class_operations import get_class_by_id
+from app.models import Grade
 
 def add_grade(student_id, class_id, grade_value):
     """Add a grade for a student in a class."""
