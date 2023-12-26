@@ -101,7 +101,7 @@ class GradesByStudentAndClass(Resource):
     def get(self, class_id, student_id):
         """Get grades for a specific student in a specific class."""
         return get_grades_by_student_and_class_id(student_id, class_id)
-    @api.expect(grades_model)  # Assuming grades_model contains the required fields for updating a grade
+    @api.expect(grades_model)  
     def put(self, class_id, student_id):
         """Update a student's grade in a specific class."""
         data = api.payload
