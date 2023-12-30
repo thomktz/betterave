@@ -1,6 +1,6 @@
 from flask_restx import Resource
 from flask_login import current_user
-from .models import class_model, homework_model, homework_post_model, grades_model, grades_post_model
+from .models import class_model, homework_model, homework_post_model
 from .namespace import api
 from app.operations.class_operations import (
     add_class,
@@ -15,7 +15,7 @@ from app.operations.message_operations import get_class_messages, add_class_mess
 from app.api.class_groups.models import message_model, message_post_model
 from app.operations.homework_operations import get_class_homework, add_homework_to_class, get_user_homework
 from app.models import UserLevel
-from app.decorators import require_authentication
+from app.decorators import require_authentication, resolve_user
 
 
 @api.route("/")
@@ -87,23 +87,18 @@ class ClassLevelResource(Resource):
             api.abort(404, f"Invalid level {level_or_me}")
 
 
-@api.route("/teacherclasses/<teacher_id_or_me>")
-@api.response(404, "Teacher id not found")
+@api.route("/teacherclasses/<user_id_or_me>")
+@api.response(400, "Teacher id not found")
 class ClassTeacherResource(Resource):
     @api.doc(security="apikey")
     @require_authentication()
+    @resolve_user
     @api.marshal_list_with(class_model)
-    def get(self, teacher_id_or_me):
+    def get(self, user):
         """Fetch all classes for a given teacher_id."""
-        try:
-            if teacher_id_or_me == "me":
-                user_id = current_user.user_id
-            classes = get_classes_from_teacher(user_id)
-            if not classes:
-                api.abort(404, f"No classes found for teacher_id {user_id}")
-            return classes
-        except ValueError:  # If "teacher_id" is not a valid teacher_id
-            api.abort(404, f"Invalid level teacher_id {user_id}")
+        if user.is_admin:
+            return get_all_classes()
+        return get_classes_from_teacher(user.user_id)
 
 
 @api.route("/<int:class_id>/messages")
@@ -115,7 +110,7 @@ class ClassMessages(Resource):
         """Get all messages for the main group of a specific class."""
         class_ = get_class_by_id(class_id)
         if not class_:
-            api.abort(404, f"Class with id {class_id} not found")
+            api.abort(400, f"Class with id {class_id} not found")
         return [message.as_dict() for message in get_class_messages(class_)]
 
     @api.doc(security="apikey")
@@ -151,28 +146,6 @@ class GroupHomework(Resource):
         if hmw:
             return api.marshal(hmw.as_dict(), homework_model), 201
         api.abort(400, "Could not add homework to the class")
-
-
-# @api.route("/<int:class_id>/grades")
-# class ClassGradesResource(Resource):
-#     @api.doc(security="apikey")
-#     @require_authentication()
-#     @api.marshal_list_with(grades_model)
-#     def get(self, class_id):
-#         """Get all grades for a specific class."""
-#         return [grade.as_dict() for grade in get_class_grades(class_id)]
-
-#     @api.doc(security="apikey")
-#     @require_authentication("admin", "teacher")
-#     @api.expect(grades_post_model)
-#     def post(self, class_id):
-#         """Post a new grade to a specific class."""
-#         student_id = api.payload.get("student_id")
-#         grade_value = api.payload.get("grade_value")
-#         grade = add_grade_to_class(student_id, class_id=class_id, grade_value=grade_value)
-#         if grade:
-#             return api.marshal(grade.as_dict(), grades_model), 201
-#         api.abort(400, "Could not add grade to the class")
 
 
 @api.route("/homework")

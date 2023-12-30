@@ -29,15 +29,24 @@ export default {
     const fetchUsers = async () => {
       try {
         if (classId.value) {
-          const response = await apiClient.get(`/users/studentlist/${classId.value}`);
+          const response = await apiClient.get(
+            `/users/studentlist/${classId.value}`,
+          );
           const users = response.data;
 
           // Fetch grades for each student and create new objects
-          const usersWithGradesArray = await Promise.all(users.map(async (user) => {
-            const gradesResponse = await apiClient.get(`/users/${classId.value}/grades/${user.user_id}`);
-            const grade = gradesResponse.data.length > 0 ? gradesResponse.data[0].grade : "N/A";
-            return { ...user, grades: grade };
-          }));
+          const usersWithGradesArray = await Promise.all(
+            users.map(async (user) => {
+              const gradesResponse = await apiClient.get(
+                `/users/${classId.value}/grades/${user.user_id}`,
+              );
+              const grade =
+                gradesResponse.data.length > 0
+                  ? gradesResponse.data[0].grade
+                  : "-";
+              return { ...user, grades: grade };
+            }),
+          );
 
           usersWithGrades.value = usersWithGradesArray;
         }

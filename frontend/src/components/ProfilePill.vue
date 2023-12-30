@@ -34,12 +34,15 @@
         Manage courses
       </button>
       <button v-if="user.user_type == 'student'" @click="goToStudentGrades">
-        Grades 
+        Grades
       </button>
-      <button v-if="user.user_type == 'teacher'" @click="goToTeacherClasses">
+      <button
+        v-if="user.user_type == 'teacher' || user.user_type == 'admin'"
+        @click="goToTeacherClasses"
+      >
         Classes
       </button>
-      
+
       <button @click="logout">Logout</button>
     </div>
   </div>

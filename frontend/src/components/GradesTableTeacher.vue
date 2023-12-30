@@ -2,11 +2,7 @@
   <v-container class="main-container">
     <v-container>
       <!-- Users Table -->
-      <v-data-table
-        :headers="headers"
-        :items="props.users"
-        class="elevation-1"
-      >
+      <v-data-table :headers="headers" :items="props.users" class="elevation-1">
         <!-- Profile Picture -->
         <template v-slot:item.profile_pic="{ item }">
           <img
@@ -20,10 +16,7 @@
         <template v-slot:item.grades="{ item }">
           <div>
             {{ item.grades }}
-            <v-icon
-              @click="editGrade(item)"
-              class="icon-pencil"
-            >
+            <v-icon @click="editGrade(item)" class="icon-pencil">
               mdi-pencil
             </v-icon>
           </div>
@@ -48,7 +41,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps, ref } from "vue";
 import { apiClient } from "@/apiConfig";
 
 const props = defineProps({
@@ -71,7 +64,7 @@ const selectedUser = ref(null);
 
 const editGrade = (user) => {
   selectedUser.value = user;
-  newGrade.value = user.grades;
+  newGrade.value = "";
   dialogVisible.value = true;
 };
 
@@ -83,9 +76,12 @@ const saveGrade = async () => {
       console.log("newGrade:", newGrade.value);
 
       // Call your API to save the new grade for selectedUser
-      const response = await apiClient.put(`/users/${props.classId}/grades/${selectedUser.value.user_id}`, {
-        grade: newGrade.value,
-      });
+      const response = await apiClient.put(
+        `/users/${props.classId}/grades/${selectedUser.value.user_id}`,
+        {
+          grade: newGrade.value,
+        },
+      );
 
       console.log("API Response:", response);
 
