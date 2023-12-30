@@ -7,8 +7,16 @@ class Grade(db.Model):
 
     __tablename__ = "grade"
     grade_id = db.Column(db.Integer, primary_key=True)
-    class_id = db.Column(db.Integer, db.ForeignKey("class.class_id"), nullable=False)
-    student_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
+    class_id = db.Column(
+        db.Integer,
+        db.ForeignKey("class.class_id"),
+        nullable=False
+    )
+    student_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.user_id"),
+        nullable=False
+    )
     grade = db.Column(db.Integer, nullable=False)
 
     def get_id(self):
