@@ -58,7 +58,7 @@ export default {
   width: 50px;
   height: 50px;
   cursor: pointer;
-  overflow: hidden; /* to ensure the inner icons don't spill out */
+  overflow: hidden;
   transition: all 0.3s ease;
 }
 

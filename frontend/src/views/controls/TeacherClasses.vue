@@ -89,7 +89,7 @@ li {
   align-items: center;
   height: 70px;
   border-bottom: 1px solid #b0b0b0;
-  cursor: pointer; /* Ajout de la propriété cursor pour indiquer que l'élément est cliquable */
+  cursor: pointer;
   transition: background-color 0.2s ease;
 }
 

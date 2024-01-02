@@ -263,14 +263,12 @@ const emitEditUser = (user) => {
 };
 
 const handleEditUser = () => {
-  // Implement your logic to handle user edit
   console.log("Editing user:", selectedUser.value);
   emit("edit-user", selectedUser.value);
   showEditDialog.value = false; // Close the dialog
 };
 
 const handleAddUser = () => {
-  // Implement your logic to handle add user
   console.log("Adding new user:", newUser.value);
   emit("add-user", newUser.value);
   showAddDialog.value = false; // Close the dialog after emitting the event
@@ -296,9 +294,9 @@ const handleAddUser = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px; /* This is the standard size for an icon button */
+  width: 56px;
   height: 56px;
-  background-color: #1d958b; /* deep-purple accent-4 */
+  background-color: #1d958b;
   border-radius: 50%;
   transition:
     background-color 0.3s,
@@ -308,19 +306,17 @@ const handleAddUser = () => {
 }
 
 .custom-circle-btn:hover {
-  background-color: #3bc8bc; /* A lighter deep-purple for hover effect */
-  transform: scale(1.1); /* Scale effect on hover */
+  background-color: #3bc8bc;
+  transform: scale(1.1);
 }
 
 .custom-circle-btn v-icon {
-  color: white; /* Ensure the icon is white */
+  color: white;
   transition: transform 0.3s;
 }
 
 .custom-circle-btn:hover v-icon {
-  transform: rotate(
-    90deg
-  ); /* Optional: adds a rotation to the plus icon on hover */
+  transform: rotate(90deg);
 }
 
 .px-2 {

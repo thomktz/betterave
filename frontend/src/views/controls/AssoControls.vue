@@ -154,7 +154,7 @@ export default {
 
 .event-content {
   flex-grow: 0;
-  padding-right: 10px; /* Add some padding if needed */
+  padding-right: 10px;
 }
 
 .event-title {

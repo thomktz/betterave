@@ -1,6 +1,7 @@
 from extensions import db
 from app.models import Grade
 
+
 def add_grade(student_id, class_id, grade_value):
     """Add a grade for a student in a class."""
     grade = Grade(student_id=student_id, class_id=class_id, grade=grade_value)
@@ -15,12 +16,13 @@ def add_grade(student_id, class_id, grade_value):
         print(f"Error adding grade: {e}")
         db.session.rollback()
         return None
-    
+
+
 def get_grades_by_student_and_class_id(student_id: int, class_id: int):
     """Retrieve grades for a specific student in a specific class."""
     return sorted(Grade.query.filter_by(student_id=student_id, class_id=class_id).all())
 
-    
+
 def update_student_grade(class_id, student_id, new_grade):
     """Update the grade for a specific student in a specific class."""
     try:

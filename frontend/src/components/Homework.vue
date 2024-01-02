@@ -76,7 +76,7 @@ export default {
 <style scoped>
 .homework-container {
   position: relative;
-  max-height: 65vh; /* Adjust based on your needs */
+  max-height: 65vh;
   overflow: auto;
 }
 
@@ -91,7 +91,7 @@ ul {
   flex-direction: column;
   padding: 10px;
   border-radius: 10px;
-  background-color: #4868bf; /* Default color */
+  background-color: #4868bf;
   color: #eee;
   margin-top: 10px;
 }
@@ -112,11 +112,11 @@ ul {
 
 .homework-due {
   font-style: italic;
-  color: #eeeeeee4; /* Shade of grey */
+  color: #eeeeeee4;
 }
 .homework-due.past-due {
   font-style: italic;
-  color: #ff0505c6; /* Shade of grey */
+  color: #ff0505c6;
 }
 
 .homework-content {

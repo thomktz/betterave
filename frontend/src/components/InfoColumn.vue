@@ -47,8 +47,8 @@ export default {
 h2 {
   font-size: 1.5rem;
   margin-bottom: 20px;
-  border-bottom: 1px solid #b0b0b0; /* Add this line */
-  padding-bottom: 10px; /* Add some padding to space out the border from the text */
+  border-bottom: 1px solid #b0b0b0;
+  padding-bottom: 10px;
 }
 
 ul {

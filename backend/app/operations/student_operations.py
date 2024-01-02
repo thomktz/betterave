@@ -18,6 +18,7 @@ def get_students_from_level(level: UserLevel):
     """Return all student users from a specific level."""
     return User.query.filter(User.user_type == UserType.STUDENT, User.level == level).all()
 
+
 @with_instance([User, ClassGroup])
 def is_student_in_group(student: User, group: ClassGroup):
     """Check if a student is in a specific class group."""
@@ -37,6 +38,7 @@ def is_student_in_class(student: User, class_: Class) -> bool:
         bool: True if the student is in the main group of the class, False otherwise.
     """
     return student in class_.main_group().students
+
 
 def get_students_from_class(class_id: int):
     """

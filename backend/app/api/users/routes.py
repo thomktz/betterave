@@ -197,11 +197,7 @@ class UserClassGroupsResource(Resource):
                     "secondary_class_group_name": class_group.secondary_class_group.name
                     if class_group.secondary_class_group
                     else "",
-                    "all_groups": [
-                        group.name
-                        for group in class_group.class_.groups
-                        if not group.is_main_group
-                    ],
+                    "all_groups": [group.name for group in class_group.class_.groups if not group.is_main_group],
                 }
                 for class_group in user.class_groups
             ],
@@ -241,9 +237,7 @@ class UserFutureLessons(Resource):
     def get(self, user):
         """Get a list of future lessons for a specific student or teacher."""
         args = parser.parse_args()
-        limit = args.get(
-            "limit"
-        )  # taking back the limit argument presents in the URL
+        limit = args.get("limit")  # taking back the limit argument presents in the URL
 
         if user.is_student:
             future_lessons = get_student_future_lessons(user, limit)
@@ -298,9 +292,7 @@ class SubscribeAssociation(Resource):
         if not asso.is_asso:
             api.abort(400, f"User asso_id={asso_id} is not an association")
         if subscribe_to_asso(user, asso):
-            return {
-                "message": "User subscribed successfully to the association"
-            }, 200
+            return {"message": "User subscribed successfully to the association"}, 200
         else:
             api.abort(400, "Could not subscribe user to the association")
 
@@ -319,9 +311,7 @@ class UnsubscribeAssociation(Resource):
         if not asso.is_asso:
             api.abort(400, f"User asso_id={asso_id} is not an association")
         if unsubscribe_from_asso(user, asso):
-            return {
-                "message": "User unsubscribed successfully from the association"
-            }, 200
+            return {"message": "User unsubscribed successfully from the association"}, 200
         else:
             api.abort(400, "Could not unsubscribe user from the association")
 
@@ -347,11 +337,7 @@ class EnrollClass(Resource):
                 "secondary_class_group_name": class_group.secondary_class_group.name
                 if class_group.secondary_class_group
                 else "",
-                "all_groups": [
-                    group.name
-                    for group in class_group.class_.groups
-                    if not group.is_main_group
-                ],
+                "all_groups": [group.name for group in class_group.class_.groups if not group.is_main_group],
             }
         elif message == "Already enrolled in class":
             api.abort(400, "User already enrolled in the class")
@@ -371,9 +357,7 @@ class UnenrollClass(Resource):
         """Unenroll a user from a class."""
         result = unenroll_user_from_class(user.user_id, class_id)
         if result == "Success":
-            return {
-                "message": "User unenrolled successfully from the class"
-            }, 200
+            return {"message": "User unenrolled successfully from the class"}, 200
         elif result == "Not enrolled in class":
             api.abort(400, "User not enrolled in the class")
         else:
@@ -410,9 +394,7 @@ class UserFutureEvents(Resource):
     def get(self, user):
         """Get a list of future events for a specific user."""
         args = parser.parse_args()
-        limit = args.get(
-            "limit"
-        )  # taking back the limit argument presents in the URL
+        limit = args.get("limit")  # taking back the limit argument presents in the URL
 
         if user.is_asso:
             future_events = get_association_future_events(user, limit)

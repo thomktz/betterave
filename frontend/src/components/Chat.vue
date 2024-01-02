@@ -251,7 +251,7 @@ export default {
   left: 0;
   right: 0;
   white-space: nowrap;
-  margin-top: 0; /* No margin needed since we're positioning it absolutely */
+  margin-top: 0;
   font-size: 0.7em;
   color: var(--secondary-text-color);
   visibility: hidden;

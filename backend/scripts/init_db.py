@@ -248,7 +248,6 @@ def initialize_database():
             for asso_id in asso_ids:
                 subscribe_to_asso(user_id, asso_id)
 
-        
         # 11 - Add association events
         print("Adding asso events...")
         # Tribu meeting every monday at 18h
@@ -284,6 +283,7 @@ def initialize_database():
                 # Set the default grade to 20
                 grade_value = random.randint(0, 20)
                 add_grade(student_id, class_id, grade_value)
-                
+
+
 if __name__ == "__main__":
     initialize_database()

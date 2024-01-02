@@ -45,7 +45,6 @@ export default {
   justify-content: end;
 }
 
-/* Add these styles to manage the visibility of the images */
 .light-image {
   width: auto;
   max-width: none;
@@ -58,7 +57,6 @@ export default {
   display: none;
 }
 
-/* Use the mounted attribute to toggle dark mode */
 [data-dark-mode="true"] .light-image {
   display: none;
 }
