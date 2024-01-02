@@ -5,6 +5,7 @@ from .models import (
     user_classgroups_model,
     asso_model,
     class_group_model,
+    grades_model,
 )
 from .namespace import api
 from app.operations.user_operations import (
@@ -14,6 +15,11 @@ from app.operations.user_operations import (
     update_user,
     delete_user,
 )
+from app.operations.grade_operations import (
+    get_grades_by_student_and_class_id,
+    update_student_grade,
+)
+from app.operations.student_operations import get_students_from_class
 from app.operations.lesson_operations import (
     get_student_lessons,
     get_teacher_lessons,
@@ -42,11 +48,21 @@ from app.operations.user_class_group_operations import (
 )
 from app.api.lessons.models import fullcalendar_lesson_model
 from app.api.events.models import fullcalendar_event_model
-from app.decorators import require_authentication, current_user_required, resolve_user
+from app.decorators import (
+    require_authentication,
+    current_user_required,
+    resolve_user,
+)
 
 # Parser for URL parameters.
 parser = reqparse.RequestParser()
-parser.add_argument("limit", type=int, required=False, default=50, help="Limit the number of lessons/events returned")
+parser.add_argument(
+    "limit",
+    type=int,
+    required=False,
+    default=50,
+    help="Limit the number of lessons/events returned",
+)
 
 
 @api.route("/")
@@ -66,7 +82,59 @@ class UserList(Resource):
         user_id = add_user(**data)
         if user_id == -1:
             api.abort(400, "Error creating user.")
-        return {"message": "User created successfully", "user_id": user_id}, 201
+        return {
+            "message": "User created successfully",
+            "user_id": user_id,
+        }, 201
+
+
+@api.route("/studentlist/<class_id>")
+class ClassListStudents(Resource):
+    @api.doc(security="apikey")
+    @require_authentication()
+    @api.marshal_list_with(user_model)
+    def get(self, class_id):
+        """List all students from a given class_id."""
+        return get_students_from_class(class_id)
+
+    @api.expect(user_post_model)
+    def post(self):
+        """Create a new user."""
+        # Extract the fields from the api.payload
+        data = api.payload
+        user_id = add_user(**data)
+        if user_id == -1:
+            api.abort(400, "Error creating user.")
+        return {
+            "message": "User created successfully",
+            "user_id": user_id,
+        }, 201
+
+
+@api.route("/<class_id>/grades/<string:user_id_or_me>")
+@api.doc(params={"class_id": "Class ID", "student_id": "Student ID"})
+class GradesByStudentAndClass(Resource):
+    @api.doc(security="apikey")
+    @require_authentication()
+    @resolve_user
+    @api.marshal_list_with(grades_model)
+    def get(self, class_id, user):
+        """Get grades for a specific student in a specific class."""
+        return get_grades_by_student_and_class_id(user.user_id, class_id)
+
+    @api.expect(grades_model)
+    @require_authentication("admin", "teacher")
+    @resolve_user
+    def put(self, class_id, user):
+        """Update a student's grade in a specific class."""
+        data = api.payload
+        if "grade" not in data:
+            api.abort(400, "Missing 'grade' in payload.")
+        new_grade = data.get("grade")
+        success = update_student_grade(class_id, user.user_id, new_grade)
+        if not success:
+            api.abort(400, "Error updating grade.")
+        return {"message": "Grade updated successfully"}, 200
 
 
 @api.route("/<string:user_id_or_me>")
@@ -134,7 +202,6 @@ class UserClassGroupsResource(Resource):
                 for class_group in user.class_groups
             ],
         }
-
         return user_details
 
 

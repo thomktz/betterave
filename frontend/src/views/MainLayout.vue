@@ -116,7 +116,7 @@ export default {
 
 .logos-block {
   display: flex;
-  align-items: center; /* This aligns children vertically in the middle */
+  align-items: center;
 }
 
 .right-section {

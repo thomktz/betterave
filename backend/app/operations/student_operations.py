@@ -38,3 +38,24 @@ def is_student_in_class(student: User, class_: Class) -> bool:
         bool: True if the student is in the main group of the class, False otherwise.
     """
     return student in class_.main_group().students
+
+
+def get_students_from_class(class_id: int):
+    """
+    Get all students who have taken a specific class.
+
+    Args:
+        class_id (int): The ID of the class.
+
+    Returns:
+        List[User]: List of students who have taken the class.
+    """
+    # Récupérez l'objet Class correspondant à class_id
+    class_ = Class.query.get(class_id)
+
+    # Vérifiez si la classe existe
+    if class_:
+        # Récupérez tous les étudiants du groupe principal de la classe
+        return class_.main_group().students
+    else:
+        return []

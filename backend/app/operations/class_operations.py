@@ -1,6 +1,7 @@
+import time
 from sqlalchemy.exc import SQLAlchemyError
 from extensions import db
-from app.models import UserLevel, Class
+from app.models import UserLevel, Class, ClassGroup, Lesson
 from app.decorators import with_instance
 
 
@@ -100,3 +101,17 @@ def get_all_classes() -> list:
 def get_classes_from_level(level: UserLevel) -> list:
     """Return all classes of a given level."""
     return Class.query.filter_by(level=level).all()
+
+
+def get_classes_from_teacher(teacher_id: int) -> list:
+    """Return all classes of a given teacher id."""
+    # Being the teacher of a Lesson of the class is enough to be considered the teacher of a class.
+    # Classes have Classes.groups, and ClassGroup have ClassGroup.lessons.
+    # We also include the default teacher of the class.
+    start_time = time.time()
+    default_teacher_classes = Class.query.filter_by(default_teacher_id=teacher_id).all()
+    lesson_classes = (
+        Class.query.join(Class.groups).join(ClassGroup.lessons).filter(Lesson.teacher_id == teacher_id).all()
+    )
+    print(f"get_classes_from_teacher took {time.time() - start_time} seconds", flush=True)
+    return list(set(default_teacher_classes + lesson_classes))

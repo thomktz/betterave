@@ -9,12 +9,13 @@ from app.operations.class_operations import (
     update_class,
     delete_class,
     get_classes_from_level,
+    get_classes_from_teacher,
 )
 from app.operations.message_operations import get_class_messages, add_class_message
 from app.api.class_groups.models import message_model, message_post_model
 from app.operations.homework_operations import get_class_homework, add_homework_to_class, get_user_homework
 from app.models import UserLevel
-from app.decorators import require_authentication
+from app.decorators import require_authentication, resolve_user
 
 
 @api.route("/")
@@ -86,6 +87,20 @@ class ClassLevelResource(Resource):
             api.abort(404, f"Invalid level {level_or_me}")
 
 
+@api.route("/teacherclasses/<user_id_or_me>")
+@api.response(400, "Teacher id not found")
+class ClassTeacherResource(Resource):
+    @api.doc(security="apikey")
+    @require_authentication()
+    @resolve_user
+    @api.marshal_list_with(class_model)
+    def get(self, user):
+        """Fetch all classes for a given teacher_id."""
+        if user.is_admin:
+            return get_all_classes()
+        return get_classes_from_teacher(user.user_id)
+
+
 @api.route("/<int:class_id>/messages")
 class ClassMessages(Resource):
     @api.doc(security="apikey")
@@ -95,7 +110,7 @@ class ClassMessages(Resource):
         """Get all messages for the main group of a specific class."""
         class_ = get_class_by_id(class_id)
         if not class_:
-            api.abort(404, f"Class with id {class_id} not found")
+            api.abort(400, f"Class with id {class_id} not found")
         return [message.as_dict() for message in get_class_messages(class_)]
 
     @api.doc(security="apikey")

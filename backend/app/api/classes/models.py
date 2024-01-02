@@ -40,3 +40,21 @@ homework_post_model = api.model(
         ),
     },
 )
+
+grades_model = api.model(
+    "Grade",
+    {
+        "grade_id": fields.Integer(readonly=True, description="The unique identifier of a grade"),
+        "class_id": fields.Integer(required=True, description="The ID of the class the grade belongs to"),
+        "student_id": fields.Integer(required=True, description="The ID of the student receiving the grade"),
+        "grade": fields.String(required=True, description="The value of the grade"),
+    },
+)
+
+grades_post_model = api.model(
+    "GradePost",
+    {
+        "student_id": fields.Integer(required=True, description="The ID of the student receiving the grade"),
+        "grade": fields.String(required=True, description="The value of the grade"),
+    },
+)

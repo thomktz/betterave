@@ -11,7 +11,15 @@
         <p>
           <a :href="classDetails.ensae_link" target="_blank">View ENSAE Link</a>
         </p>
-        <!-- Other information related to class -->
+        <!-- Edit gradesonly available for teachers and admins -->
+        <div
+          v-if="user_type == 'teacher' || user_type == 'admin'"
+          class="edit-container"
+          @click="redirectToEditGrades"
+        >
+          <span><h1>Edit Grades</h1></span>
+          <v-icon class="edit-icon">mdi-pencil</v-icon>
+        </div>
       </div>
 
       <!-- Middle Container -->
@@ -45,6 +53,7 @@ export default {
       classDetails: {},
       class_id: parseInt(this.$route.params.class_id),
       user_id: NaN,
+      user_type: "student",
       newHomework: {
         content: "",
         due_date: null,
@@ -55,16 +64,23 @@ export default {
     try {
       const response = await apiClient.get(`/classes/${this.class_id}`);
       this.classDetails = response.data;
-      this.$emit("updateTitle", this.classDetails.name);
+      this.$emit("updateTitle", `${this.classDetails.name}`);
     } catch (error) {
       console.error("Error fetching class details:", error);
     }
     try {
       const response = await apiClient.get("/users/me");
       this.user_id = response.data.user_id;
+      this.user_type = response.data.user_type;
     } catch (error) {
       console.error("Error fetching user details:", error);
     }
+  },
+  methods: {
+    redirectToEditGrades() {
+      // Navigate to the 'edit-grades' route
+      this.$router.push(`/class/${this.class_id}/grades`);
+    },
   },
 };
 </script>
@@ -91,5 +107,19 @@ export default {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 20px; /* space between title and content */
+}
+.edit-container {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: var(--primary-text-color);
+}
+
+.edit-container span {
+  margin-right: 10px;
+}
+
+.edit-icon {
+  font-size: 2rem;
 }
 </style>
