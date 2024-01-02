@@ -2,13 +2,17 @@ _Projet Infrastructures et systèmes logiciels_
 
 ## **Better**ave: Pamplemousse 2.0
 
-- Calendar management
+- Calendar
 - Class groupchats
 - Homework
-- Association notification and events
+- Grades
+- Association events
 - Trombinoscope
+- Class scraping from Pamplemousse and the ENSAE website
 
-<img width="1728" alt="image" src="https://github.com/thomktz/betterave/assets/60552083/ce64adce-a47b-4d20-8f25-34d51f73d60b">
+<img width="1200" alt="image" src="https://github.com/thomktz/betterave/assets/60552083/353cdd6b-93d0-4354-9c99-0f1bbd496da7">
+<img width="1200" alt="image" src="https://github.com/thomktz/betterave/assets/60552083/fc2ca296-6561-4ae6-9f07-64ac2f41b01e">
+
 
 ## Setup for development
 
