@@ -2,6 +2,8 @@ _Projet Infrastructures et systèmes logiciels_
 
 ## **Better**ave: Pamplemousse 2.0
 
+
+
 - Calendar
 - Class groupchats
 - Homework
@@ -13,6 +15,19 @@ _Projet Infrastructures et systèmes logiciels_
 
 <img width="1200" alt="image" src="https://github.com/thomktz/betterave/assets/60552083/353cdd6b-93d0-4354-9c99-0f1bbd496da7">
 <img width="1200" alt="image" src="https://github.com/thomktz/betterave/assets/60552083/fc2ca296-6561-4ae6-9f07-64ac2f41b01e">
+
+## Features
+
+## Demo
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/zZC0X2hOou0" frameborder="0" allowfullscreen></iframe>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YLPqCE9lRXs" frameborder="0" allowfullscreen></iframe>
+
+
+## Database Stucture
+
+## API
 
 
 ## Setup for development
