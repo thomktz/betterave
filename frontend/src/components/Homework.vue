@@ -96,8 +96,8 @@ ul {
   margin-top: 10px;
 }
 .homework-item.past-due {
-  background-color: rgb(133, 133, 133);
-  color: #5a5959; /* Dark grey text for past homework */
+  background-color: rgb(222, 220, 220);
+  color: #383535; /* Dark grey text for past homework */
 }
 
 .homework-header {
@@ -116,7 +116,7 @@ ul {
 }
 .homework-due.past-due {
   font-style: italic;
-  color: #ff0505c6;
+  color: #7e1111c6;
 }
 
 .homework-content {
