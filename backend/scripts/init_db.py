@@ -8,7 +8,7 @@ from main import app
 from extensions import db
 from app.operations.user_operations import add_user, get_user_by_name
 from app.operations.student_operations import get_students_from_level
-from app.operations.class_operations import add_class, get_classes_from_level
+from app.operations.class_operations import add_class, get_classes_from_level, get_class_by_id
 from app.operations.lesson_operations import add_lesson
 from app.operations.class_group_operations import (
     add_class_group,
@@ -20,6 +20,7 @@ from app.operations.grade_operations import add_grade
 from app.operations.user_class_group_operations import add_user_class_group
 from app.operations.asso_operations import subscribe_to_asso
 from app.operations.message_operations import add_class_message
+from app.operations.homework_operations import add_homework_to_class
 from app.models import UserLevel
 
 CLASSES_PER_STUDENT = 10
@@ -69,6 +70,16 @@ admins = [
     ("admin", "admin"),
 ]
 
+homework_contents = [
+    "Do exercices 1 to 10 of chapter 1.",
+    "Read chapter 2.",
+    "Assigned reading: https://download.arxiv.org/pdf/1706.03762.pdf",
+    "Read chapter 3.",
+    "Prepare exercices 1 to 10 of chapter 2.",
+    "Team project: Build a website",
+    "Learn the basics of Python.",
+    "Read chapter 4.",
+]
 
 def initialize_database():
     """Initialize the database with dummy data."""
@@ -280,9 +291,25 @@ def initialize_database():
         print("Adding grades...")
         for student_id in student_ids:
             for class_id in class_ids:
-                # Set the default grade to 20
-                grade_value = random.randint(0, 20)
+                # Choose a random grade between 7 and 19
+                grade_value = random.randint(14, 38) / 2
                 add_grade(student_id, class_id, grade_value)
+        
+        # 13 - Add homework to half of the classes, randomly
+        print("Adding homework...")
+        for class_id in class_ids:
+            if random.random() < 0.5:
+                # Iterate over the lessons of the class
+                class_ = get_class_by_id(class_id)
+                for lesson in class_.main_group().lessons:
+                    # Add homework to the lesson
+                    if random.random() < 0.2:
+                        add_homework_to_class(
+                            content=random.choice(homework_contents),
+                            class_id=class_id,
+                            due_date=lesson.date.strftime("%Y-%m-%d"),
+                            due_time=lesson.start_time.strftime("%H:%M"),
+                        )
 
 
 if __name__ == "__main__":
