@@ -11,7 +11,8 @@
         <p>
           <a :href="classDetails.ensae_link" target="_blank">View ENSAE Link</a>
         </p>
-        <!-- Edit gradesonly available for teachers and admins -->
+
+        <!-- Edit grades only available for teachers and admins -->
         <div
           v-if="user_type == 'teacher' || user_type == 'admin'"
           class="edit-container"
@@ -19,6 +20,67 @@
         >
           <span><h1>Edit Grades</h1></span>
           <v-icon class="edit-icon">mdi-pencil</v-icon>
+        </div>
+
+        <!-- Edit homexorks only available for teachers and admins -->
+        <div
+          v-if="user_type == 'teacher' || user_type == 'admin'"
+          class="edit-container"
+          @click="openAddHomeworkDialog"
+        >
+          <span><h1>Add Homework</h1></span>
+          <v-icon class="edit-icon">mdi-pencil</v-icon>
+
+          <!-- Dialog for adding new homework -->
+          <v-dialog v-model="dialogVisible" max-width="500px">
+            <v-card>
+              <v-card-title>Add Homework</v-card-title>
+              <v-card-text>
+                <v-text-field
+                  v-model="formattedDate"
+                  label="Due Date"
+                  readonly
+                  @click="showDatePicker = true"
+                  @focus="showDatePicker = true"
+                  required
+                ></v-text-field>
+
+                <v-dialog
+                  v-model="showDatePicker"
+                  persistent
+                  width="290px"
+                  @click:outside="showDatePicker = false"
+                >
+                  <v-date-picker
+                    v-model="newHomework.due_date"
+                    @update:model-value="showDatePicker = false"
+                    :first-day-of-week="1"
+                  ></v-date-picker>
+                </v-dialog>
+
+                <vue-timepicker
+                  :key="dueTimePickerKey"
+                  v-model="newHomework.due_time"
+                  label="Due Time"
+                  required
+                  format="HH:mm"
+                  minute-interval="1"
+                  class="time-picker"
+                  :hideDisabledHours="true"
+                  placeholder="  Due time"
+                ></vue-timepicker>
+
+                <v-text-field
+                  v-model="newHomework.content"
+                  label="Homework Content"
+                ></v-text-field>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn @click="saveHomework" color="primary">Save</v-btn>
+                <v-btn @click="closeDialog">Cancel</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </div>
       </div>
 
@@ -42,11 +104,14 @@
 import Chat from "@/components/Chat.vue";
 import { apiClient } from "@/apiConfig";
 import Homework from "@/components/Homework.vue";
+import VueTimepicker from "vue3-timepicker";
+import "vue3-timepicker/dist/VueTimepicker.css";
 
 export default {
   components: {
     Homework,
     Chat,
+    VueTimepicker,
   },
   data() {
     return {
@@ -54,11 +119,29 @@ export default {
       class_id: parseInt(this.$route.params.class_id),
       user_id: NaN,
       user_type: "student",
+      dialogVisible: false,
       newHomework: {
         content: "",
         due_date: null,
       },
+      showDatePicker: false,
+      dueTimePickerKey: 0,
     };
+  },
+  computed: {
+    formattedDate() {
+      if (this.newHomework.due_date) {
+        const date = new Date(this.newHomework.due_date);
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        };
+        return date.toLocaleDateString("en-US", options);
+      }
+      return "";
+    },
   },
   async mounted() {
     try {
@@ -77,9 +160,52 @@ export default {
     }
   },
   methods: {
+    async saveHomework() {
+      try {
+        if (this.class_id) {
+          const date = this.newHomework.due_date;
+          const year = date.getFullYear();
+          const month = date.getMonth() + 1; // getMonth() returns 0-11, so add 1 for the correct month
+          const day = date.getDate();
+
+          // Format the date as YYYY-MM-DD
+          const formattedDate = `${year}-${month
+            .toString()
+            .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+
+          console.log("Formatted date:", formattedDate);
+
+          const response = await apiClient.post(
+            `/classes/${this.class_id}/homework`,
+            {
+              content: this.newHomework.content,
+              class_id: this.class_id,
+              due_date: formattedDate,
+              due_time: this.newHomework.due_time,
+            },
+          );
+          console.log("API Response:", response.data);
+          this.closeDialog();
+        }
+      } catch (error) {
+        console.error("Error adding homework:", error);
+      }
+    },
     redirectToEditGrades() {
       // Navigate to the 'edit-grades' route
       this.$router.push(`/class/${this.class_id}/grades`);
+    },
+    openAddHomeworkDialog() {
+      // Open the dialog when the "Add Homework" button is clicked
+      this.dialogVisible = true;
+    },
+    closeDialog() {
+      // Close the dialog and reset form values
+      this.dialogVisible = false;
+      this.newHomework = {
+        content: "",
+        due_date: null,
+      };
     },
   },
 };
@@ -121,5 +247,10 @@ export default {
 
 .edit-icon {
   font-size: 2rem;
+}
+
+.time-picker {
+  padding-bottom: 25px;
+  width: 100%;
 }
 </style>
