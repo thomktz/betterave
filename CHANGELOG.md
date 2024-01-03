@@ -8,17 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.4.2] - 2024-01-03
 
 ### Changed
+
 - Update init_db script to add homework
 - Updated login screen theme
 
 ## [3.4.1] - 2024-01-03
 
 ### Changed
+
 - Update README.md
 
 ## [3.4.0] - 2024-01-03
 
 ### Added
+
 - Grade model, operations and routes
 - Student grade page
 - Teacher special grade section of class page
