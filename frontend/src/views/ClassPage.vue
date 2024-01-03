@@ -21,25 +21,59 @@
           <span><h1>Edit Grades</h1></span>
           <v-icon class="edit-icon">mdi-pencil</v-icon>
         </div>
-      
+
         <!-- Edit homexorks only available for teachers and admins -->
         <div
           v-if="user_type == 'teacher' || user_type == 'admin'"
           class="edit-container"
           @click="openAddHomeworkDialog"
         >
-          <span><h1>Add Homework </h1></span>
+          <span><h1>Add Homework</h1></span>
           <v-icon class="edit-icon">mdi-pencil</v-icon>
-        
-      
+
           <!-- Dialog for adding new homework -->
           <v-dialog v-model="dialogVisible" max-width="500px">
             <v-card>
               <v-card-title>Add Homework</v-card-title>
               <v-card-text>
-                <v-text-field v-model="newHomework.due_date" label="Due Date"></v-text-field>
-                <v-text-field v-model="newHomework.due_time" label="Due Time"></v-text-field>
-                <v-text-field v-model="newHomework.content" label="Homework Content"></v-text-field>
+                <v-text-field
+                  v-model="formattedDate"
+                  label="Due Date"
+                  readonly
+                  @click="showDatePicker = true"
+                  @focus="showDatePicker = true"
+                  required
+                ></v-text-field>
+
+                <v-dialog
+                  v-model="showDatePicker"
+                  persistent
+                  width="290px"
+                  @click:outside="showDatePicker = false"
+                >
+                  <v-date-picker
+                    v-model="newHomework.due_date"
+                    @update:model-value="showDatePicker = false"
+                    :first-day-of-week="1"
+                  ></v-date-picker>
+                </v-dialog>
+
+                <vue-timepicker
+                  :key="dueTimePickerKey"
+                  v-model="newHomework.due_time"
+                  label="Due Time"
+                  required
+                  format="HH:mm"
+                  minute-interval="1"
+                  class="time-picker"
+                  :hideDisabledHours="true"
+                  placeholder="  Due time"
+                ></vue-timepicker>
+
+                <v-text-field
+                  v-model="newHomework.content"
+                  label="Homework Content"
+                ></v-text-field>
               </v-card-text>
               <v-card-actions>
                 <v-btn @click="saveHomework" color="primary">Save</v-btn>
@@ -48,9 +82,7 @@
             </v-card>
           </v-dialog>
         </div>
-       
       </div>
-
 
       <!-- Middle Container -->
       <div class="info-container">
@@ -108,25 +140,34 @@ export default {
     }
   },
   methods: {
-      async saveHomework() {
-        try {
-            if (this.class_id) {
-              // Implement logic to save the new homework
-              console.log("Saving new homework:", this.newHomework);
-              // Call your backend API to add homework
-              const response = await apiClient.post(`/classes/${this.class_id}/homework`, {
-                    content: this.newHomework.content,
-                    class_id: this.class_id,
-                    due_date: this.newHomework.due_date,
-                    due_time: this.newHomework.due_time,
-                  });
+    async saveHomework() {
+      try {
+        if (this.class_id) {
+          const date = this.newHomework.due_date;
+          const year = date.getFullYear();
+          const month = date.getMonth() + 1; // getMonth() returns 0-11, so add 1 for the correct month
+          const day = date.getDate();
 
-              // Handle the response from the API as needed
-              console.log("API Response:", response.data);
-              // Reset form values and close the dialog
-              this.closeDialog();
-            }
-        } catch (error) {
+          // Format the date as YYYY-MM-DD
+          const formattedDate = `${year}-${month
+            .toString()
+            .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+
+          console.log("Formatted date:", formattedDate);
+
+          const response = await apiClient.post(
+            `/classes/${this.class_id}/homework`,
+            {
+              content: this.newHomework.content,
+              class_id: this.class_id,
+              due_date: formattedDate,
+              due_time: this.newHomework.due_time,
+            },
+          );
+          console.log("API Response:", response.data);
+          this.closeDialog();
+        }
+      } catch (error) {
         console.error("Error adding homework:", error);
       }
     },
@@ -144,7 +185,7 @@ export default {
       this.newHomework = {
         content: "",
         due_date: null,
-        };
+      };
     },
   },
 };

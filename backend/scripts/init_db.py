@@ -81,6 +81,7 @@ homework_contents = [
     "Read chapter 4.",
 ]
 
+
 def initialize_database():
     """Initialize the database with dummy data."""
     with app.app_context():
@@ -294,7 +295,7 @@ def initialize_database():
                 # Choose a random grade between 7 and 19
                 grade_value = random.randint(14, 38) / 2
                 add_grade(student_id, class_id, grade_value)
-        
+
         # 13 - Add homework to half of the classes, randomly
         print("Adding homework...")
         for class_id in class_ids:
