@@ -142,6 +142,8 @@ class GroupHomework(Resource):
         content = api.payload.get("content")
         due_date = api.payload.get("due_date")
         due_time = api.payload.get("due_time")
+        if isinstance(due_time, dict):
+            due_time = f"{due_time['HH']}:{due_time['mm']}"
         hmw = add_homework_to_class(content, class_id=class_id, due_date=due_date, due_time=due_time)
         if hmw:
             return api.marshal(hmw.as_dict(), homework_model), 201

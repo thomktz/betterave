@@ -98,7 +98,7 @@ export default {
 <style scoped>
 .fill-height {
   min-height: 100vh;
-  background: #a3cdcf;
+  background: var(--background-color);
 }
 
 .logo {

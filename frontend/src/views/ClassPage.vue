@@ -37,9 +37,42 @@
             <v-card>
               <v-card-title>Add Homework</v-card-title>
               <v-card-text>
-                <v-text-field v-model="newHomework.due_date" label="Due Date"></v-text-field>
-                <v-text-field v-model="newHomework.due_time" label="Due Time"></v-text-field>
+                <v-text-field
+                  v-model="formattedDate"
+                  label="Due Date"
+                  readonly
+                  @click="showDatePicker = true"
+                  @focus="showDatePicker = true"
+                  required
+                ></v-text-field>
+
+                <v-dialog
+                  v-model="showDatePicker"
+                  persistent
+                  width="290px"
+                  @click:outside="showDatePicker = false"
+                >
+                  <v-date-picker
+                    v-model="newHomework.due_date"
+                    @update:model-value="showDatePicker = false"
+                    :first-day-of-week="1"
+                  ></v-date-picker>
+                </v-dialog>
+        
+                <vue-timepicker
+                  :key="dueTimePickerKey"
+                  v-model="newHomework.due_time"
+                  label="Due Time"
+                  required
+                  format="HH:mm"
+                  minute-interval="1"
+                  class="time-picker"
+                  :hideDisabledHours="true"
+                  placeholder="  Due time"
+                ></vue-timepicker>
+
                 <v-text-field v-model="newHomework.content" label="Homework Content"></v-text-field>
+              
               </v-card-text>
               <v-card-actions>
                 <v-btn @click="saveHomework" color="primary">Save</v-btn>
@@ -72,11 +105,14 @@
 import Chat from "@/components/Chat.vue";
 import { apiClient } from "@/apiConfig";
 import Homework from "@/components/Homework.vue";
+import VueTimepicker from "vue3-timepicker";
+import "vue3-timepicker/dist/VueTimepicker.css";
 
 export default {
   components: {
     Homework,
     Chat,
+    VueTimepicker,
   },
   data() {
     return {
@@ -89,7 +125,24 @@ export default {
         content: "",
         due_date: null,
       },
+      showDatePicker: false,
+      dueTimePickerKey: 0,
     };
+  },
+  computed: {
+    formattedDate() {
+      if (this.newHomework.due_date) {
+        const date = new Date(this.newHomework.due_date);
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        };
+        return date.toLocaleDateString("en-US", options);
+      }
+      return "";
+    },
   },
   async mounted() {
     try {
@@ -111,19 +164,26 @@ export default {
       async saveHomework() {
         try {
             if (this.class_id) {
-              // Implement logic to save the new homework
-              console.log("Saving new homework:", this.newHomework);
-              // Call your backend API to add homework
+
+              const date = this.newHomework.due_date;
+              const year = date.getFullYear();
+              const month = date.getMonth() + 1; // getMonth() returns 0-11, so add 1 for the correct month
+              const day = date.getDate();
+
+              // Format the date as YYYY-MM-DD
+              const formattedDate = `${year}-${month.toString().padStart(2, "0")}-${day
+                .toString()
+                .padStart(2, "0")}`;
+
+              console.log("Formatted date:", formattedDate);
+
               const response = await apiClient.post(`/classes/${this.class_id}/homework`, {
                     content: this.newHomework.content,
                     class_id: this.class_id,
-                    due_date: this.newHomework.due_date,
+                    due_date: formattedDate,
                     due_time: this.newHomework.due_time,
                   });
-
-              // Handle the response from the API as needed
               console.log("API Response:", response.data);
-              // Reset form values and close the dialog
               this.closeDialog();
             }
         } catch (error) {
@@ -186,5 +246,10 @@ export default {
 
 .edit-icon {
   font-size: 2rem;
+}
+
+.time-picker {
+  padding-bottom: 25px;
+  width: 100%;
 }
 </style>
