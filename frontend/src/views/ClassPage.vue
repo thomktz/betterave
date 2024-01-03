@@ -11,7 +11,8 @@
         <p>
           <a :href="classDetails.ensae_link" target="_blank">View ENSAE Link</a>
         </p>
-        <!-- Edit gradesonly available for teachers and admins -->
+
+        <!-- Edit grades only available for teachers and admins -->
         <div
           v-if="user_type == 'teacher' || user_type == 'admin'"
           class="edit-container"
@@ -20,7 +21,36 @@
           <span><h1>Edit Grades</h1></span>
           <v-icon class="edit-icon">mdi-pencil</v-icon>
         </div>
+      
+        <!-- Edit homexorks only available for teachers and admins -->
+        <div
+          v-if="user_type == 'teacher' || user_type == 'admin'"
+          class="edit-container"
+          @click="openAddHomeworkDialog"
+        >
+          <span><h1>Add Homework </h1></span>
+          <v-icon class="edit-icon">mdi-pencil</v-icon>
+        
+      
+          <!-- Dialog for adding new homework -->
+          <v-dialog v-model="dialogVisible" max-width="500px">
+            <v-card>
+              <v-card-title>Add Homework</v-card-title>
+              <v-card-text>
+                <v-text-field v-model="newHomework.due_date" label="Due Date"></v-text-field>
+                <v-text-field v-model="newHomework.due_time" label="Due Time"></v-text-field>
+                <v-text-field v-model="newHomework.content" label="Homework Content"></v-text-field>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn @click="saveHomework" color="primary">Save</v-btn>
+                <v-btn @click="closeDialog">Cancel</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
+       
       </div>
+
 
       <!-- Middle Container -->
       <div class="info-container">
@@ -54,6 +84,7 @@ export default {
       class_id: parseInt(this.$route.params.class_id),
       user_id: NaN,
       user_type: "student",
+      dialogVisible: false,
       newHomework: {
         content: "",
         due_date: null,
@@ -77,9 +108,43 @@ export default {
     }
   },
   methods: {
+      async saveHomework() {
+        try {
+            if (this.class_id) {
+              // Implement logic to save the new homework
+              console.log("Saving new homework:", this.newHomework);
+              // Call your backend API to add homework
+              const response = await apiClient.post(`/classes/${this.class_id}/homework`, {
+                    content: this.newHomework.content,
+                    class_id: this.class_id,
+                    due_date: this.newHomework.due_date,
+                    due_time: this.newHomework.due_time,
+                  });
+
+              // Handle the response from the API as needed
+              console.log("API Response:", response.data);
+              // Reset form values and close the dialog
+              this.closeDialog();
+            }
+        } catch (error) {
+        console.error("Error adding homework:", error);
+      }
+    },
     redirectToEditGrades() {
       // Navigate to the 'edit-grades' route
       this.$router.push(`/class/${this.class_id}/grades`);
+    },
+    openAddHomeworkDialog() {
+      // Open the dialog when the "Add Homework" button is clicked
+      this.dialogVisible = true;
+    },
+    closeDialog() {
+      // Close the dialog and reset form values
+      this.dialogVisible = false;
+      this.newHomework = {
+        content: "",
+        due_date: null,
+        };
     },
   },
 };
