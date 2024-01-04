@@ -20,13 +20,36 @@ Betterave is a school management software designed for students and professors a
 <img width="1200" alt="image" src="https://github.com/thomktz/betterave/assets/60552083/fc2ca296-6561-4ae6-9f07-64ac2f41b01e">
 
 
-## Demonstration videos
+## Features
+
+There are 4 types of user profiles in the software, each with different features and restrictions:
+
+- **Student Profile:**
+  - View schedule and grades
+  - Manage course registrations and check assignments
+  - Access the class roster
+  - Subscribe to news from student associations at the school
+
+- **Association Profile (managed by a student):**
+  - Create events
+  - Send notifications to subscribed students
+
+- **Teacher Profile:**
+  - View schedule
+  - Enter grades
+  - Assign homework to students
+
+- **Administrator Profile:**
+  - Add or remove users
+
+Here you can find demonstration videos according to the type of users :
 
 [Student demo](https://www.youtube.com/watch?v=zZC0X2hOou0)
+
 [Association demo](https://www.youtube.com/watch?v=YLPqCE9lRXs&feature=youtu.be)
 
-
 ## Database Stucture
+
 
 ## API
 
