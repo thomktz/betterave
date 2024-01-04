@@ -27,15 +27,16 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-def create_app():
+def create_app(db_test_path=None):
     """Create the application instance."""
     print(f"Creating app from {os.getcwd()}", flush=True)
     print("API KEY:", os.environ.get("API_KEY"))
 
     # Initialize the Flask app
     app = Flask(__name__)
+    app.config["TESTING"] = db_test_path is not None
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or b"\x05\xe1C\x07k\x1ay<\xb6\xa4\xf8\xc6\xa8f\xb4*"
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////database/betterave.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_test_path if db_test_path else "sqlite:////database/betterave.db"
     app.config.update(
         DEBUG=True,
         SESSION_COOKIE_HTTPONLY=True,
