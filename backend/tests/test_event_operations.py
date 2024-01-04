@@ -1,5 +1,5 @@
 import pytest
-from backend.app.models.user import User
+from app.models.user import User
 from app.models import UserType, UserLevel
 from datetime import date, time
 from app.operations.class_operations import add_class
