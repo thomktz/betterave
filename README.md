@@ -1,4 +1,6 @@
-<img src="https://github.com/thomktz/betterave/assets/82711723/4649d8fd-837b-4be4-93c5-6212d36d7d88" width="200" height="200" alt="betterave-logo">
+<img src="https://github.com/thomktz/betterave/assets/82711723/4649d8fd-837b-4be4-93c5-6212d36d7d88" width="100" height="100" alt="betterave-logo">  
+
+
 _ENSAE année 2023-2024 : Projet Infrastructures et systèmes logiciels_ 
 
 ## **Better**ave: Pamplemousse 2.0
