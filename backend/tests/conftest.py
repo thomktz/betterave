@@ -6,15 +6,13 @@ import os
 
 sys.path.append(os.path.join(os.getcwd(), "backend"))
 
-from main import app
+from create_app import create_app
 from extensions import db
-
-os.environ["API_KEY"] = "BETTERAVEAPIKEY9999" # It sets to None when it runs
 
 @pytest.fixture(scope="function")
 def test_client():
-    app.config["TESTING"] = True
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
+    app = create_app(db_test_path="sqlite:///:memory:")
+    
     context = app.app_context()
     context.push()
     with app.test_client() as client:
