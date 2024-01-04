@@ -30,7 +30,7 @@ IS_MAIN_GROUP = True
 LESSON_DATE = date(2023, 10, 21)
 START_TIME = time(9, 0, 0)
 END_TIME = time(10, 0, 0)
-STUDENT_NAME = ("Alice", "Smith")
+STUDENT_NAME = ("Lucas", "Dough")
 HOMEWORK = "Solve problem set 4"
 ROOM = "A1"
 
@@ -38,7 +38,7 @@ ROOM = "A1"
 @pytest.fixture
 def setup_teacher(test_client):
     """Create a user and returns their ID."""
-    student_id = add_user("John", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
+    student_id = add_user("John", "Adams", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
     return student_id
 
 
