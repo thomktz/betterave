@@ -3,24 +3,24 @@ from app.models import User, ClassGroup, Class, UserType, UserLevel
 
 
 @with_instance(User)
-def get_student_groups(user: User):
+def get_student_groups(user: User) -> list[ClassGroup]:
     """Get all class groups a student is enrolled in."""
-    return user.enrolled_groups
+    return user.enrolled_groups  # type: ignore
 
 
-def get_all_students():
+def get_all_students() -> list[User]:
     """Return all student users in the database."""
     # Assuming UserType is an enum and "student" is one of its members
-    return User.query.filter(User.user_type == UserType.STUDENT).all()
+    return User.query.filter(User.user_type == UserType.STUDENT).all()  # type: ignore
 
 
-def get_students_from_level(level: UserLevel):
+def get_students_from_level(level: UserLevel) -> list[User]:
     """Return all student users from a specific level."""
-    return User.query.filter(User.user_type == UserType.STUDENT, User.level == level).all()
+    return User.query.filter(User.user_type == UserType.STUDENT, User.level == level).all()  # type: ignore
 
 
 @with_instance([User, ClassGroup])
-def is_student_in_group(student: User, group: ClassGroup):
+def is_student_in_group(student: User, group: ClassGroup) -> bool:
     """Check if a student is in a specific class group."""
     return student in group.students
 
@@ -40,7 +40,7 @@ def is_student_in_class(student: User, class_: Class) -> bool:
     return student in class_.main_group().students
 
 
-def get_students_from_class(class_id: int):
+def get_students_from_class(class_id: int) -> list[User]:
     """
     Get all students who have taken a specific class.
 
@@ -56,6 +56,6 @@ def get_students_from_class(class_id: int):
     # Vérifiez si la classe existe
     if class_:
         # Récupérez tous les étudiants du groupe principal de la classe
-        return class_.main_group().students
+        return class_.main_group().students  # type: ignore
     else:
         return []

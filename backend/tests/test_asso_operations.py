@@ -1,3 +1,4 @@
+# type: ignore
 import pytest
 from backend.app.operations import user_operations
 from app.operations.asso_operations import (

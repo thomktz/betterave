@@ -1,3 +1,4 @@
+# type: ignore
 from app.models import UserLevel, UserType
 from app.operations import user_operations
 

@@ -2,6 +2,7 @@
 
 import os
 
+from typing import Optional
 from flask import Flask
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -20,14 +21,14 @@ from app.api import (
 
 
 @login_manager.user_loader
-def load_user(user_id):
+def load_user(user_id: int):  # type: ignore
     """Load the user from the database."""
     from app.models.user import User
 
     return User.query.get(int(user_id))
 
 
-def create_app(db_test_path=None):
+def create_app(db_test_path: Optional[str] = None) -> Flask:
     """Create the application instance."""
     print(f"Creating app from {os.getcwd()}", flush=True)
     print("API KEY:", os.environ.get("API_KEY"))
@@ -93,7 +94,7 @@ def create_app(db_test_path=None):
 
     # For testing purposes
     @app.route("/hello")
-    def index():
+    def index() -> str:
         """Route for testing purposes."""
         return "Hello, World!"
 
