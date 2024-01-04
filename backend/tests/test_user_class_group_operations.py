@@ -1,3 +1,4 @@
+# type: ignore
 import pytest
 from app.models import UserType, UserLevel
 from app.operations.user_class_group_operations import (

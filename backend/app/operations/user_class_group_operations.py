@@ -1,3 +1,4 @@
+from typing import Any, Optional
 from sqlalchemy.exc import SQLAlchemyError
 from extensions import db
 from app.models import UserClassGroup, ClassGroup
@@ -8,7 +9,7 @@ from app.operations.class_group_operations import (
 )
 
 
-def enroll_user_in_class(user_id: int, class_id: int):
+def enroll_user_in_class(user_id: int, class_id: int) -> tuple[str, Optional[int]]:
     """
     Enroll a user in a class.
 
@@ -50,7 +51,7 @@ def enroll_user_in_class(user_id: int, class_id: int):
         return "Error adding user to class", None
 
 
-def unenroll_user_from_class(user_id: int, class_id: int):
+def unenroll_user_from_class(user_id: int, class_id: int) -> str:
     """
     Unenroll a user from a class.
 
@@ -82,7 +83,7 @@ def add_user_class_group(
     user_id: int,
     class_id: int,
     primary_class_group_id: int,
-    secondary_class_group_id: int = None,
+    secondary_class_group_id: Optional[int] = None,
 ) -> int:
     """
     Add a UserClassGroup to the database.
@@ -105,7 +106,7 @@ def add_user_class_group(
         )
         db.session.add(new_user_class_group)
         db.session.commit()
-        return new_user_class_group.id
+        return new_user_class_group.id  # type: ignore
     except SQLAlchemyError as e:
         db.session.rollback()
         print(f"Error adding user class group: {str(e)}")
@@ -113,7 +114,7 @@ def add_user_class_group(
 
 
 @with_instance(UserClassGroup)
-def update_user_class_group(user_class_group: UserClassGroup, new_data: dict) -> bool:
+def update_user_class_group(user_class_group: UserClassGroup, new_data: dict[str, Any]) -> bool:
     """
     Modify UserClassGroup information in the database.
 

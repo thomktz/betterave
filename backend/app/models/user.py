@@ -43,15 +43,15 @@ class User(db.Model, UserMixin):
         backref=db.backref("subscribers", lazy="dynamic"),
     )
 
-    def get_user_type(self):
+    def get_user_type(self) -> UserType:
         """Get the user type."""
         return self.user_type
 
-    def get_id(self):
+    def get_id(self) -> int:
         """Necessary because UserMixin expects either an "id" argument or a "get_id" method."""
         return self.user_id
 
-    def as_dict(self):
+    def as_dict(self) -> dict:
         """Convert the SQLAlchemy object into a dictionary."""
         return {
             "user_id": self.user_id,
@@ -64,21 +64,21 @@ class User(db.Model, UserMixin):
         }
 
     @property
-    def is_student(self):
+    def is_student(self) -> bool:
         """Return whether the user is a student."""
         return self.user_type == UserType.STUDENT
 
     @property
-    def is_teacher(self):
+    def is_teacher(self) -> bool:
         """Return whether the user is a teacher."""
         return self.user_type == UserType.TEACHER
 
     @property
-    def is_asso(self):
+    def is_asso(self) -> bool:
         """Return whether the user is an association."""
         return self.user_type == UserType.ASSO
 
     @property
-    def is_admin(self):
+    def is_admin(self) -> bool:
         """Return whether the user is an admin."""
         return self.user_type == UserType.ADMIN

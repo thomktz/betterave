@@ -1,3 +1,4 @@
+# type: ignore
 import pytest
 from app.operations.class_group_operations import (
     add_class_group,

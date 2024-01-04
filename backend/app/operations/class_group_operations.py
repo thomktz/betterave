@@ -1,3 +1,4 @@
+from typing import Any
 from sqlalchemy.exc import SQLAlchemyError
 from extensions import db
 from app.decorators import with_instance
@@ -20,7 +21,7 @@ def add_class_group(name: str, class_id: int, is_main_group: bool) -> int:
         new_group = ClassGroup(name=name, class_id=class_id, is_main_group=is_main_group)
         db.session.add(new_group)
         db.session.commit()
-        return new_group.group_id
+        return new_group.group_id  # type: ignore
     except SQLAlchemyError as e:
         db.session.rollback()
         print(f"Error adding class group: {str(e)}")
@@ -28,7 +29,7 @@ def add_class_group(name: str, class_id: int, is_main_group: bool) -> int:
 
 
 @with_instance(ClassGroup)
-def update_class_group(group: ClassGroup, new_data: dict) -> bool:
+def update_class_group(group: ClassGroup, new_data: dict[str, Any]) -> bool:
     """
     Modify class group information in the database.
 
@@ -92,7 +93,7 @@ def get_all_class_groups() -> list[ClassGroup]:
     Returns:
         list[ClassGroup]: A list of class group objects.
     """
-    return ClassGroup.query.all()
+    return ClassGroup.query.all()  # type: ignore
 
 
 @with_instance([User, ClassGroup])
@@ -143,6 +144,6 @@ def unenroll_student_from_group(student: User, group: ClassGroup) -> bool:
         return False
 
 
-def get_class_group_by_name(class_id, name):
+def get_class_group_by_name(class_id: int, name: str) -> ClassGroup:
     """Return a class group by its name."""
     return ClassGroup.query.filter_by(class_id=class_id, name=name).first()
