@@ -3,7 +3,7 @@ This module contains functions for performing operations on users in the databas
 
 It excludes operations related specifically to students, which are defined in student_operations.py.
 """
-
+from typing import Optional, Any
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import and_
 from extensions import db, bcrypt
@@ -14,12 +14,12 @@ from app.operations.event_operations import get_all_events
 
 def hash_password(password: str) -> str:
     """Hash a given password."""
-    return bcrypt.generate_password_hash(password).decode("utf-8")
+    return bcrypt.generate_password_hash(password).decode("utf-8")  # type: ignore
 
 
 def check_password(hashed_password: str, password: str) -> bool:
     """Check if a given password matches a hashed password."""
-    return bcrypt.check_password_hash(hashed_password, password)
+    return bcrypt.check_password_hash(hashed_password, password)  # type: ignore
 
 
 def authenticate_user(email: str, password: str) -> bool:
@@ -36,10 +36,10 @@ def add_user(
     profile_pic: str,
     user_type: str,
     level: str = "N/A",
-    email_override: str = None,
-    password_override: str = None,
-    linkedin: str = None,
-    website: str = None,
+    email_override: Optional[str] = None,
+    password_override: Optional[str] = None,
+    linkedin: Optional[str] = None,
+    website: Optional[str] = None,
 ) -> int:
     """
     Add a user to the database.
@@ -86,7 +86,7 @@ def add_user(
         # Update the user's attendance to events
         update_event_attendance(new_user)
 
-        return new_user.user_id
+        return new_user.user_id  # type: ignore
     except SQLAlchemyError as e:
         db.session.rollback()
         print(f"Error adding user: {str(e)}")
@@ -94,7 +94,7 @@ def add_user(
 
 
 @with_instance(User)
-def update_event_attendance(user: User):
+def update_event_attendance(user: User) -> None:
     """Update the attendance of a user to the events of the database."""
     # Loop through all events
     for event in get_all_events():
@@ -129,7 +129,7 @@ def update_event_attendance(user: User):
 
 
 @with_instance(User)
-def update_user(user: User, new_data: dict) -> bool:
+def update_user(user: User, new_data: dict[str, Any]) -> bool:
     """
     Modify user information in the database.
 
@@ -203,16 +203,16 @@ def get_user_by_email(email: str) -> User:
 
 def get_all_users() -> list[User]:
     """Return all users in the database."""
-    return User.query.all()
+    return User.query.all()  # type: ignore
 
 
 @with_instance(User)
 def get_user_profile_pic(user: User) -> str:
     """Get the profil picture of a particular user."""
-    return user.profile_pic
+    return user.profile_pic  # type: ignore
 
 
-def get_user_by_name(name, surname):
+def get_user_by_name(name: str, surname: str) -> User:
     """Get a user by their name and surname."""
     user = User.query.filter(and_(User.name.ilike(name), User.surname.ilike(surname))).first()
     if user:

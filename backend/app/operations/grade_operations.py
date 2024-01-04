@@ -1,8 +1,9 @@
+from typing import Optional
 from extensions import db
 from app.models import Grade
 
 
-def add_grade(student_id, class_id, grade_value):
+def add_grade(student_id: int, class_id: int, grade_value: float) -> Optional[Grade]:
     """Add a grade for a student in a class."""
     grade = Grade(student_id=student_id, class_id=class_id, grade=grade_value)
 
@@ -18,12 +19,12 @@ def add_grade(student_id, class_id, grade_value):
         return None
 
 
-def get_grades_by_student_and_class_id(student_id: int, class_id: int):
+def get_grades_by_student_and_class_id(student_id: int, class_id: int) -> list[Grade]:
     """Retrieve grades for a specific student in a specific class."""
     return sorted(Grade.query.filter_by(student_id=student_id, class_id=class_id).all())
 
 
-def update_student_grade(class_id, student_id, new_grade):
+def update_student_grade(class_id: int, student_id: int, new_grade: float) -> bool:
     """Update the grade for a specific student in a specific class."""
     try:
         # Récupérer l'objet Grade à partir de la base de données
