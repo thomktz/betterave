@@ -42,7 +42,7 @@ There are 4 types of user profiles in the software, each with different features
 - **Administrator Profile:**
   - Add or remove users
 
-Here you can find demonstration videos according to the type of users :
+Here you can find demonstration videos according to the type of users:
 
 [Student demo](https://www.youtube.com/watch?v=zZC0X2hOou0)
 
@@ -52,7 +52,43 @@ Here you can find demonstration videos according to the type of users :
 
 ![Diagramme de la base de données](https://github.com/thomktz/betterave/assets/82711723/28393118-e898-405b-9c2a-8fb463c8a8af)
 
-## API
+## API Structure 
+
+RESTful 
+
+
+## Code standards 
+
+- **Using Pre-Commit**  
+  If you wish to integrate Pre-Commit into your workflow, simply follow these steps:
+  - Install Pre-Commit in your Python environment using the following command:
+     ```pip install pre-commit```
+  - Run the following command to set up Pre-Commit in your repository:
+     ```pre-commit install```
+  - If you want to manually run hooks on files you've modified and staged, use the command:
+      ```pre-commit run```
+  - To run hooks across the entire codebase, including all files, use the command:
+      ```pre-commit run --all-files```
+
+- **Code review and Pull requests**  
+  We encourage collaboration through the use of pull requests (PRs) for proposing changes to the codebase:
+  - **Fork the Repo:** Fork the repository to your GitHub account.
+  - **Create a Branch:** Start a new branch for your changes.
+  - **Make Changes:** Implement your code changes in the branch.
+  - **Commit & Push:** Commit changes and push to your fork.
+  - **Open a Pull Request:** Propose changes through a pull request.
+  - **Code Review:** Team members review and provide feedback.
+  - **Address Feedback:** Make necessary changes based on feedback.
+  - **Merge:** Once approved, changes are merged.
+
+- **Testing**  
+  To test the code, run `pytest` in the source directory. This will exercise the unit tests (using [pytest](https://docs.pytest.org/)) and generate a coverage report.
+
+## Deployment
+
+Docker
+Serveur
+DNS
 
 ## Setup for development
 
@@ -99,5 +135,16 @@ And to see the logs,
 ```bash
 docker compose logs
 ```
-## Difficulties and Areas for Improvement
+
+
+## Difficulties and Areas for Improvement 
+
+- Notifications functionnality to be finished
+
+
+
+
+
+
+
 
