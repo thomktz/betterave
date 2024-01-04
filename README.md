@@ -50,6 +50,7 @@ Here you can find demonstration videos according to the type of users :
 
 ## Database Stucture
 
+![Diagramme de la base de données](https://github.com/thomktz/betterave/assets/82711723/28393118-e898-405b-9c2a-8fb463c8a8af)
 
 ## API
 
@@ -99,3 +100,4 @@ And to see the logs,
 docker compose logs
 ```
 ## Difficulties and Areas for Improvement
+
