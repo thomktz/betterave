@@ -3,7 +3,6 @@ from backend.app.models.class_ import Class
 from backend.app.models.user import User
 from app.models import UserType, UserLevel
 from app.operations.class_operations import add_class
-from app.operations.class_group_operations import add_class_group, delete_class_group
 from app.operations.grade_operations import (
     add_grade,
     get_grades_by_student_and_class_id,
