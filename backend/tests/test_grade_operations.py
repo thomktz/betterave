@@ -1,6 +1,4 @@
 import pytest
-from backend.app.models.class_ import Class
-from backend.app.models.user import User
 from app.models import UserType, UserLevel
 from app.operations.class_operations import add_class
 from app.operations.grade_operations import (
