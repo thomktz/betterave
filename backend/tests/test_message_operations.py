@@ -12,7 +12,7 @@ from app.operations.message_operations import (
 )
 from app.operations.user_operations import add_user
 
-STUDENT_NAME = ("Alice", "Smith")
+STUDENT_NAME = ("Zoe", "Smith")
 GROUP_NAME = "Test Group"
 IS_MAIN_GROUP = True
 MESSAGE_CONTENT = "Hello, this is a test message!"
@@ -21,7 +21,7 @@ MESSAGE_CONTENT = "Hello, this is a test message!"
 @pytest.fixture
 def setup_teacher(test_client):
     """Create a user and returns their ID."""
-    student_id = add_user("John", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
+    student_id = add_user("Allan", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
     return student_id
 
 

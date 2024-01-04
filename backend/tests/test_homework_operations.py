@@ -15,7 +15,7 @@ from app.operations.homework_operations import (
 )
 from app.operations.user_operations import add_user
 
-STUDENT_NAME = ("Alice", "Smith")
+STUDENT_NAME = ("Alice", "Doe")
 GROUP_NAME = "Test Group"
 IS_MAIN_GROUP = True
 DUE_DATE = "2023-12-31"
@@ -26,7 +26,7 @@ HOMEWORK_CONTENT = "Complete assignment 1"
 @pytest.fixture
 def setup_teacher(test_client):
     """Create a user and returns their ID."""
-    student_id = add_user("John", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
+    student_id = add_user("Thomas", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
     return student_id
 
 
