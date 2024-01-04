@@ -28,7 +28,7 @@ def load_user(user_id):
 
 
 def create_app():
-    """Create the applicaiton instance."""
+    """Create the application instance."""
     print(f"Creating app from {os.getcwd()}", flush=True)
     print("API KEY:", os.environ.get("API_KEY"))
 
