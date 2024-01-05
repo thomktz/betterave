@@ -6,6 +6,7 @@ _ENSAE année 2023-2024 : Projet Infrastructures et systèmes logiciels_
 ## Table of Contents
 
 - [Introduction](#betterave-pamplemousse-20)
+- [Features](#features)
 - [Repository Organization](#repository-organization)
 - [Database Structure](#database-structure)
 - [API Structure](#api-structure)
@@ -113,6 +114,9 @@ This organized structure enhances the clarity and maintainability of the API imp
 ## Frontend
 
 The frontend of this application is built using [Vue.js](https://vuejs.org/), a progressive JavaScript framework. It provides a user-friendly interface for interacting with the backend services.
+Within this directory, you'll find two main subfolders:
+- `public` (houses logos, photos displayed on the app)
+- `src` (houses the Vue scripts, font files, and style configurations that contribute to the frontend functionality and appearance...)
 
 
 ## Code standards 
