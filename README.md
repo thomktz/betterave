@@ -3,6 +3,9 @@
 
 _ENSAE année 2023-2024 : Projet Infrastructures et systèmes logiciels_ 
 
+**Link to the website** : [betterave.kientz.net](https://betterave.kientz.net)
+Link to the API : [api.betterave.kientz.net](https://api.betterave.kientz.net)
+
 ## Table of Contents
 
 - [Introduction](#betterave-pamplemousse-20)
@@ -33,6 +36,8 @@ Betterave is a school management software designed for students and professors a
 <img width="1200" alt="image" src="https://github.com/thomktz/betterave/assets/60552083/353cdd6b-93d0-4354-9c99-0f1bbd496da7">
 <img width="1200" alt="image" src="https://github.com/thomktz/betterave/assets/60552083/fc2ca296-6561-4ae6-9f07-64ac2f41b01e">
 
+**Link to the website** : [betterave.kientz.net](https://betterave.kientz.net)
+
 
 ## Features
 
@@ -62,6 +67,8 @@ Here you can find demonstration videos according to the type of users:
 [Student demo](https://www.youtube.com/watch?v=zZC0X2hOou0)
 
 [Association demo](https://www.youtube.com/watch?v=YLPqCE9lRXs&feature=youtu.be)
+
+Login is handled using flask-login, and the password is hashed using bcrypt, before being stored in the database.
 
 ## Repository Organization
 
@@ -95,6 +102,8 @@ While coding the data structure, we incrementally added tables to fit new featur
 
 This application is built using Flask-RESTx (branch of Flask-RESTful), a Flask extension designed to simplify the development of RESTful APIs. Flask-RESTful streamlines the process of creating API endpoints, managing resources, and incorporating RESTful features seamlessly.
 
+The organized structure of the API allows us to easily create an API page, which provides a clear overview of the API endpoints and their respective functionalities. Link to the API : [api.betterave.kientz.net](https://api.betterave.kientz.net)
+
 ### API Scripts Location
 
 All scripts related to the API are centralized in the `backend/app/api` directory. Within this directory, you'll find various subfolders:
@@ -121,6 +130,7 @@ Within this directory, you'll find two main subfolders:
 - `public` (houses logos, photos displayed on the app)
 - `src` (houses the Vue scripts, font files, and style configurations that contribute to the frontend functionality and appearance...)
 
+We used **vuetify** for tables and form elements, but coded many components ourselves, such as the grade table, the groupchats, the next classes, etc.
 
 ## Code standards 
 
@@ -149,7 +159,9 @@ To test the code, execute `pytest` in the source directory. This command will ru
 
 ### Docker
 
-The code is containerized using Docker. Both frontend and backend have their Dockerfile, and a `docker-compose.yml` in the root folder is used to orchestrate them, and the database/volumes. More information on how to setup the app for development can be found in the section 
+The code is containerized using Docker. Both frontend and backend have their Dockerfile, and a `docker-compose.yml` in the root folder is used to orchestrate them, and the database/volumes. More information on how to setup the app for development can be found in the Setup for Development section.
+
+The compose file also allows us to use a specific address for the frontend and backend within a docker network, which is useful for the reverse proxy.
 
 ### Server
 
