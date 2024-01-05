@@ -21,11 +21,11 @@ def add_event(
     """Add an event to the database."""
     try:
         if isinstance(date, str):
-            date_ = datetime.strptime(date, "%Y-%m-%d").date()
+            date = datetime.strptime(date, "%Y-%m-%d").date()
         if isinstance(start_time, str):
-            start_time_ = datetime.strptime(start_time, "%H:%M").time()
+            start_time = datetime.strptime(start_time, "%H:%M").time()
         if isinstance(end_time, str):
-            end_time_ = datetime.strptime(end_time, "%H:%M").time()
+            end_time = datetime.strptime(end_time, "%H:%M").time()
 
         if participants == "Subscribers":
             attending_users = User.query.get(asso_id).subscribers
@@ -38,9 +38,9 @@ def add_event(
         new_event = Event(
             asso_id=asso_id,
             name=name,
-            date=date_,
-            start_time=start_time_,
-            end_time=end_time_,
+            date=date,
+            start_time=start_time,
+            end_time=end_time,
             description=description,
             location=location,
             attending_users=attending_users,

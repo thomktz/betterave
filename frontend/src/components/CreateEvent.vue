@@ -30,7 +30,7 @@
           ></v-date-picker>
         </v-dialog>
         <div class="timepickers">
-          <vue-timepicker
+          <VueTimepicker
             :key="startTimePickerKey"
             v-model="eventData.start_time"
             label="Start Time"
@@ -41,9 +41,9 @@
             class="time-picker"
             :hideDisabledHours="true"
             placeholder="  Start time"
-          ></vue-timepicker>
+          ></VueTimepicker>
 
-          <vue-timepicker
+          <VueTimepicker
             :key="endTimePickerKey"
             v-model="eventData.end_time"
             label="End Time"
@@ -54,7 +54,7 @@
             class="time-picker"
             :hideDisabledHours="true"
             placeholder="  End time"
-          ></vue-timepicker>
+          ></VueTimepicker>
         </div>
 
         <v-select

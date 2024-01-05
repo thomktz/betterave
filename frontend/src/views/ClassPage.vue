@@ -58,7 +58,7 @@
                   ></v-date-picker>
                 </v-dialog>
 
-                <vue-timepicker
+                <VueTimepicker
                   :key="dueTimePickerKey"
                   v-model="newHomework.due_time"
                   label="Due Time"
@@ -68,7 +68,7 @@
                   class="time-picker"
                   :hideDisabledHours="true"
                   placeholder="  Due time"
-                ></vue-timepicker>
+                ></VueTimepicker>
 
                 <v-text-field
                   v-model="newHomework.content"
@@ -104,11 +104,14 @@
 import Chat from "@/components/Chat.vue";
 import { apiClient } from "@/apiConfig";
 import Homework from "@/components/Homework.vue";
+import VueTimepicker from "vue3-timepicker";
+import "vue3-timepicker/dist/VueTimepicker.css";
 
 export default {
   components: {
     Homework,
     Chat,
+    VueTimepicker,
   },
   data() {
     return {
@@ -121,7 +124,24 @@ export default {
         content: "",
         due_date: null,
       },
+      showDatePicker: false,
+      dueTimePickerKey: 0,
     };
+  },
+  computed: {
+    formattedDate() {
+      if (this.newHomework.due_date) {
+        const date = new Date(this.newHomework.due_date);
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        };
+        return date.toLocaleDateString("en-US", options);
+      }
+      return "";
+    },
   },
   async mounted() {
     try {
@@ -147,14 +167,11 @@ export default {
           const year = date.getFullYear();
           const month = date.getMonth() + 1; // getMonth() returns 0-11, so add 1 for the correct month
           const day = date.getDate();
-
           // Format the date as YYYY-MM-DD
           const formattedDate = `${year}-${month
             .toString()
             .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
-
           console.log("Formatted date:", formattedDate);
-
           const response = await apiClient.post(
             `/classes/${this.class_id}/homework`,
             {
@@ -227,5 +244,9 @@ export default {
 
 .edit-icon {
   font-size: 2rem;
+}
+.time-picker {
+  padding-bottom: 25px;
+  width: 100%;
 }
 </style>

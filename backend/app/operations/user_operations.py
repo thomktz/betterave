@@ -98,13 +98,9 @@ def update_event_attendance(user: User) -> None:
     """Update the attendance of a user to the events of the database."""
     # Loop through all events
     for event in get_all_events():
-        print(event.name)
-        print(event.participant_type)
-        print(user.level.value)
-        print()
         # If user already has an attendance for this event
         if event in user.attended_events:
-            if event.participant_type == "Subscribers":
+            if event.participant_type == "Subscribers" and event.association not in user.subscriptions:
                 user.attended_events.remove(event)
 
             elif event.participant_type == "All users":
