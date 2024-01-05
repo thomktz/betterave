@@ -15,8 +15,8 @@ STUDENT_NAME = ("Alice", "Smith")
 @pytest.fixture
 def setup_teacher(test_client):
     """Create a user and returns their ID."""
-    student_id = add_user("John", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
-    return student_id
+    teacher_id = add_user("John", "Doe", "teacher_pic_url", UserType.TEACHER, UserLevel.NA)
+    return teacher_id
 
 
 @pytest.fixture
