@@ -159,6 +159,9 @@ We used **vuetify** for tables and form elements, but coded many components ours
 - **Testing**  
   To test the code, execute `pytest` in the source directory. This command will run the unit tests (using pytest) and generate a coverage report. Our tests cover mostly the database operations, which is critical when developing an API, since routes are just shallow interfaces to the operations. Our test suite contains **68 tests**.
 
+- **ChangeLog**  
+  
+  We started a [CHANGELOG.md](https://github.com/thomktz/betterave/blob/main/CHANGELOG.md) to keep track of versions and the features added by each PR
 ## Deployment
 
 ### Docker
