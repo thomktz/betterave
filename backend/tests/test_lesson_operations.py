@@ -16,7 +16,7 @@ from app.operations.lesson_operations import (
     get_student_lessons,
     get_student_future_lessons,
     get_teacher_lessons,
-    get_teacher_future_lessons
+    get_teacher_future_lessons,
 )
 from app.operations.user_operations import add_user
 
@@ -117,27 +117,6 @@ def test_delete_lesson(test_client, setup_lesson):
     success = delete_lesson(setup_lesson)
     assert success is True
     assert get_lesson_by_id(setup_lesson) is None
-
-
-def test_get_lesson_by_id(test_client, setup_lesson):
-    """Test getting a lesson by its ID."""
-    lesson = get_lesson_by_id(setup_lesson)
-    assert lesson is not None
-    assert lesson.lesson_id == setup_lesson
-
-
-def test_get_all_lessons(test_client, setup_lesson):
-    """Test getting all lessons."""
-    lessons = get_all_lessons()
-    assert lessons is not None
-    assert len(lessons) >= 1
-
-
-def test_get_all_future_lessons(test_client, setup_lesson):
-    """Test getting all future lessons."""
-    future_lessons = get_all_future_lessons()
-    assert future_lessons is not None
-    assert all(lesson.date >= datetime.now().date() for lesson in future_lessons)
 
 
 def test_get_lesson_by_id(test_client, setup_lesson):

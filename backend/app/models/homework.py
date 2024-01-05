@@ -1,4 +1,6 @@
+# type: ignore
 """SQLAlchemy object for homework associated with a ClassGroup."""
+from typing import Any
 from extensions import db
 
 
@@ -15,15 +17,15 @@ class Homework(db.Model):
     # Relationships
     group_ref = db.relationship("ClassGroup", back_populates="homework")
 
-    def get_id(self):
+    def get_id(self) -> str:
         """Get the homework's ID."""
         return str(self.homework_id)
 
-    def get_content(self):
+    def get_content(self) -> str:
         """Get the homework's content."""
         return str(self.content)
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         """Define the '<' operator for Homework objects."""
         if self.due_date != other.due_date:
             return self.due_date < other.due_date
@@ -33,7 +35,7 @@ class Homework(db.Model):
             return False
         return self.due_time < other.due_time
 
-    def as_dict(self):
+    def as_dict(self) -> dict[str, Any]:
         """Return the homework as a dictionary."""
         return {
             "homework_id": self.homework_id,

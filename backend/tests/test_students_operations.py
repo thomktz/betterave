@@ -1,3 +1,4 @@
+# type: ignore
 import pytest
 from app.models.class_group import ClassGroup
 from app.models.user import User
@@ -11,7 +12,7 @@ from app.operations.student_operations import (
     get_students_from_class,
     get_students_from_level,
     is_student_in_class,
-    is_student_in_group
+    is_student_in_group,
 )
 from app.operations.user_operations import add_user
 
@@ -55,12 +56,12 @@ def setup_group(test_client, setup_class):
     delete_class_group(group_id)
 
 
-def test_get_student_groups(test_client, setup_student, setup_group, setup_class):
+def test_get_student_groups(test_client, setup_student, setup_group, setup_class, setup_teacher):
     """Test getting class groups a student is enrolled in."""
     enroll_student_in_group(setup_student, setup_group)
     student_groups = get_student_groups(User.query.get(setup_student))
     assert len(student_groups) >= 1
-    assert setup_group in student_groups
+    assert setup_group in [group.group_id for group in student_groups]
 
 
 def test_get_all_students(test_client, setup_student):
@@ -84,14 +85,16 @@ def test_is_student_in_group(test_client, setup_student, setup_group):
     assert result is True
 
 
-def test_is_student_in_class(test_client, setup_student, setup_class):
+def test_is_student_in_class(test_client, setup_student, setup_class, setup_group):
     """Test checking if a student is in the main group of a specific class."""
+    enroll_student_in_group(setup_student, setup_group)
     result = is_student_in_class(User.query.get(setup_student), Class.query.get(setup_class))
     assert result is True
 
 
-def test_get_students_from_class(test_client, setup_student, setup_class):
+def test_get_students_from_class(test_client, setup_student, setup_class, setup_group):
     """Test getting students who have taken a specific class."""
+    enroll_student_in_group(setup_student, setup_group)
     students_from_class = get_students_from_class(setup_class)
     assert len(students_from_class) >= 1
     assert User.query.get(setup_student) in students_from_class

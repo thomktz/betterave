@@ -1,3 +1,4 @@
+# type: ignore
 """Custom decorators for Flask routes.
 
 with_instance:
@@ -44,7 +45,7 @@ from flask_restx import abort
 from app.models import User
 
 
-def is_valid_apikey(key):
+def is_valid_apikey(key: str) -> bool:
     """Check if the API key is valid."""
     return key == os.getenv("API_KEY")
 
@@ -99,7 +100,7 @@ def with_instance(model_classes: Union[Type[Any], List[Type[Any]]]) -> Callable:
     return decorator
 
 
-def require_authentication(*user_types_required):
+def require_authentication(*user_types_required: List[str]):
     """
     Authentificate user or check for valid API key.
 
@@ -108,7 +109,7 @@ def require_authentication(*user_types_required):
     If no user types are specified, the decorator will allow any authenticated user to access the route.
     """
 
-    def decorator(f):
+    def decorator(f: Callable) -> Callable:
         @wraps(f)
         def decorated_function(*args, **kwargs):
             # Skip API key check if the user is already authenticated
@@ -134,7 +135,7 @@ def require_authentication(*user_types_required):
     return decorator
 
 
-def current_user_required(f):
+def current_user_required(f: Callable) -> Callable:
     """
     Ensure that the current user is either the user specified by the user_id in the route or an admin.
 
@@ -166,7 +167,7 @@ def current_user_required(f):
     return decorated_function
 
 
-def resolve_user(f):
+def resolve_user(f: Callable) -> Callable:
     """
     Resolve the user from the user_id_or_me parameter in the route.
 

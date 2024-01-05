@@ -82,7 +82,7 @@ homework_contents = [
 ]
 
 
-def initialize_database():
+def initialize_database() -> None:
     """Initialize the database with dummy data."""
     with app.app_context():
         db.session.remove()

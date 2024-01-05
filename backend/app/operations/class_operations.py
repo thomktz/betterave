@@ -1,3 +1,4 @@
+# type: ignore
 import time
 from sqlalchemy.exc import SQLAlchemyError
 from extensions import db

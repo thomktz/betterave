@@ -1,3 +1,4 @@
+# type: ignore
 from flask_restx import Resource
 from flask_login import current_user
 from .models import class_model, homework_model, homework_post_model

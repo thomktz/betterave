@@ -30,14 +30,16 @@ class Class(db.Model):
     groups = db.relationship("ClassGroup", back_populates="class_ref", lazy="dynamic")
     user_groups = db.relationship("UserClassGroup", back_populates="class_", lazy="dynamic")
 
-    def main_group(self):
+    # Not type-hinted because of circular import
+    def main_group(self):  # type: ignore
         """Retrieve the main group for this class."""
         return self.groups.filter_by(is_main_group=True).first()
 
-    def secondary_groups(self):
+    # Not type-hinted because of circular import
+    def secondary_groups(self):  # type: ignore
         """Retrieve the secondary groups for this class."""
         return self.groups.filter_by(is_main_group=False).all()
 
-    def get_id(self):
+    def get_id(self) -> str:
         """Get the ID of this class."""
         return str(self.class_id)

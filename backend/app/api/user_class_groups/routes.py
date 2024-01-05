@@ -1,3 +1,4 @@
+# type: ignore
 from flask_restx import Resource
 from .models import user_class_group_model, user_class_group_update_model
 from .namespace import api

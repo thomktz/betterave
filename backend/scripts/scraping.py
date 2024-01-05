@@ -1,8 +1,9 @@
+# type: ignore
 """Script to scrap classes schedule and match classes with id and ECTS."""
-
 import json
 import re
 import requests
+from typing import Union
 from bs4 import BeautifulSoup
 
 
@@ -276,7 +277,7 @@ def combine_lessons(event_data: list) -> list:
     return result
 
 
-def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
+def match_id_ects(event_data: list, mapping: dict = MAPPING) -> list:
     """
     Match id and ECTS to a class.
 
@@ -381,7 +382,7 @@ def match_id_ects(event_data: list, mapping: dict = MAPPING) -> tuple:
     return out_data
 
 
-def replace_unicode_escapes(obj) -> dict:
+def replace_unicode_escapes(obj: Union[str, list, dict]) -> Union[str, list, dict]:
     """Replace unicode escapes in json, for instance replace \u00e9 by é."""
     if isinstance(obj, str):
         return obj.encode("utf-8").decode("unicode_escape")

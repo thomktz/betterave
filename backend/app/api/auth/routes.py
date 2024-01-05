@@ -1,3 +1,4 @@
+# type: ignore
 from flask_restx import Resource
 from flask_login import login_user, current_user, logout_user
 from .namespace import api
