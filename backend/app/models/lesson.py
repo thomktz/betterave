@@ -24,14 +24,14 @@ class Lesson(db.Model):
     class_group = db.relationship("ClassGroup", back_populates="lessons")
 
     # Ordering methods for comparing lessons
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:  # type: ignore
         """Compare first by date, then by start time."""
         if not isinstance(other, Lesson):
             return NotImplemented
         return (self.date, self.start_time) < (other.date, other.start_time)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:  # type: ignore
         """Equal if both date and start time are the same."""
         if not isinstance(other, Lesson):
             return NotImplemented
-        return self.date == other.date and self.start_time == other.start_time
+        return self.date == other.date and self.start_time == other.start_time  # type: ignore

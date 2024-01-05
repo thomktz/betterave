@@ -1,5 +1,6 @@
 """SQLAlchemy object representing a user with different roles and levels."""
 
+from typing import Any
 from flask_login import UserMixin
 from extensions import db
 from app.models.enums import UserLevel, UserType
@@ -49,9 +50,9 @@ class User(db.Model, UserMixin):
 
     def get_id(self) -> int:
         """Necessary because UserMixin expects either an "id" argument or a "get_id" method."""
-        return self.user_id
+        return self.user_id  # type: ignore
 
-    def as_dict(self) -> dict:
+    def as_dict(self) -> dict[str, Any]:
         """Convert the SQLAlchemy object into a dictionary."""
         return {
             "user_id": self.user_id,
@@ -66,19 +67,19 @@ class User(db.Model, UserMixin):
     @property
     def is_student(self) -> bool:
         """Return whether the user is a student."""
-        return self.user_type == UserType.STUDENT
+        return self.user_type == UserType.STUDENT  # type: ignore
 
     @property
     def is_teacher(self) -> bool:
         """Return whether the user is a teacher."""
-        return self.user_type == UserType.TEACHER
+        return self.user_type == UserType.TEACHER  # type: ignore
 
     @property
     def is_asso(self) -> bool:
         """Return whether the user is an association."""
-        return self.user_type == UserType.ASSO
+        return self.user_type == UserType.ASSO  # type: ignore
 
     @property
     def is_admin(self) -> bool:
         """Return whether the user is an admin."""
-        return self.user_type == UserType.ADMIN
+        return self.user_type == UserType.ADMIN  # type: ignore

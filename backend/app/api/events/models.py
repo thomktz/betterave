@@ -1,16 +1,17 @@
+# type: ignore
 from datetime import datetime
 from flask_restx import fields
 from .namespace import api
 
 
 class AssoNameModel(fields.Raw):
-    def format(self, value):
+    def format(self, value) -> str:
         """Format the association name to be displayed in the calendar."""
         return value.name
 
 
 class EventBackgroundColorModel(fields.Raw):
-    def format(self, value):
+    def format(self, value) -> str:
         """Define the default background color for events."""
         return "#FFFFFF"
 

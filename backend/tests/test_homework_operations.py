@@ -1,3 +1,4 @@
+# type: ignore
 import pytest
 from app.models.class_ import Class
 from app.models.user import User
@@ -6,12 +7,11 @@ from app.operations.class_operations import add_class
 from app.operations.class_group_operations import add_class_group
 from app.operations.homework_operations import (
     get_homework_by_group_id,
-    add_homework_to_class,
     add_homework_to_group,
     delete_homework,
     get_class_homework,
     add_homework_to_class,
-    get_user_homework
+    get_user_homework,
 )
 from app.operations.user_operations import add_user
 
@@ -21,7 +21,7 @@ IS_MAIN_GROUP = True
 DUE_DATE = "2023-12-31"
 DUE_TIME = "23:59"
 HOMEWORK_CONTENT = "Complete assignment 1"
-    
+
 
 @pytest.fixture
 def setup_teacher(test_client):
@@ -64,7 +64,7 @@ def test_get_homework_by_group_id(test_client, setup_group):
     assert homework_list is not None
 
 
-def test_add_homework_to_class(test_client, setup_class):
+def test_add_homework_to_class(test_client, setup_class, setup_group):
     """Test adding homework to a specific class."""
     homework = add_homework_to_class(HOMEWORK_CONTENT, setup_class, DUE_DATE, DUE_TIME)
     assert homework is not None
@@ -78,7 +78,7 @@ def test_delete_homework(test_client, setup_group):
     assert success is True
 
 
-def test_get_class_homework(test_client, setup_class):
+def test_get_class_homework(test_client, setup_class, setup_group):
     """Test retrieving homework for a specific class."""
     class_homework = get_class_homework(Class.query.get(setup_class))
     assert class_homework is not None

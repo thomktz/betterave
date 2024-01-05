@@ -1,3 +1,4 @@
+# type: ignore
 from flask_restx import Resource
 from .models import fullcalendar_lesson_model, lesson_post_model
 from .namespace import api

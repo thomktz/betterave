@@ -5,7 +5,7 @@ from app.models import User, ClassGroup, Class, UserType, UserLevel
 @with_instance(User)
 def get_student_groups(user: User) -> list[ClassGroup]:
     """Get all class groups a student is enrolled in."""
-    return user.enrolled_groups  # type: ignore
+    return user.groups  # type: ignore
 
 
 def get_all_students() -> list[User]:

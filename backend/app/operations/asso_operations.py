@@ -52,4 +52,4 @@ def unsubscribe_from_asso(user: User, asso: User) -> bool:
 
 def get_all_assos() -> list[User]:
     """Get all associations."""
-    return User.query.filter_by(user_type=UserType("asso")).all()
+    return User.query.filter_by(user_type=UserType("asso")).all()  # type: ignore

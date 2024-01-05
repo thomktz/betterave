@@ -1,4 +1,5 @@
 """SQLAlchemy object for Grade associated with a ClassGroup."""
+from typing import Any
 from extensions import db
 
 
@@ -11,19 +12,19 @@ class Grade(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
     grade = db.Column(db.Integer, nullable=False)
 
-    def get_id(self):
+    def get_id(self) -> str:
         """Get the grade's ID."""
         return str(self.grade_id)
 
-    def get_student_id(self):
+    def get_student_id(self) -> str:
         """Get the grade's student's ID."""
         return str(self.user_id)
 
-    def get_grade(self):
+    def get_grade(self) -> str:
         """Get the grade."""
         return str(self.grade)
 
-    def as_dict(self):
+    def as_dict(self) -> dict[str, Any]:
         """Return the grade as a dictionary."""
         return {
             "grade_id": self.grade_id,

@@ -1,3 +1,4 @@
+# type: ignore
 from datetime import datetime
 from sqlalchemy.exc import SQLAlchemyError
 from extensions import db
@@ -5,7 +6,15 @@ from app.decorators import with_instance
 from app.models import Lesson, ClassGroup, Class, User
 
 
-def add_lesson(group_id, date, start_time, end_time, homework=None, room=None, teacher_id=None):
+def add_lesson(
+    group_id: int,
+    date: str,
+    start_time: str,
+    end_time: str,
+    homework: str = None,
+    room: str = None,
+    teacher_id: int = None,
+):
     """Add a lesson to the database."""
     try:
         # Validate and convert date and time if provided as strings

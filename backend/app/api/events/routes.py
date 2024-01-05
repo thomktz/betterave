@@ -1,3 +1,4 @@
+# type: ignore
 from flask_restx import Resource
 from .namespace import api
 from .models import (
@@ -47,7 +48,7 @@ class EventList(Resource):
 class EventResource(Resource):
     @api.doc(security="apikey")
     @require_authentication("admin", "asso")
-    def delete(self, event_id):
+    def delete(self, event_id: int):
         """Delete an event."""
         if delete_event(event_id):
             return {"message": "Event deleted successfully"}, 200
@@ -59,7 +60,7 @@ class EventAttendees(Resource):
     @api.doc(security="apikey")
     @require_authentication("admin", "asso")
     @api.expect(event_attendees_post_model)
-    def post(self, event_id):
+    def post(self, event_id: int):
         """Add attendees to an event."""
         user_ids = api.payload.get("user_ids", [])
         user_level = api.payload.get("user_level", None)

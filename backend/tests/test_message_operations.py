@@ -1,3 +1,4 @@
+# type: ignore
 import pytest
 from app.models.class_ import Class
 from app.models import UserType, UserLevel
@@ -8,7 +9,7 @@ from app.operations.message_operations import (
     add_message_to_group,
     delete_message,
     get_class_messages,
-    add_class_message
+    add_class_message,
 )
 from app.operations.user_operations import add_user
 
@@ -73,13 +74,13 @@ def test_delete_message(test_client, setup_group, setup_student):
     assert success is True
 
 
-def test_get_class_messages(test_client, setup_class):
+def test_get_class_messages(test_client, setup_class, setup_group):
     """Test retrieving messages for a specific class."""
     class_messages = get_class_messages(Class.query.get(setup_class))
     assert class_messages is not None
 
 
-def test_add_class_message(test_client, setup_class, setup_student):
+def test_add_class_message(test_client, setup_class, setup_student, setup_group):
     """Test adding a message to a specific class's main group."""
     class_message = add_class_message(MESSAGE_CONTENT, setup_class, setup_student)
     assert class_message is not None

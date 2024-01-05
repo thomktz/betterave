@@ -1,3 +1,4 @@
+# type: ignore
 from flask_restx import Resource, reqparse
 from .models import (
     user_model,

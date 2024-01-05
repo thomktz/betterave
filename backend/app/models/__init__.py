@@ -7,5 +7,5 @@ from .lesson import Lesson
 from .message import Message
 from .relationship_tables import group_enrollment, event_attendance
 from .enums import UserLevel, UserType
-from .homework import Homework
+from .homework import Homework  # type: ignore
 from .grade import Grade

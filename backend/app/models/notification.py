@@ -20,10 +20,10 @@ class Notification(db.Model):
     recipient_level = db.Column(db.Enum(UserLevel), nullable=True)
     for_followers = db.Column(db.Boolean, default=False, nullable=False)
 
-    def send_to_followers(self):
+    def send_to_followers(self) -> None:
         """Send the notification to all followers of the sender."""
         self.for_followers = True
 
-    def send_to_level(self, user_level):
+    def send_to_level(self, user_level: UserLevel) -> None:
         """Send the notification to all users of the specified level."""
         self.recipient_level = user_level

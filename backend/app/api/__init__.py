@@ -1,3 +1,4 @@
+# type: ignore
 from .auth import auth_ns
 from .users import users_ns
 from .classes import classes_ns
