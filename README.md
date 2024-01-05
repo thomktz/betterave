@@ -3,6 +3,19 @@
 
 _ENSAE année 2023-2024 : Projet Infrastructures et systèmes logiciels_ 
 
+## Table of Contents
+
+- [Introduction](#betterave-pamplemousse-20)
+- [Repository Organization](#repository-organization)
+- [Database Structure](#database-structure)
+- [API Structure](#api-structure)
+- [Frontend](#frontend)
+- [Code Standards](#code-standards)
+- [Deployment](#deployment)
+- [Setup for Development](#setup-for-development)
+- [Difficulties and Areas for Improvement](#difficulties-and-areas-for-improvement)
+
+
 ## **Better**ave: Pamplemousse 2.0
 
 Betterave is a school management software designed for students and professors at ENSAE. It incorporates the main features of the existing software 'Pamplemousse' but also introduces new functionalities:
@@ -48,6 +61,16 @@ Here you can find demonstration videos according to the type of users:
 
 [Association demo](https://www.youtube.com/watch?v=YLPqCE9lRXs&feature=youtu.be)
 
+## Repository Organization
+
+The repository is structured into three main directories:
+- `backend`: Manages the definition of database structures, API development, and unit tests.
+- `frontend`: Encompasses all aspects related to the user interface, including images, web scripts, and other frontend-specific files.
+- `scripts`: Dedicated to scripts used for tasks such as generating the virtual environment or other related functionalities.
+
+This organization ensures a clear separation of concerns between the backend and frontend, providing an organized space for frontend components, visual elements, and scripts. 
+
+
 ## Database Stucture
 
 - User Table: Stores user information for the application (type of the user, name, username, email...).
@@ -61,14 +84,35 @@ Here you can find demonstration videos according to the type of users:
 - Homework Table: Stores information about a homework (corresponding class, due date, due time...).
 - Event Table: Stores information about an event (association, date...).
 - Event_Attendance Table: Stores the attending relationship between a student and an event. 
-  
-
 
 ![Relationship diagram of de database](https://github.com/thomktz/betterave/assets/82711723/28393118-e898-405b-9c2a-8fb463c8a8af)
 
 ## API Structure 
 
-RESTful 
+This application is built using Flask-RESTful, a Flask extension designed to simplify the development of RESTful APIs. Flask-RESTful streamlines the process of creating API endpoints, managing resources, and incorporating RESTful features seamlessly.
+
+### API Scripts Location
+
+All scripts related to the API are centralized in the `backend/app/api` directory. Within this directory, you'll find various subfolders:
+
+- `auth`
+- `class_groups`
+- `classes`
+- `events`
+- `lessons`
+- `user_class_groups`
+- `users`
+
+### Key Files
+
+- `routes.py`: This file contains the route definitions for different API endpoints.
+- `models.py`: Here, you'll find the data models used by the application.
+
+This organized structure enhances the clarity and maintainability of the API implementation.
+
+## Frontend
+
+The frontend of this application is built using [Vue.js](https://vuejs.org/), a progressive JavaScript framework. It provides a user-friendly interface for interacting with the backend services.
 
 
 ## Code standards 
@@ -133,7 +177,7 @@ Scraping ENSAE website
 docker exec -it betterave-backend-1 python -m scripts.scraping
 ```
 
-Initiate the database
+Initialize randomly the database
 ```bash
 docker exec -it betterave-backend-1 python -m scripts.init_db
 ```
