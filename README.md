@@ -55,6 +55,7 @@ There are 4 types of user profiles in the software, each with different features
 
 - **Administrator Profile:**
   - Add or remove users
+  - All teacher and association features
 
 Here you can find demonstration videos according to the type of users:
 
@@ -74,6 +75,8 @@ This organization ensures a clear separation of concerns between the backend and
 
 ## Database Stucture
 
+While coding the data structure, we incrementally added tables to fit new features. We first started off with only Students and Classes, and then realized the need for Lessons, Groups, etc.
+
 - User Table: Stores user information for the application (type of the user, name, username, email...).
 - Grade Table: Stores student grades (student_id, class_id, grade...)
 - Class Table: Stores information about a class (teacher,...). Each class has several lessons, groups, and homework.
@@ -90,7 +93,7 @@ This organization ensures a clear separation of concerns between the backend and
 
 ## API Structure 
 
-This application is built using Flask-RESTful, a Flask extension designed to simplify the development of RESTful APIs. Flask-RESTful streamlines the process of creating API endpoints, managing resources, and incorporating RESTful features seamlessly.
+This application is built using Flask-RESTx (branch of Flask-RESTful), a Flask extension designed to simplify the development of RESTful APIs. Flask-RESTful streamlines the process of creating API endpoints, managing resources, and incorporating RESTful features seamlessly.
 
 ### API Scripts Location
 
@@ -113,7 +116,7 @@ This organized structure enhances the clarity and maintainability of the API imp
 
 ## Frontend
 
-The frontend of this application is built using [Vue.js](https://vuejs.org/), a progressive JavaScript framework. It provides a user-friendly interface for interacting with the backend services.
+The frontend of this application is built using [Vue.js](https://vuejs.org/), a JavaScript framework. It provides a user-friendly interface for interacting with the backend services.
 Within this directory, you'll find two main subfolders:
 - `public` (houses logos, photos displayed on the app)
 - `src` (houses the Vue scripts, font files, and style configurations that contribute to the frontend functionality and appearance...)
@@ -121,20 +124,16 @@ Within this directory, you'll find two main subfolders:
 
 ## Code standards 
 
-- **Using Pre-Commit**  
-  If you wish to integrate Pre-Commit into your workflow, simply follow these steps:
-  - Install Pre-Commit in your Python environment using the following command:
-     ```pip install pre-commit```
-  - Run the following command to set up Pre-Commit in your repository:
-     ```pre-commit install```
-  - If you want to manually run hooks on files you've modified and staged, use the command:
-      ```pre-commit run```
-  - To run hooks across the entire codebase, including all files, use the command:
-      ```pre-commit run --all-files```
+- **Package managing**
+  Environments were managed using Poetry in Python and Npm in Vue.js.
+
+- **Using Pre-Commit hooks**  
+  Pre-commit allows you to run scripts ('hooks') before each commit to your repository. The ones we used are **black** (python - code formatter), **flake8** (python - linter), **prettier** (js/vue - code formatter) and **mypy** (python - type checker).  
+
+  To run them, you should install the hooks using `pre-commit install`, and then `pre-commit run`
 
 - **Code review and Pull requests**  
   We encourage collaboration through the use of pull requests (PRs) for proposing changes to the codebase:
-  - **Fork the Repo:** Fork the repository to your GitHub account.
   - **Create a Branch:** Start a new branch for your changes.
   - **Make Changes:** Implement your code changes in the branch.
   - **Commit & Push:** Commit changes and push to your fork.
@@ -144,13 +143,23 @@ Within this directory, you'll find two main subfolders:
   - **Merge:** Once approved, changes are merged.
 
 - **Testing**  
-To test the code, execute `pytest` in the source directory. This command will run the unit tests (using pytest) and generate a coverage report. Currently, there are 68 tests coded, all of which have passed successfully.
+To test the code, execute `pytest` in the source directory. This command will run the unit tests (using pytest) and generate a coverage report. Our tests cover mostly the database operations, which is critical when developing an API, since routes are just shallow interfaces to the operations. Our test suite contains **68 tests**.
 
 ## Deployment
 
-Docker
-Serveur
-DNS
+### Docker
+
+The code is containerized using Docker. Both frontend and backend have their Dockerfile, and a `docker-compose.yml` in the root folder is used to orchestrate them, and the database/volumes. More information on how to setup the app for development can be found in the section 
+
+### Server
+
+To host our app, we used a free-tier EC2 instance from Amazon Web Services. The instance is running Ubuntu 22.04, and is accessible through SSH. We installed Docker and then cloned the repository. 
+
+### DNS
+
+Luckily enough, we already had a domain name for us to use - or rather to create a subdomain from. On the server, we set up a reverse proxy to redirect requests to the right port. 
+- betterave.kientz.net redirects to port 8080 (frontend)
+- api.betterave.kientz.net redirects to port 5000 (backend)
 
 ## Setup for development
 
