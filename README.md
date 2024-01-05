@@ -61,11 +61,14 @@ There are 4 types of user profiles in the software, each with different features
   - Add or remove users
   - All teacher and association features
 
-Here you can find demonstration videos according to the type of users:
+**Here you can find demonstration videos according to the type of users**:
 
 [Student demo](https://www.youtube.com/watch?v=zZC0X2hOou0)
 
 [Association demo](https://www.youtube.com/watch?v=YLPqCE9lRXs&feature=youtu.be)
+
+[Admin and teacher demo](https://www.youtube.com/watch?v=L9cUxl0pSjQ)
+
 
 Login is handled using flask-login, and the password is hashed using bcrypt, before being stored in the database.
 
