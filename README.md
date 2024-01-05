@@ -50,7 +50,21 @@ Here you can find demonstration videos according to the type of users:
 
 ## Database Stucture
 
-![Diagramme de la base de données](https://github.com/thomktz/betterave/assets/82711723/28393118-e898-405b-9c2a-8fb463c8a8af)
+- User Table: Stores user information for the application (type of the user, name, username, email...).
+- Grade Table: Stores student grades (student_id, class_id, grade...)
+- Class Table: Stores information about a class (teacher,...). Each class has several lessons, groups, and homework.
+- Lesson Table: Stores information about the different lessons of a class (date, place...).
+- Homework Table: Stores information about homework of a specific class (content, due date...).
+- Class_Group Table: Stores information about a specific group of a class (attending students, class_id ...)
+- User_Class_Group Table: Stores the relationship between a student and the class that the student subscribed to.
+- Group_Enrollment Table: Stores the relationship between a student and the specific class group that the student subscribed to.
+- Homework Table: Stores information about a homework (corresponding class, due date, due time...).
+- Event Table: Stores information about an event (association, date...).
+- Event_Attendance Table: Stores the attending relationship between a student and an event. 
+  
+
+
+![Relationship diagram of de database](https://github.com/thomktz/betterave/assets/82711723/28393118-e898-405b-9c2a-8fb463c8a8af)
 
 ## API Structure 
 
