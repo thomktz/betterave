@@ -98,6 +98,8 @@ While coding the data structure, we incrementally added tables to fit new featur
 - Event Table: Stores information about an event (association, date...).
 - Event_Attendance Table: Stores the attending relationship between a student and an event.
 
+The data for classes was scraped from the ENSAE website, and the data for the lessons calendar was scraped from Pamplemousse, using BeautifulSoup.
+
 ![Relationship diagram of de database](https://github.com/thomktz/betterave/assets/82711723/28393118-e898-405b-9c2a-8fb463c8a8af)
 
 ## API Structure
