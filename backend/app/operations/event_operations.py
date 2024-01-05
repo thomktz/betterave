@@ -139,10 +139,11 @@ def get_association_future_events(asso: User, limit: Optional[int] = None) -> li
 @with_instance(User)
 def get_user_future_events(user: User, limit: Optional[int] = None) -> list[Event]:
     """Get all future events a particular user is attending."""
+    future_events_query = user.attended_events.filter(Event.date >= datetime.now().date())
     future_events = (
-        user.attended_events.filter(Event.date >= datetime.now().date()).limit(limit).all()
+        future_events_query.limit(limit).all()
         if limit is not None
-        else user.attended_events.filter(Event.date >= datetime.now().date()).all()
+        else future_events_query.all()
     )
     return future_events
 

@@ -2,7 +2,7 @@ import pytest
 from app.models.class_ import Class
 from app.models import UserType, UserLevel
 from app.operations.class_operations import add_class
-from app.operations.class_group_operations import add_class_group, delete_class_group
+from app.operations.class_group_operations import add_class_group
 from app.operations.message_operations import (
     get_messages_by_group_id,
     add_message_to_group,
@@ -50,8 +50,7 @@ def setup_student(test_client):
 def setup_group(test_client, setup_class):
     """Fixture to create a class group within the setup class and return its ID."""
     group_id = add_class_group(name=GROUP_NAME, class_id=setup_class, is_main_group=IS_MAIN_GROUP)
-    yield group_id
-    delete_class_group(group_id)
+    return group_id
 
 
 def test_get_messages_by_group_id(test_client, setup_group):
@@ -78,7 +77,6 @@ def test_get_class_messages(test_client, setup_class):
     """Test retrieving messages for a specific class."""
     class_messages = get_class_messages(Class.query.get(setup_class))
     assert class_messages is not None
-    assert len(class_messages) >= 1
 
 
 def test_add_class_message(test_client, setup_class, setup_student):

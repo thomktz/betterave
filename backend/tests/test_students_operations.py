@@ -4,7 +4,7 @@ from app.models.user import User
 from app.models.class_ import Class
 from app.models import UserType, UserLevel
 from app.operations.class_operations import add_class
-from app.operations.class_group_operations import add_class_group, delete_class_group
+from app.operations.class_group_operations import add_class_group, delete_class_group, enroll_student_in_group
 from app.operations.student_operations import (
     get_all_students,
     get_student_groups,
@@ -55,8 +55,9 @@ def setup_group(test_client, setup_class):
     delete_class_group(group_id)
 
 
-def test_get_student_groups(test_client, setup_student, setup_group):
+def test_get_student_groups(test_client, setup_student, setup_group, setup_class):
     """Test getting class groups a student is enrolled in."""
+    enroll_student_in_group(setup_student, setup_group)
     student_groups = get_student_groups(User.query.get(setup_student))
     assert len(student_groups) >= 1
     assert setup_group in student_groups
@@ -78,6 +79,7 @@ def test_get_students_from_level(test_client, setup_student):
 
 def test_is_student_in_group(test_client, setup_student, setup_group):
     """Test checking if a student is in a specific class group."""
+    enroll_student_in_group(setup_student, setup_group)
     result = is_student_in_group(User.query.get(setup_student), ClassGroup.query.get(setup_group))
     assert result is True
 
