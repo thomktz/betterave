@@ -13,8 +13,7 @@
                 :rules="nameRules"
                 required
                 prepend-icon="mdi-account"
-              >
-              </v-text-field>
+              ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
@@ -24,8 +23,7 @@
                 :rules="surnameRules"
                 required
                 prepend-icon="mdi-account-outline"
-              >
-              </v-text-field>
+              ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -33,8 +31,7 @@
                 v-model="email"
                 disabled
                 prepend-icon="mdi-email"
-              >
-              </v-text-field>
+              ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
@@ -44,8 +41,7 @@
                 :rules="passwordRules"
                 required
                 prepend-icon="mdi-lock"
-              >
-              </v-text-field>
+              ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6">
               <v-select
@@ -54,10 +50,17 @@
                 v-model="level"
                 required
                 prepend-icon="mdi-school"
-              >
-              </v-select>
+              ></v-select>
             </v-col>
-            <!-- Additional fields like LinkedIn, Website, etc., can be added here -->
+            <v-col cols="12">
+              <v-checkbox
+                v-model="gdprConsent"
+                :rules="[v => v || 'You must agree to continue']"
+                label="I agree to the GDPR terms"
+                required
+              ></v-checkbox>
+              <v-btn color="primary" @click="openGdprDialog">GDPR</v-btn>
+            </v-col>
           </v-row>
         </v-container>
       </v-card-text>
@@ -68,7 +71,22 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <!-- This GDPR dialog should be outside the first v-dialog, not nested inside it -->
+  <v-dialog v-model="showGdprDialog" persistent max-width="800px">
+    <v-card>
+      <v-card-title class="headline">GDPR Compliance Information</v-card-title>
+      <v-card-text>
+        <div class="gdpr-text">{{ gdprTextContent }}</div>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="green darken-1" text @click="showGdprDialog = false">Close</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
+
 
 <script>
 import { apiClient, toast } from "@/apiConfig";
@@ -103,6 +121,10 @@ export default {
         (v) => !!v || "Password is required",
         (v) => (v && v.length >= 4) || "Password must be at least 4 characters",
       ],
+      gdprConsent: false,
+      showGdprChart: false,
+      gdprTextContent: '',
+      showGdprDialog: false, 
     };
   },
   watch: {
@@ -151,8 +173,27 @@ export default {
         console.error("Error creating user:", error);
       }
     },
+    async fetchGdprContent() {
+      const response = await fetch('/gdpr-policy.txt'); // Adjust the path if your file is located differently
+      if (response.ok) {
+        const text = await response.text();
+        this.gdprTextContent = text;
+      } else {
+        console.error('Failed to load GDPR content');
+        this.gdprTextContent = 'Failed to load content. Please try again later.';
+      }
+    },
+    openGdprDialog() {
+      this.fetchGdprContent();
+      this.showGdprDialog = true;
+    }
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.gdpr-text {
+  white-space: pre-wrap; /* CSS property to preserve whitespace and line breaks */
+  font-family: 'Arial', sans-serif; /* Example font */
+}
+</style>

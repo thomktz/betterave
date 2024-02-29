@@ -1,0 +1,158 @@
+CHARTER RELATING TO THE USE OF COMPUTER RESOURCES AND INTERNET OF THE ILE-DE-FRANCE ENTITIES OF GENES
+
+The computer equipment of the Parisian entities of GENES Paris (ENSAE, CREST, CEPE, CASD, Directorate and General Secretariat) is dedicated to teaching, research, and administration. Every user of this equipment accesses common resources, which requires adherence to certain security and good conduct rules.
+
+This charter defines the rights and duties of each party and represents a mutual commitment between the user, the general management of GENES, and the IT managers.
+
+This charter applies to all staff of the Parisian entities of GENES regardless of their status, to ENSAE students, and more generally, to all persons who use, for any reason whatsoever, locally or remotely, a computer system or network of GENES.
+
+It must be made known to the aforementioned persons by all means, notably:
+
+- electronically when opening an account for a user, who declares having acknowledged this charter;
+- by display in the premises of GENES;
+- by handing out a paper copy (it can notably be annexed to work contracts).
+
+The proper functioning of the GENES computer system assumes compliance with current legislative and regulatory provisions. It is specified that the management of GENES's computer resources was declared to the CNIL on September 3, 2012, under the number 1612828.
+
+1. Definitions
+
+Computer resources: all the local computer networks and means as well as those that can be accessed remotely from the GENES network, software, applications, databases, etc.
+
+Internet services: provision by local or remote servers of means of exchange and information: web, email, forums, etc.
+
+Users: students, teachers, researchers, staff, and generally, anyone using the computer systems provided by GENES;
+
+System administrators: agents technically responsible for the proper functioning of computer tools (systems, networks, and applications);
+
+Functional managers: the directors of each unit, the GENES general secretariat, laboratory directors, teachers supervising students in activities that call for computer resources.
+
+Everyone has identical rights and duties, to which are added specific rights and duties for system administrators and for functional managers.
+
+2. THE RIGHTS AND DUTIES OF ALL
+
+The use of computer resources is subject to prior authorization by functional managers (entity director or service head/laboratory manager). This authorization is materialized by the attribution of an identifier associated with a password, sometimes completed by access means (key, magnetic card, etc.).
+
+Computer resources consist notably of:
+
+- servers equipped with a wide range of software (languages, databases, statistics, office automation, etc.);
+- local networks;
+- workstations;
+- printers;
+- connections (notably to the Internet) that allow access to all or part of the communication services with the world of Teaching and Research in France and abroad: email, file transfer, remote connection, etc.
+
+2.1 Rights
+
+Every user has the right to:
+
+- The provision of necessary computer resources for their work, research, studies;
+- Information related to the common resources and services offered by the group.
+
+Note: a portal of services and documentation http://portail.ensae.fr is made available to users.
+
+2.2 Duties
+
+Everyone must respect intellectual property rules in accordance with current legislation.
+
+It is forbidden to reproduce, download, copy, distribute, modify, or use software, databases, web pages, images, photographs, and all creations protected by copyright without having first obtained permission from the rights holders.
+
+Everyone must respect the security rules applicable to the system they use: these rules consist of this charter complemented by regularly updated annexes, as well as, where applicable, specific rules related to a particular work environment (laboratory, student resource room).
+
+Each user commits not to disrupt the proper functioning of GENES's computer resources, whether through abnormal hardware manipulations or by introducing computer viruses.
+
+Everyone commits not to take notice of information belonging to others without their agreement, not to communicate such information to a third party, or non-public information to which they can access but are not the owner of.
+
+Every user is responsible for the read and modification rights they give to other users for their files. Everyone is invited not to leave storage media (USB key, etc.) containing data lying around.
+
+It is up to each user to protect their data by any means of adequate backup or made available, especially when traveling. Everyone must ensure the protection of personal authentication means and must not allow unauthorized users to access GENES's computer resources or internet services.
+
+No user should use accounts other than those for which they have received authorization. They must refrain from any attempt to appropriate or decipher another user's password.
+
+Everyone must clearly identify themselves, no one has the right to impersonate another or act anonymously; no one can transfer their access rights to others.
+
+The authorization to use computer resources is strictly personal and cannot under any circumstances be transferred, even temporarily, to a third party. Therefore, any action under another person's identity is prohibited.
+
+No user of
+
+ the microcomputers in free service should leave their workstation with an unlocked session in progress.
+
+Everyone must strive to achieve their goal by the most resource-efficient means (disk space, printing, occupation of workstations, network transfers, occupation of remote servers...). In particular, excessive use of printing and storage will lead to billing.
+
+Use of email and collaborative tools:
+
+The utmost correction must be respected with interlocutors in electronic exchanges, discussion forums, newsgroups, etc. The use of the email address @ensae.fr (respectively @groupe-genes.fr) must be done only in a professional, academic, or research context. Any message will be deemed professional or related to the activities of GENES unless it contains a special mention in its subject (e.g., "personal" or "private") or if it is kept in a private space.
+
+It is strongly advised against publishing your @ensae.fr (respectively @groupe-genes.fr) address on digital supports (websites...). It quickly becomes the target of numerous spams.
+
+The use of collective messages of opinion or mood (political, religious...) is to be avoided.
+
+For those who forward their email to an external mail (polytechnique, gmail...), it is imperative to send messages (originals or responses) for administration from their ensae.fr mail account (respectively @groupe-genes.fr).
+
+These recommendations also apply to collaborative supports (mysite, sharepoint...).
+
+Everyone must contribute to the improvement of the functioning and security of computer tools, by respecting the security rules and advice, by immediately reporting any anomalies noticed to the managers, by raising awareness among their colleagues of the problems they are aware of.
+
+Everyone must ensure to use the means at their disposal in a professional context, which excludes use for personal purposes. Reasonable use in the context of the necessities of daily and family life is tolerated, provided that the use does not affect the system's and network's performances.
+
+In this context, the use of a "private" directory is allowed after creating a directory of the same name under the root of their shared network space. This can be used to archive strictly personal data (CV, photos...)
+
+No one can modify equipment, both in terms of hardware and system software, without the agreement of the system manager.
+
+No computer equipment must be connected to the networks or moved locally without the authorization of the IT team.
+
+3. The specific rights and duties of system administrators
+
+Administrators must ensure the normal functioning and security of computer tools. By their very function, they are led to have access to all information related to users; including those recorded on the workstation or network disk.
+
+What you absolutely need to know:
+
+The administrator must not access user account data, including email, without a legitimate and serious reason.
+
+The administrator cannot know the user's password.
+
+The administrator may reset a password only if the user has lost it and only at the user's request and after verifying their identity. Consequently, this operation cannot be done over the phone.
+
+Finally, administrators can access personal data or email only on written request signed by the general director of GENES.
+
+3.1 As part of their missions, every administrator has the right
+
+To be informed of the legal implications of their work, including the risks they incur in the case where a system user they are responsible for commits a reprehensible action.
+
+To use logging files and access private information for diagnostic and system administration purposes, while scrupulously respecting the confidentiality of this information.
+
+3.2 As part of their missions, every administrator has the duty
+
+To ensure compliance with the general data protection regulation (GDPR).
+
+4. Controls and sanctions incurred in case of non-compliance with the provisions of this charter
+
+4.1 Control and prevention
+
+Regulation and analysis tools are set up by the system administrators of the GENES Paris IT team to ensure the security of the Group's computer means and to ensure compliance with the GDPR.
+
+The user whose workstation is subject to remote maintenance is informed beforehand.
+
+The IT service agents in charge of maintenance operations are subject to a confidentiality obligation and consequently cannot disclose information they may come to know in the course of their duties, especially when it is covered by the secrecy of correspondence or relates to the private life of the user.
+
+The user and all the agents of GENES have the possibility to approach the data protection officer (DPO) for any concerns regarding the processing or security of personal data. The DPO is the legal responsible of GENES.
+
+4.2 Consequences of non-compliance with the rules
+
+Non-compliance with the rules defined in this charter by a user of GENES's computer means may lead to disciplinary and/or criminal sanctions:
+
+Disciplinary sanctions:
+
+Functional managers have full authority to take the necessary conservatory measures in case of breach of this charter and prohibit faulty users access to computer means and the network.
+
+Faulty users may be subject to disciplinary sanctions according to their status (agents employed by GENES and students).
+
+Criminal sanctions:
+
+The use of computer means and electronic communication is subject to common law and notably:
+
+
+
+- Law No. 51-711 of June 7, 1951 on the obligation, coordination, and secrecy in matters of statistics;
+- Law No. 78-17 of January 6, 1978, amended relating to data processing, files, and freedoms (known as "Data Processing and Freedoms Law")
+- Law No. 2004-575 of June 21, 2004 for confidence in the digital economy;
+- The Intellectual Property Code;
+- Specific provisions of the criminal code.
