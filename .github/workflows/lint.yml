@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, 3.10, 3.11, 3.12]
+        python-version: ["3.11"]
     
     steps:
     - uses: actions/checkout@v3
@@ -35,10 +35,10 @@ jobs:
     - name: Install dependencies
       run: |
         pip install poetry
-        cd betterave/backend
+        cd backend
         poetry install
 
     - name: Run flake8
       run: |
-        cd betterave/backend
+        cd backend
         poetry run flake8 .
