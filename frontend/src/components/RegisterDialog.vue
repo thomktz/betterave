@@ -53,13 +53,27 @@
               ></v-select>
             </v-col>
             <v-col cols="12">
-              <v-checkbox
-                v-model="gdprConsent"
-                :rules="[v => v || 'You must agree to continue']"
-                label="I agree to the GDPR terms"
-                required
-              ></v-checkbox>
-              <v-btn color="primary" @click="openGdprDialog">GDPR</v-btn>
+              <v-row align="start" no-gutters>
+                <v-col cols="auto">
+                  <v-checkbox
+                    class="gdpr-checkbox"
+                    v-model="gdprConsent"
+                    :rules="[v => v || 'You must agree to continue']"
+                    required
+                  ></v-checkbox>
+                </v-col>
+                <v-col cols="auto" class="checkbox-label">
+                  I agree to the
+                  <span 
+                    class="gdpr-link" 
+                    @click="openGdprDialog"
+                    role="button"
+                    tabindex="0"
+                    style="text-decoration: underline; color: #1976D2; cursor: pointer;">
+                    GDPR terms.
+                  </span>
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
         </v-container>
@@ -165,16 +179,14 @@ export default {
           password_override: this.password,
         });
 
-        // Manually display a success toast
         toast.success("User created successfully");
         this.close();
       } catch (error) {
-        // Error handling is already taken care of by the apiClient interceptor
         console.error("Error creating user:", error);
       }
     },
     async fetchGdprContent() {
-      const response = await fetch('/gdpr-policy.txt'); // Adjust the path if your file is located differently
+      const response = await fetch('/gdpr-policy.txt');
       if (response.ok) {
         const text = await response.text();
         this.gdprTextContent = text;
@@ -192,8 +204,19 @@ export default {
 </script>
 
 <style scoped>
+.checkbox-label {
+  margin-top: 15px;
+}
 .gdpr-text {
-  white-space: pre-wrap; /* CSS property to preserve whitespace and line breaks */
-  font-family: 'Arial', sans-serif; /* Example font */
+  white-space: pre-wrap;
+  font-family: 'Arial', sans-serif;
+}
+.gdpr-link {
+  text-decoration: underline;
+  color: #1976D2;
+  cursor: pointer;
+}
+.gdpr-checkbox {
+  width: 90px;
 }
 </style>
