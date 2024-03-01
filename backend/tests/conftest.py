@@ -6,8 +6,8 @@ import os
 
 sys.path.append(os.path.join(os.getcwd(), "backend"))
 
-from create_app import create_app
-from extensions import db
+from backend.create_app import create_app
+from backend.extensions import db
 
 
 @pytest.fixture(scope="function")

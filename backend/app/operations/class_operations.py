@@ -1,9 +1,9 @@
 # type: ignore
 import time
 from sqlalchemy.exc import SQLAlchemyError
-from extensions import db
-from app.models import UserLevel, Class, ClassGroup, Lesson
-from app.decorators import with_instance
+from backend.extensions import db
+from backend.app.models import UserLevel, Class, ClassGroup, Lesson
+from backend.app.decorators import with_instance
 
 
 def add_class(class_id, name, ects_credits, default_teacher_id, level, background_color, **kwargs) -> int:

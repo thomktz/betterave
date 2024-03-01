@@ -1,6 +1,6 @@
 # type: ignore
 import pytest
-from app.operations.class_group_operations import (
+from backend.app.operations.class_group_operations import (
     add_class_group,
     delete_class_group,
     update_class_group,
@@ -8,9 +8,9 @@ from app.operations.class_group_operations import (
     enroll_student_in_group,
     unenroll_student_from_group,
 )
-from app.operations.user_operations import add_user, delete_user
-from app.operations.class_operations import add_class
-from app.models import UserType, UserLevel
+from backend.app.operations.user_operations import add_user, delete_user
+from backend.app.operations.class_operations import add_class
+from backend.app.models import UserType, UserLevel
 
 # Constants for the test
 GROUP_NAME = "Test Group"
@@ -47,16 +47,14 @@ def setup_class(test_client, setup_teacher):
 def setup_group(test_client, setup_class):
     """Fixture to create a class group within the setup class and return its ID."""
     group_id = add_class_group(name=GROUP_NAME, class_id=setup_class, is_main_group=IS_MAIN_GROUP)
-    yield group_id
-    delete_class_group(group_id)
+    return group_id
 
 
 @pytest.fixture
 def setup_student(test_client):
     """Fixture to create a student and return their ID."""
     student_id = add_user("Jane", "Doe", "student_pic_url", UserType.STUDENT, UserLevel._1A)
-    yield student_id
-    delete_user(student_id)
+    return student_id
 
 
 def test_add_class_group(setup_class):

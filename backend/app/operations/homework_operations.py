@@ -1,8 +1,8 @@
 from datetime import datetime
-from extensions import db
-from app.models import Homework, Class, User
-from app.decorators import with_instance
-from app.operations.class_operations import get_class_by_id
+from backend.extensions import db
+from backend.app.models import Homework, Class, User
+from backend.app.decorators import with_instance
+from backend.app.operations.class_operations import get_class_by_id
 
 
 def get_homework_by_group_id(group_id: int) -> list[Homework]:

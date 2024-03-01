@@ -1,7 +1,7 @@
-from extensions import db
-from app.decorators import with_instance
-from app.models import Message, Class
-from app.operations.class_operations import get_class_by_id
+from backend.extensions import db
+from backend.app.decorators import with_instance
+from backend.app.models import Message, Class
+from backend.app.operations.class_operations import get_class_by_id
 
 
 def get_messages_by_group_id(group_id: int) -> list[Message]:

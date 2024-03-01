@@ -1,8 +1,8 @@
 # type: ignore
 import pytest
-from app.operations import class_operations
-from app.models import UserType, UserLevel
-from app.operations.user_operations import add_user
+from backend.app.operations import class_operations
+from backend.app.models import UserType, UserLevel
+from backend.app.operations.user_operations import add_user
 
 # Constants
 CLASS_NAME = "Data Science"

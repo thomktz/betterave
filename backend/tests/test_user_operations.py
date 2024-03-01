@@ -1,6 +1,6 @@
 # type: ignore
-from app.models import UserLevel, UserType
-from app.operations import user_operations
+from backend.app.models import UserLevel, UserType
+from backend.app.operations import user_operations
 
 PIC_URL = "pic_url"
 

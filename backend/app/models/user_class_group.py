@@ -3,7 +3,7 @@ Flask SQLAlchemy UserClassGroup Model.
 
 This model represents the relationship between a user and a class through its primary and secondary classgroups.
 """
-from extensions import db
+from backend.extensions import db
 
 
 class UserClassGroup(db.Model):

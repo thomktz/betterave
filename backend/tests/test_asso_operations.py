@@ -1,13 +1,13 @@
 # type: ignore
 import pytest
 from backend.app.operations import user_operations
-from app.operations.asso_operations import (
+from backend.app.operations.asso_operations import (
     subscribe_to_asso,
     unsubscribe_from_asso,
     get_all_assos,
 )
-from app.operations.user_operations import get_user_by_id
-from app.models import UserType, UserLevel
+from backend.app.operations.user_operations import get_user_by_id
+from backend.app.models import UserType, UserLevel
 
 
 # Constants

@@ -1,5 +1,5 @@
-from app.decorators import with_instance
-from app.models import User, ClassGroup, Class, UserType, UserLevel
+from backend.app.decorators import with_instance
+from backend.app.models import User, ClassGroup, Class, UserType, UserLevel
 
 
 @with_instance(User)

@@ -9,19 +9,19 @@ from .models import (
     grades_model,
 )
 from .namespace import api
-from app.operations.user_operations import (
+from backend.app.operations.user_operations import (
     get_all_users,
     add_user,
     get_user_by_id,
     update_user,
     delete_user,
 )
-from app.operations.grade_operations import (
+from backend.app.operations.grade_operations import (
     get_grades_by_student_and_class_id,
     update_student_grade,
 )
-from app.operations.student_operations import get_students_from_class
-from app.operations.lesson_operations import (
+from backend.app.operations.student_operations import get_students_from_class
+from backend.app.operations.lesson_operations import (
     get_student_lessons,
     get_teacher_lessons,
     get_all_lessons,
@@ -29,12 +29,12 @@ from app.operations.lesson_operations import (
     get_teacher_future_lessons,
     get_all_future_lessons,
 )
-from app.operations.asso_operations import (
+from backend.app.operations.asso_operations import (
     get_all_assos,
     unsubscribe_from_asso,
     subscribe_to_asso,
 )
-from app.operations.event_operations import (
+from backend.app.operations.event_operations import (
     get_association_events,
     get_all_events,
     get_user_events,
@@ -42,14 +42,14 @@ from app.operations.event_operations import (
     get_all_future_events,
     get_user_future_events,
 )
-from app.operations.user_class_group_operations import (
+from backend.app.operations.user_class_group_operations import (
     enroll_user_in_class,
     unenroll_user_from_class,
     get_user_class_group_by_id,
 )
-from app.api.lessons.models import fullcalendar_lesson_model
-from app.api.events.models import fullcalendar_event_model
-from app.decorators import (
+from backend.app.api.lessons.models import fullcalendar_lesson_model
+from backend.app.api.events.models import fullcalendar_event_model
+from backend.app.decorators import (
     require_authentication,
     current_user_required,
     resolve_user,

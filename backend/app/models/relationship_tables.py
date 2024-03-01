@@ -1,6 +1,6 @@
 """Various relationship tables for many-to-many relationships."""
 
-from extensions import db
+from backend.extensions import db
 
 group_enrollment = db.Table(
     "group_enrollment",

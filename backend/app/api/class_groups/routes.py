@@ -3,19 +3,19 @@ from flask_restx import Resource
 from flask_login import current_user
 from .models import class_group_model, message_model, message_post_model
 from .namespace import api
-from app.operations.class_group_operations import (
+from backend.app.operations.class_group_operations import (
     get_all_class_groups,
     add_class_group,
     get_class_group_by_id,
     update_class_group,
     delete_class_group,
 )
-from app.operations.message_operations import (
+from backend.app.operations.message_operations import (
     get_messages_by_group_id,
     add_message_to_group,
     delete_message,
 )
-from app.decorators import require_authentication
+from backend.app.decorators import require_authentication
 
 
 @api.route("/")

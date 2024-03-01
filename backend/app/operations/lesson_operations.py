@@ -1,9 +1,9 @@
 # type: ignore
 from datetime import datetime
 from sqlalchemy.exc import SQLAlchemyError
-from extensions import db
-from app.decorators import with_instance
-from app.models import Lesson, ClassGroup, Class, User
+from backend.extensions import db
+from backend.app.decorators import with_instance
+from backend.app.models import Lesson, ClassGroup, Class, User
 
 
 def add_lesson(

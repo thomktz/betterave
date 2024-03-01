@@ -1,4 +1,4 @@
-name: Run Pytest Across Environments
+name: Run Pytest
 
 on:
   push:

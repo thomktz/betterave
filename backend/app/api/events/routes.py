@@ -6,7 +6,7 @@ from .models import (
     event_post_model,
     event_attendees_post_model,
 )
-from app.operations.event_operations import (
+from backend.app.operations.event_operations import (
     add_event,
     add_attendees_to_event,
     can_create_event,
@@ -14,7 +14,7 @@ from app.operations.event_operations import (
     delete_event,
     get_event_by_id,
 )
-from app.decorators import require_authentication
+from backend.app.decorators import require_authentication
 from flask_login import current_user
 
 

@@ -1,7 +1,7 @@
 """Flask SQLAlchemy model for a notification."""
 
 from datetime import datetime
-from extensions import db
+from backend.extensions import db
 from models import UserLevel
 
 

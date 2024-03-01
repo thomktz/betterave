@@ -1,9 +1,9 @@
 from typing import Any
 from sqlalchemy.exc import SQLAlchemyError
-from extensions import db
-from app.decorators import with_instance
-from app.models.class_group import ClassGroup
-from app.models.user import User
+from backend.extensions import db
+from backend.app.decorators import with_instance
+from backend.app.models.class_group import ClassGroup
+from backend.app.models.user import User
 
 
 def add_class_group(name: str, class_id: int, is_main_group: bool) -> int:

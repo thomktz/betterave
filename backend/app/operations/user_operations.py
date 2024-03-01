@@ -6,10 +6,10 @@ It excludes operations related specifically to students, which are defined in st
 from typing import Optional, Any
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import and_
-from extensions import db, bcrypt
-from app.decorators import with_instance
-from app.models import UserLevel, UserType, User
-from app.operations.event_operations import get_all_events
+from backend.extensions import db, bcrypt
+from backend.app.decorators import with_instance
+from backend.app.models import UserLevel, UserType, User
+from backend.app.operations.event_operations import get_all_events
 
 
 def hash_password(password: str) -> str:

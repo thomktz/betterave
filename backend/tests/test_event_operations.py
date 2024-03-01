@@ -1,9 +1,9 @@
 # type: ignore
 import pytest
-from app.models import User
-from app.models import UserType, UserLevel
+from backend.app.models import User
+from backend.app.models import UserType, UserLevel
 from datetime import date, time
-from app.operations.event_operations import (
+from backend.app.operations.event_operations import (
     add_event,
     update_event,
     delete_event,
@@ -16,7 +16,7 @@ from app.operations.event_operations import (
     get_association_future_events,
     add_attendees_to_event,
 )
-from app.operations.user_operations import add_user
+from backend.app.operations.user_operations import add_user
 
 # Constants
 ASSO_NAME = "Betterave"
