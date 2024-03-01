@@ -58,18 +58,23 @@
                   <v-checkbox
                     class="gdpr-checkbox"
                     v-model="gdprConsent"
-                    :rules="[v => v || 'You must agree to continue']"
+                    :rules="[(v) => v || 'You must agree to continue']"
                     required
                   ></v-checkbox>
                 </v-col>
                 <v-col cols="auto" class="checkbox-label">
                   I agree to the
-                  <span 
-                    class="gdpr-link" 
+                  <span
+                    class="gdpr-link"
                     @click="openGdprDialog"
                     role="button"
                     tabindex="0"
-                    style="text-decoration: underline; color: #1976D2; cursor: pointer;">
+                    style="
+                      text-decoration: underline;
+                      color: #1976d2;
+                      cursor: pointer;
+                    "
+                  >
                     GDPR terms.
                   </span>
                 </v-col>
@@ -93,12 +98,13 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="green darken-1" text @click="showGdprDialog = false">Close</v-btn>
+        <v-btn color="green darken-1" text @click="showGdprDialog = false"
+          >Close</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
-
 
 <script>
 import { apiClient, toast } from "@/apiConfig";
@@ -135,8 +141,8 @@ export default {
       ],
       gdprConsent: false,
       showGdprChart: false,
-      gdprTextContent: '',
-      showGdprDialog: false, 
+      gdprTextContent: "",
+      showGdprDialog: false,
     };
   },
   watch: {
@@ -184,19 +190,20 @@ export default {
       }
     },
     async fetchGdprContent() {
-      const response = await fetch('/gdpr-policy.txt');
+      const response = await fetch("/gdpr-policy.txt");
       if (response.ok) {
         const text = await response.text();
         this.gdprTextContent = text;
       } else {
-        console.error('Failed to load GDPR content');
-        this.gdprTextContent = 'Failed to load content. Please try again later.';
+        console.error("Failed to load GDPR content");
+        this.gdprTextContent =
+          "Failed to load content. Please try again later.";
       }
     },
     openGdprDialog() {
       this.fetchGdprContent();
       this.showGdprDialog = true;
-    }
+    },
   },
 };
 </script>
@@ -207,11 +214,11 @@ export default {
 }
 .gdpr-text {
   white-space: pre-wrap;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 .gdpr-link {
   text-decoration: underline;
-  color: #1976D2;
+  color: #1976d2;
   cursor: pointer;
 }
 .gdpr-checkbox {
