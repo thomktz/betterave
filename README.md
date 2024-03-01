@@ -2,6 +2,8 @@
 
 _ENSAE année 2023-2024 : Projet Infrastructures et systèmes logiciels_
 
+[![Pytest](https://github.com/thomktz/betterave/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/thomktz/betterave/actions/workflows/pytest.yml)
+
 **Link to the website** : [betterave.kientz.net](https://betterave.kientz.net)
 Link to the API : [api.betterave.kientz.net](https://api.betterave.kientz.net)
 
