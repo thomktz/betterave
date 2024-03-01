@@ -85,8 +85,6 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-
-  <!-- This GDPR dialog should be outside the first v-dialog, not nested inside it -->
   <v-dialog v-model="showGdprDialog" persistent max-width="800px">
     <v-card>
       <v-card-title class="headline">GDPR Compliance Information</v-card-title>
