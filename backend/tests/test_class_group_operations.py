@@ -8,7 +8,7 @@ from backend.app.operations.class_group_operations import (
     enroll_student_in_group,
     unenroll_student_from_group,
 )
-from backend.app.operations.user_operations import add_user, delete_user
+from backend.app.operations.user_operations import add_user
 from backend.app.operations.class_operations import add_class
 from backend.app.models import UserType, UserLevel
 

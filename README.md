@@ -142,7 +142,7 @@ We used **vuetify** for tables and form elements, but coded many components ours
   Environments were managed using Poetry in Python and Npm in Vue.js.
 
 - **Using Pre-Commit hooks**  
-  Pre-commit allows you to run scripts ('hooks') before each commit to your repository. The ones we used are **black** (python - code formatter), **flake8** (python - linter), **prettier** (js/vue - code formatter) and **mypy** (python - type checker).
+  Pre-commit allows you to run scripts ('hooks') before each commit to your repository. The ones we used are **black** (python - code formatter), **flake8** (python - linter) and **prettier** (js/vue - code formatter).
 
   To run them, you should install the hooks using `pre-commit install`, and then `pre-commit run`
 
