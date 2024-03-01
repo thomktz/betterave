@@ -1,6 +1,6 @@
 """SQLAlchemy model for the event table. Analoguous to the Lesson model."""
 
-from extensions import db
+from backend.extensions import db
 
 
 class Event(db.Model):

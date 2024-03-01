@@ -1,14 +1,14 @@
 # type: ignore
 import pytest
-from app.models import UserType, UserLevel
-from app.operations.user_class_group_operations import (
+from backend.app.models import UserType, UserLevel
+from backend.app.operations.user_class_group_operations import (
     add_user_class_group,
     delete_user_class_group,
     get_user_class_group_by_id,
 )
-from app.operations.class_group_operations import add_class_group, delete_class_group
-from app.operations.user_operations import add_user, delete_user, get_user_by_id
-from app.operations.class_operations import add_class
+from backend.app.operations.class_group_operations import add_class_group, delete_class_group
+from backend.app.operations.user_operations import add_user, delete_user, get_user_by_id
+from backend.app.operations.class_operations import add_class
 
 # Constants for the test
 PRIMARY_GROUP_NAME = "Test Primary Group"
@@ -84,8 +84,7 @@ def setup_user_class_group(test_client, setup_user, setup_primary_class_group, s
         primary_class_group_id=setup_primary_class_group,
         secondary_class_group_id=setup_secondary_class_group,
     )
-    yield user_class_group_id
-    delete_user_class_group(user_class_group_id)
+    return user_class_group_id
 
 
 def test_add_user_class_group(setup_user, setup_primary_class_group):

@@ -1,11 +1,11 @@
 # type: ignore
 import pytest
-from app.models.class_ import Class
-from app.models.user import User
-from app.models import UserType, UserLevel
-from app.operations.class_operations import add_class
-from app.operations.class_group_operations import add_class_group
-from app.operations.homework_operations import (
+from backend.app.models.class_ import Class
+from backend.app.models.user import User
+from backend.app.models import UserType, UserLevel
+from backend.app.operations.class_operations import add_class
+from backend.app.operations.class_group_operations import add_class_group
+from backend.app.operations.homework_operations import (
     get_homework_by_group_id,
     add_homework_to_group,
     delete_homework,
@@ -13,7 +13,7 @@ from app.operations.homework_operations import (
     add_homework_to_class,
     get_user_homework,
 )
-from app.operations.user_operations import add_user
+from backend.app.operations.user_operations import add_user
 
 STUDENT_NAME = ("Alice", "Doe")
 GROUP_NAME = "Test Group"

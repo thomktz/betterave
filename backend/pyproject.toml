@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "betterave-backend"
-version = "0.1.0"
+version = "3.5.0"
 description = "Backend for Betterave - Pamplemousse alternative"
 authors = ["ENSAE students"]
 license = "MIT"
@@ -27,7 +27,6 @@ gunicorn = "^21.2.0"
 flask-restx = "^1.2.0"
 pre-commit = "^3.5.0"
 types-requests = "^2.31.0.20231231"
-mypy = "^1.8.0"
 
 [tool.black]
 line-length = 120

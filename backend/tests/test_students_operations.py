@@ -1,12 +1,12 @@
 # type: ignore
 import pytest
-from app.models.class_group import ClassGroup
-from app.models.user import User
-from app.models.class_ import Class
-from app.models import UserType, UserLevel
-from app.operations.class_operations import add_class
-from app.operations.class_group_operations import add_class_group, delete_class_group, enroll_student_in_group
-from app.operations.student_operations import (
+from backend.app.models.class_group import ClassGroup
+from backend.app.models.user import User
+from backend.app.models.class_ import Class
+from backend.app.models import UserType, UserLevel
+from backend.app.operations.class_operations import add_class
+from backend.app.operations.class_group_operations import add_class_group, delete_class_group, enroll_student_in_group
+from backend.app.operations.student_operations import (
     get_all_students,
     get_student_groups,
     get_students_from_class,
@@ -14,7 +14,7 @@ from app.operations.student_operations import (
     is_student_in_class,
     is_student_in_group,
 )
-from app.operations.user_operations import add_user
+from backend.app.operations.user_operations import add_user
 
 # Constants
 STUDENT_NAME = ("Alice", "Smith")

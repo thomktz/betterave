@@ -2,14 +2,14 @@
 from flask_restx import Resource
 from .models import fullcalendar_lesson_model, lesson_post_model
 from .namespace import api
-from app.operations.lesson_operations import (
+from backend.app.operations.lesson_operations import (
     get_all_lessons,
     add_lesson,
     get_lesson_by_id,
     update_lesson,
     delete_lesson,
 )
-from app.decorators import require_authentication
+from backend.app.decorators import require_authentication
 
 
 @api.route("/")

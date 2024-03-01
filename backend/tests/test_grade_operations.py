@@ -1,14 +1,14 @@
 # type: ignore
 import pytest
-from app.models import UserType, UserLevel
-from app.operations.class_operations import add_class
-from app.operations.grade_operations import (
+from backend.app.models import UserType, UserLevel
+from backend.app.operations.class_operations import add_class
+from backend.app.operations.grade_operations import (
     add_grade,
     get_grades_by_student_and_class_id,
     update_student_grade,
 )
-from app.operations.user_operations import add_user
-from extensions import db
+from backend.app.operations.user_operations import add_user
+from backend.extensions import db
 
 STUDENT_NAME = ("Alice", "Smith")
 

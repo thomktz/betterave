@@ -3,9 +3,9 @@ from typing import Optional
 from datetime import datetime
 from flask import request
 from sqlalchemy.exc import SQLAlchemyError
-from extensions import db
-from app.models import Event, User, UserLevel
-from app.decorators import is_valid_apikey, with_instance
+from backend.extensions import db
+from backend.app.models import Event, User, UserLevel
+from backend.app.decorators import is_valid_apikey, with_instance
 
 
 def add_event(

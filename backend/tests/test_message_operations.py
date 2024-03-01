@@ -1,17 +1,17 @@
 # type: ignore
 import pytest
-from app.models.class_ import Class
-from app.models import UserType, UserLevel
-from app.operations.class_operations import add_class
-from app.operations.class_group_operations import add_class_group
-from app.operations.message_operations import (
+from backend.app.models.class_ import Class
+from backend.app.models import UserType, UserLevel
+from backend.app.operations.class_operations import add_class
+from backend.app.operations.class_group_operations import add_class_group
+from backend.app.operations.message_operations import (
     get_messages_by_group_id,
     add_message_to_group,
     delete_message,
     get_class_messages,
     add_class_message,
 )
-from app.operations.user_operations import add_user
+from backend.app.operations.user_operations import add_user
 
 STUDENT_NAME = ("Zoe", "Smith")
 GROUP_NAME = "Test Group"

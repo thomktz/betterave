@@ -2,8 +2,8 @@
 
 from typing import Any
 from flask_login import UserMixin
-from extensions import db
-from app.models.enums import UserLevel, UserType
+from backend.extensions import db
+from backend.app.models.enums import UserLevel, UserType
 
 
 association_subscriptions = db.Table(

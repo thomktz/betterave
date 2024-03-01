@@ -3,7 +3,7 @@ SQLAlchemy model for a class group.
 
 See the docstring of the Class model for more information.
 """
-from extensions import db
+from backend.extensions import db
 
 
 class ClassGroup(db.Model):

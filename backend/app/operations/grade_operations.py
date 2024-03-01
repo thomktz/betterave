@@ -1,6 +1,6 @@
 from typing import Optional
-from extensions import db
-from app.models import Grade
+from backend.extensions import db
+from backend.app.models import Grade
 
 
 def add_grade(student_id: int, class_id: int, grade_value: float) -> Optional[Grade]:

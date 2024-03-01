@@ -38,11 +38,11 @@ resolve_user:
 import os
 from typing import Any, Callable, List, Type, Union
 from functools import wraps
-from extensions import db
+from backend.extensions import db
 from flask_login import current_user
 from flask import jsonify, request
 from flask_restx import abort
-from app.models import User
+from backend.app.models import User
 
 
 def is_valid_apikey(key: str) -> bool:

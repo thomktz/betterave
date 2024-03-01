@@ -1,8 +1,8 @@
-from extensions import db
-from app.decorators import with_instance
-from app.models.user import User, UserType
+from backend.extensions import db
+from backend.app.decorators import with_instance
+from backend.app.models.user import User, UserType
 from sqlalchemy.exc import SQLAlchemyError
-from app.operations.event_operations import get_association_events
+from backend.app.operations.event_operations import get_association_events
 
 
 @with_instance([User, User])

@@ -2,15 +2,15 @@
 from flask_restx import Resource
 from .models import user_class_group_model, user_class_group_update_model
 from .namespace import api
-from app.operations.user_class_group_operations import (
+from backend.app.operations.user_class_group_operations import (
     add_user_class_group,
     get_user_class_group_by_id,
     update_user_class_group,
     delete_user_class_group,
     get_ucg_by_user_and_class,
 )
-from app.operations.class_group_operations import get_class_group_by_name
-from app.decorators import require_authentication
+from backend.app.operations.class_group_operations import get_class_group_by_name
+from backend.app.decorators import require_authentication
 
 
 @api.route("/")

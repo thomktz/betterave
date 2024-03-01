@@ -1,7 +1,7 @@
 # type: ignore
 """SQLAlchemy object for homework associated with a ClassGroup."""
 from typing import Any
-from extensions import db
+from backend.extensions import db
 
 
 class Homework(db.Model):

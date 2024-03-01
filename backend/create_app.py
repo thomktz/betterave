@@ -7,9 +7,9 @@ from flask import Flask
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from extensions import db, bcrypt, login_manager, api
+from backend.extensions import db, bcrypt, login_manager, api
 
-from app.api import (
+from backend.app.api import (
     auth_ns,
     users_ns,
     classes_ns,
@@ -23,7 +23,7 @@ from app.api import (
 @login_manager.user_loader
 def load_user(user_id: int):  # type: ignore
     """Load the user from the database."""
-    from app.models.user import User
+    from backend.app.models.user import User
 
     return User.query.get(int(user_id))
 

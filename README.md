@@ -2,6 +2,9 @@
 
 _ENSAE année 2023-2024 : Projet Infrastructures et systèmes logiciels_
 
+[![Pytest](https://github.com/thomktz/betterave/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/thomktz/betterave/actions/workflows/pytest.yml)
+[![Pytest](https://github.com/thomktz/betterave/actions/workflows/pre-commit.yml/badge.svg?branch=main)](https://github.com/thomktz/betterave/actions/workflows/pre-commit.yml)
+
 **Link to the website** : [betterave.kientz.net](https://betterave.kientz.net)
 Link to the API : [api.betterave.kientz.net](https://api.betterave.kientz.net)
 
@@ -142,7 +145,7 @@ We used **vuetify** for tables and form elements, but coded many components ours
   Environments were managed using Poetry in Python and Npm in Vue.js.
 
 - **Using Pre-Commit hooks**  
-  Pre-commit allows you to run scripts ('hooks') before each commit to your repository. The ones we used are **black** (python - code formatter), **flake8** (python - linter), **prettier** (js/vue - code formatter) and **mypy** (python - type checker).
+  Pre-commit allows you to run scripts ('hooks') before each commit to your repository. The ones we used are **black** (python - code formatter), **flake8** (python - linter) and **prettier** (js/vue - code formatter).
 
   To run them, you should install the hooks using `pre-commit install`, and then `pre-commit run`
 

@@ -8,8 +8,8 @@ Not to be confused with
 
 """
 
-from extensions import db
-from app.models.enums import UserLevel
+from backend.extensions import db
+from backend.app.models.enums import UserLevel
 
 
 class Class(db.Model):

@@ -1,9 +1,9 @@
 from typing import Any, Optional
 from sqlalchemy.exc import SQLAlchemyError
-from extensions import db
-from app.models import UserClassGroup, ClassGroup
-from app.decorators import with_instance
-from app.operations.class_group_operations import (
+from backend.extensions import db
+from backend.app.models import UserClassGroup, ClassGroup
+from backend.app.decorators import with_instance
+from backend.app.operations.class_group_operations import (
     enroll_student_in_group,
     unenroll_student_from_group,
 )

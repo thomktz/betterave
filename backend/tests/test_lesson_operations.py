@@ -1,11 +1,11 @@
 # type: ignore
 import pytest
-from app.models.user import User
-from app.models import UserType, UserLevel
+from backend.app.models.user import User
+from backend.app.models import UserType, UserLevel
 from datetime import date, time, datetime
-from app.operations.class_operations import add_class
-from app.operations.class_group_operations import add_class_group, delete_class_group
-from app.operations.lesson_operations import (
+from backend.app.operations.class_operations import add_class
+from backend.app.operations.class_group_operations import add_class_group, delete_class_group
+from backend.app.operations.lesson_operations import (
     add_lesson,
     update_lesson,
     delete_lesson,
@@ -18,7 +18,7 @@ from app.operations.lesson_operations import (
     get_teacher_lessons,
     get_teacher_future_lessons,
 )
-from app.operations.user_operations import add_user
+from backend.app.operations.user_operations import add_user
 
 # Constants
 CLASS_NAME = "Test Class"
@@ -84,8 +84,7 @@ def setup_lesson(test_client, setup_group, setup_teacher):
         room=ROOM,
         teacher_id=setup_teacher,
     )
-    yield lesson_id
-    delete_lesson(lesson_id)
+    return lesson_id
 
 
 def test_add_lesson(test_client, setup_group, setup_teacher):

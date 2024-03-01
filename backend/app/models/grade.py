@@ -1,6 +1,6 @@
 """SQLAlchemy object for Grade associated with a ClassGroup."""
 from typing import Any
-from extensions import db
+from backend.extensions import db
 
 
 class Grade(db.Model):

@@ -3,7 +3,7 @@ from flask_restx import Resource
 from flask_login import current_user
 from .models import class_model, homework_model, homework_post_model
 from .namespace import api
-from app.operations.class_operations import (
+from backend.app.operations.class_operations import (
     add_class,
     get_class_by_id,
     get_all_classes,
@@ -12,11 +12,11 @@ from app.operations.class_operations import (
     get_classes_from_level,
     get_classes_from_teacher,
 )
-from app.operations.message_operations import get_class_messages, add_class_message
-from app.api.class_groups.models import message_model, message_post_model
-from app.operations.homework_operations import get_class_homework, add_homework_to_class, get_user_homework
-from app.models import UserLevel
-from app.decorators import require_authentication, resolve_user
+from backend.app.operations.message_operations import get_class_messages, add_class_message
+from backend.app.api.class_groups.models import message_model, message_post_model
+from backend.app.operations.homework_operations import get_class_homework, add_homework_to_class, get_user_homework
+from backend.app.models import UserLevel
+from backend.app.decorators import require_authentication, resolve_user
 
 
 @api.route("/")
