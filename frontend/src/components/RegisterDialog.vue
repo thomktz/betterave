@@ -13,8 +13,7 @@
                 :rules="nameRules"
                 required
                 prepend-icon="mdi-account"
-              >
-              </v-text-field>
+              ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
@@ -24,8 +23,7 @@
                 :rules="surnameRules"
                 required
                 prepend-icon="mdi-account-outline"
-              >
-              </v-text-field>
+              ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -33,8 +31,7 @@
                 v-model="email"
                 disabled
                 prepend-icon="mdi-email"
-              >
-              </v-text-field>
+              ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
@@ -44,8 +41,7 @@
                 :rules="passwordRules"
                 required
                 prepend-icon="mdi-lock"
-              >
-              </v-text-field>
+              ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6">
               <v-select
@@ -54,10 +50,36 @@
                 v-model="level"
                 required
                 prepend-icon="mdi-school"
-              >
-              </v-select>
+              ></v-select>
             </v-col>
-            <!-- Additional fields like LinkedIn, Website, etc., can be added here -->
+            <v-col cols="12">
+              <v-row align="start" no-gutters>
+                <v-col cols="auto">
+                  <v-checkbox
+                    class="gdpr-checkbox"
+                    v-model="gdprConsent"
+                    :rules="[(v) => v || 'You must agree to continue']"
+                    required
+                  ></v-checkbox>
+                </v-col>
+                <v-col cols="auto" class="checkbox-label">
+                  I agree to the
+                  <span
+                    class="gdpr-link"
+                    @click="openGdprDialog"
+                    role="button"
+                    tabindex="0"
+                    style="
+                      text-decoration: underline;
+                      color: #1976d2;
+                      cursor: pointer;
+                    "
+                  >
+                    GDPR terms.
+                  </span>
+                </v-col>
+              </v-row>
+            </v-col>
           </v-row>
         </v-container>
       </v-card-text>
@@ -65,6 +87,20 @@
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
         <v-btn color="blue darken-1" text @click="register">Register</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+  <v-dialog v-model="showGdprDialog" persistent max-width="800px">
+    <v-card>
+      <v-card-title class="headline">GDPR Compliance Information</v-card-title>
+      <v-card-text>
+        <div class="gdpr-text">{{ gdprTextContent }}</div>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="green darken-1" text @click="showGdprDialog = false"
+          >Close</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -103,6 +139,10 @@ export default {
         (v) => !!v || "Password is required",
         (v) => (v && v.length >= 4) || "Password must be at least 4 characters",
       ],
+      gdprConsent: false,
+      showGdprChart: false,
+      gdprTextContent: "",
+      showGdprDialog: false,
     };
   },
   watch: {
@@ -143,16 +183,45 @@ export default {
           password_override: this.password,
         });
 
-        // Manually display a success toast
         toast.success("User created successfully");
         this.close();
       } catch (error) {
-        // Error handling is already taken care of by the apiClient interceptor
         console.error("Error creating user:", error);
       }
+    },
+    async fetchGdprContent() {
+      const response = await fetch("/gdpr-policy.txt");
+      if (response.ok) {
+        const text = await response.text();
+        this.gdprTextContent = text;
+      } else {
+        console.error("Failed to load GDPR content");
+        this.gdprTextContent =
+          "Failed to load content. Please try again later.";
+      }
+    },
+    openGdprDialog() {
+      this.fetchGdprContent();
+      this.showGdprDialog = true;
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.checkbox-label {
+  margin-top: 15px;
+}
+.gdpr-text {
+  white-space: pre-wrap;
+  font-family: "Arial", sans-serif;
+}
+.gdpr-link {
+  text-decoration: underline;
+  color: #1976d2;
+  cursor: pointer;
+}
+.gdpr-checkbox {
+  width: 90px;
+}
+</style>
