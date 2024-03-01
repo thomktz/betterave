@@ -1,4 +1,4 @@
-name: pre-commit
+name: Pre-commit Checks
 
 on:
   pull_request:
@@ -9,8 +9,12 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v3
-    - uses: pre-commit/action@v3.0.1
-    - uses: pre-commit-ci/lite-action@v1.0.2
-      if: always()
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Set Up Python
+        uses: actions/setup-python@v3
+      - name: Run pre-commit Hooks
+        uses: pre-commit/action@v3.0.1
+      - name: Run pre-commit-ci for automatic fixing
+        uses: pre-commit-ci/lite-action@v1.0.2
+        if: always()
