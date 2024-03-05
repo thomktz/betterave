@@ -210,7 +210,7 @@ Or, if you want to run the containers in the background:
 docker compose up --build -d
 ```
 
-To scrap ENSAE website, run :
+To scrape the ENSAE website, run :
 
 ```bash
 docker exec -it betterave-backend-1 python -m scripts.scraping
