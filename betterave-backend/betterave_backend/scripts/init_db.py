@@ -4,7 +4,7 @@ import random
 import json
 import numpy as np
 import pandas as pd
-from main import app
+from betterave_backend.main import app
 from betterave_backend.extensions import db
 from betterave_backend.app.operations.user_operations import add_user, get_user_by_name
 from betterave_backend.app.operations.student_operations import get_students_from_level

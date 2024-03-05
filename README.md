@@ -213,13 +213,13 @@ docker compose up --build -d
 To scrape the ENSAE website, run :
 
 ```bash
-docker exec -it betterave-backend-1 python -m scripts.scraping
+docker exec -it betterave-backend-1 python -m betterave_backend.scripts.scraping
 ```
 
 To initialize the database, run :
 
 ```bash
-docker exec -it betterave-backend-1 python -m scripts.init_db
+docker exec -it betterave-backend-1 python -m betterave_backend.scripts.init_db
 ```
 
 To shut down the containers:
