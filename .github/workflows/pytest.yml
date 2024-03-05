@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'backend/**'
+      - 'betterave-backend/**'
   pull_request:
     branches: [main]
     paths:
-      - 'backend/**'
+      - 'betterave-backend/**'
 
 jobs:
   test:
@@ -34,17 +34,17 @@ jobs:
           ~/.cache/pypoetry/virtualenvs
           ~/Library/Caches/pypoetry/virtualenvs
           %LOCALAPPDATA%\pypoetry\Cache\virtualenvs
-        key: ${{ runner.os }}-poetry-${{ matrix.python-version }}-${{ hashFiles('backend/pyproject.toml') }}
+        key: ${{ runner.os }}-poetry-${{ matrix.python-version }}-${{ hashFiles('betterave-backend/pyproject.toml') }}
         restore-keys: |
           ${{ runner.os }}-poetry-${{ matrix.python-version }}-
 
     - name: Install dependencies
       run: |
         pip install poetry
-        cd backend
+        cd betterave-backend
         poetry install
 
     - name: Run pytest
       run: |
-        cd backend
+        cd betterave-backend
         poetry run pytest tests/
