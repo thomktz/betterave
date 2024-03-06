@@ -81,6 +81,9 @@ export default {
     goToAssoControls() {
       this.$router.push({ name: "asso-controls" });
     },
+    goToNotificationControls() {
+      this.$router.push({ name: "notification-controls" });
+    },
     goToStudentControls() {
       this.$router.push({ name: "student-controls" });
     },
