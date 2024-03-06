@@ -11,6 +11,15 @@
         </div>
       </div>
 
+
+        <div class="notification-container">
+          <h2>Notifications</h2>
+         <!-- Ajoutez le contenu de votre composant de notification ici si nécessaire -->
+         </div>
+
+    
+
+
       <!-- Right Side Calendar -->
       <div class="calendar-box">
         <UserCalendar :user="user" />
@@ -59,6 +68,29 @@ export default {
 </script>
 
 <style>
+
+.notification-container {
+  justify-content: space-between;
+  width: calc(50% - 20px);
+  height: 80vh;
+  padding: 20px;
+  background-color: var(--secondary-color-transparent);
+  color: var(--primary-text-color);
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  margin: 0 10px;
+  
+}
+
+.notification-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--separator-color);
+  padding-bottom: 10px;
+}
+
+
+
 .calendar-box {
   background-color: #f5f5f5;
   border-radius: 10px;
