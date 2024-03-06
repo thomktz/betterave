@@ -16,7 +16,7 @@ const toast = useToast();
 // Add a request interceptor
 apiClient.interceptors.request.use(
   (request) => {
-    // Log the full request details here
+    // Log the full request de tails here
     // console.log("Starting Request", JSON.stringify(request, null, 2));
     return request;
   },
