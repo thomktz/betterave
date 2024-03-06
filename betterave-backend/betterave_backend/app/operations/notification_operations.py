@@ -1,9 +1,9 @@
 from datetime import datetime
 from flask import request
 from sqlalchemy.exc import SQLAlchemyError
-from extensions import db
-from app.models import Notification, User, UserLevel
-from app.decorators import is_valid_apikey, with_instance
+from betterave_backend.extensions import db
+from betterave_backend.app.models import Notification, User, UserLevel
+from betterave_backend.app.decorators import is_valid_apikey, with_instance
 
 
 def add_notification(

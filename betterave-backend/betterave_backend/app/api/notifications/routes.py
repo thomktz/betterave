@@ -4,7 +4,7 @@ from .models import (
     notification_post_model,
     notification_recipients_post_model,
 )
-from app.operations.notification_operations import (
+from betterave_backend.app.operations.notification_operations import (
     add_notification,
     add_recipient_to_notification,
     get_notification_by_id,
@@ -13,7 +13,7 @@ from app.operations.notification_operations import (
     get_notification_by_id,
     can_create_notification,
 )
-from app.decorators import require_authentication
+from betterave_backend.app.decorators import require_authentication
 from flask_login import current_user
 
 

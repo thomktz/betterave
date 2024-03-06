@@ -6,3 +6,4 @@ from .lessons import lessons_ns
 from .class_groups import class_groups_ns
 from .user_class_groups import user_class_groups_ns
 from .events import events_ns
+from .notifications import notifications_ns
