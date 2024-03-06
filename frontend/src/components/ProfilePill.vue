@@ -30,6 +30,12 @@
       >
         Manage events
       </button>
+      <button
+        v-if="user.user_type == 'asso' || user.user_type == 'admin'"
+        @click="goToNotificationControls"
+      >
+        Manage notifications
+      </button>
       <button v-if="user.user_type == 'student'" @click="goToStudentControls">
         Manage courses
       </button>
