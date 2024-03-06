@@ -31,7 +31,7 @@
   </template>
   
   <script>
-  //import CreateNotification from "@/components/CreateNotification.vue";
+  import CreateNotification from "@/components/CreateNotification.vue";
   import { apiClient } from "@/apiConfig";
   
   export default {
