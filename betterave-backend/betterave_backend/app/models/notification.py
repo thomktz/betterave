@@ -18,7 +18,7 @@ class Notification(db.Model):
     
     recipient_type = db.Column(db.String, nullable=False)
     
-    recipient_users = db.relationship("User", secondary="notification_reception", back_populates="receptionned_notifications")
+    #recipient_users = db.relationship("User", secondary="notification_reception", back_populates="receptionned_notifications")
 
     #recipient_level = db.Column(db.Enum(UserLevel), nullable=True)
     #for_followers = db.Column(db.Boolean, default=False, nullable=False)

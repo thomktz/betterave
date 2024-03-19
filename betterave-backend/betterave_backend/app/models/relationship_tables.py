@@ -13,3 +13,9 @@ event_attendance = db.Table(
     db.Column("user_id", db.Integer, db.ForeignKey("user.user_id")),
     db.Column("event_id", db.Integer, db.ForeignKey("event.event_id")),
 )
+
+notification_reception = db.Table(
+    "notification_reception",
+    db.Column("user_id", db.Integer, db.ForeignKey("user.user_id")),
+    db.Column("notification_id", db.Integer, db.ForeignKey("notification.notification_id")),
+)
