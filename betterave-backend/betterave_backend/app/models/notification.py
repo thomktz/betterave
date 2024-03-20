@@ -6,7 +6,6 @@ from betterave_backend.extensions import db
 
 class Notification(db.Model):
     """SQLAlchemy object representing a notification."""
-    print("test5")
     __tablename__ = "notification"
     notification_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(256), nullable=False)

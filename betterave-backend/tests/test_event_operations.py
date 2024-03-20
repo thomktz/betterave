@@ -27,6 +27,7 @@ DESCRIPTION = "Test Réunion"
 LOCATION = "Amphi 200"
 PARTICIPANT_TYPE = "All users"
 
+print("test event test")
 
 @pytest.fixture
 def setup_student(test_client):

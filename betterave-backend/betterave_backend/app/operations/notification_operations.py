@@ -14,7 +14,6 @@ def add_notification(
     recipient_type
 ):
     """Add a notification to the database."""
-    print("test3")
     try:
         if recipient_type == "Subscribers":
             recipient_users = User.query.get(sent_by_user_id).subscribers
@@ -23,7 +22,7 @@ def add_notification(
         elif recipient_type == "UserLevel":
             # Assuming recipient_type is a UserLevel
             recipient_users = User.query.filter_by(level=UserLevel(recipient_users)).all()
-        print("test4")
+       
 
         new_notification = Notification(
             title=title,
@@ -32,10 +31,10 @@ def add_notification(
             recipient_type=recipient_type,
             recipient_users=recipient_users,
         )
-        print("test6")
+    
         db.session.add(new_notification)
         db.session.commit()
-        print("test7")
+
         return new_notification.notification_id
     except SQLAlchemyError as e:
         db.session.rollback()

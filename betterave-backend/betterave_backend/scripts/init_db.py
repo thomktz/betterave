@@ -291,17 +291,13 @@ def initialize_database() -> None:
             
         # 11bis - Add notifications
         print("Adding notifications ...")
-        # test notif 
-        print("test1")
         sent_by_user_id = admin_ids[0]
-        print("test2")
         add_notification(
             "Test notif",
             "This is a test to test notifications",
             sent_by_user_id,
             "All users",
         )
-        print("test8")
 
         # 12 - Add grades
         print("Adding grades...")
