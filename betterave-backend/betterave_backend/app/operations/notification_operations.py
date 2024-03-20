@@ -1,3 +1,4 @@
+from typing import Optional
 from datetime import datetime
 from flask import request
 from sqlalchemy.exc import SQLAlchemyError
@@ -15,8 +16,8 @@ def add_notification(
     """Add a notification to the database."""
     print("test3")
     try:
-        if recipient_type == "Followers":
-            recipient_users = User.query.get(sent_by_user_id).followers
+        if recipient_type == "Subscribers":
+            recipient_users = User.query.get(sent_by_user_id).subscribers
         elif recipient_type == "All users":
             recipient_users = User.query.all()
         elif recipient_type == "UserLevel":
@@ -95,16 +96,15 @@ def get_association_notifications(asso: User, limit: int = None) -> list[Notific
 
 
 @with_instance(User)
-def get_user_notifications(user: User, limit: int = None) -> list[Notification]:
-    """Get all notifications for a particular user."""
+def get_user_notifications(user: User, limit: Optional[int] = None) -> list[Notification]:
+    """Get all events a particular user is attending."""
     if limit is not None:
-        notifications = (
-            user.notifications.filter(Notification.created_at >= datetime.utcnow()).limit(limit).all()
-        )
+        notification = user.receptionned_notifications[:limit]
     else:
-        notifications = user.notifications.filter(Notification.created_at >= datetime.utcnow()).all()
+        notification = user.receptionned_notifications
 
-    return notifications
+    return notification
+
 
 
 
