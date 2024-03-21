@@ -14,7 +14,27 @@ class NotificationBackgroundColorModel(fields.Raw):
         """Define the default background color for notifications."""
         return "#FFFFFF"
 
-
+fullcalendar_notif_model = api.model(
+    "Event",
+    {
+        "id": fields.String(
+            attribute=lambda x: f"notif_{x.notif_id}",
+            description="A unique identifier for the notif prefixed with 'notif_'",
+        ),
+        "title": fields.String(
+            attribute=lambda x: f"{x.association.name} - {x.name}" if x.association else "Unnamed Event",
+            description="The name of the association or the main title of the event",
+        ),
+        "type": fields.String(
+            attribute="description",
+            description="A brief description or subtitle for the notif",
+        ),
+        "notif_id": fields.Integer(
+            attribute="notif_id",
+            description="The internal unique identifier of the notif",
+        ),
+    },
+)
 
 notification_post_model = api.model(
     "NotificationPost",

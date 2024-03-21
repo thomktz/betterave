@@ -1,6 +1,7 @@
 from flask_restx import Resource
 from .namespace import api
 from .models import (
+    fullcalendar_notif_model,
     notification_post_model,
     notification_recipients_post_model,
 )
@@ -21,6 +22,7 @@ from flask_login import current_user
 class NotificationList(Resource):
     @api.doc(security="apikey")
     @require_authentication()
+    @api.marshal_list_with(fullcalendar_notif_model)
     def get(self):
         """Get a list of all notifications."""
         return get_all_notifications()
@@ -28,6 +30,7 @@ class NotificationList(Resource):
     @api.doc(security="apikey")
     @require_authentication()
     @api.expect(notification_post_model)
+    @api.marshal_list_with(fullcalendar_notif_model)
     def post(self):
         """Create a new notification."""
         notification_data = api.payload

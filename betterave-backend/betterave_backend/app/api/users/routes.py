@@ -56,6 +56,7 @@ from betterave_backend.app.operations.user_class_group_operations import (
 )
 from betterave_backend.app.api.lessons.models import fullcalendar_lesson_model
 from betterave_backend.app.api.events.models import fullcalendar_event_model
+from betterave_backend.app.api.notifications.models import fullcalendar_notif_model
 from betterave_backend.app.decorators import (
     require_authentication,
     current_user_required,
@@ -415,11 +416,12 @@ class UserFutureEvents(Resource):
 
 
 @api.route("/<string:user_id_or_me>/notifications")
-class UserEvents(Resource):
+class UserNotifications(Resource):
     @api.doc(security="apikey")
     @require_authentication()
     @resolve_user
     @current_user_required
+    @api.marshal_list_with(fullcalendar_notif_model)
     def get(self, user):
         """Get a list of notifications for a specific user."""
         if user.is_asso:
