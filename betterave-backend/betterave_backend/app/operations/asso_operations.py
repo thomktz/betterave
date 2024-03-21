@@ -3,6 +3,7 @@ from betterave_backend.app.decorators import with_instance
 from betterave_backend.app.models.user import User, UserType
 from sqlalchemy.exc import SQLAlchemyError
 from betterave_backend.app.operations.event_operations import get_association_events
+from betterave_backend.app.operations.notification_operations import get_association_notifications
 
 
 @with_instance([User, User])
@@ -18,6 +19,11 @@ def subscribe_to_asso(user: User, asso: User) -> bool:
         future_events = get_association_events(asso)
         for event in future_events:
             event.attending_users.append(user)
+        
+        notifications = get_association_notifications(asso)
+        for notif in notifications:
+            notif.recipient_users.append(user)
+        
 
         db.session.commit()
         return True
@@ -41,6 +47,12 @@ def unsubscribe_from_asso(user: User, asso: User) -> bool:
         for event in future_events:
             if user in event.attending_users:
                 event.attending_users.remove(user)
+        
+        notifications = get_association_notifications(asso)
+        for notif in notifications:
+            if user in notif.recipient_users:
+                notif.recipient_users.remove(user)
+        
 
         db.session.commit()
         return True

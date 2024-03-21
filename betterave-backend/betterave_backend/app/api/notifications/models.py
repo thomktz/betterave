@@ -21,6 +21,11 @@ fullcalendar_notif_model = api.model(
             attribute=lambda x: f"notif_{x.notification_id}",
             description="A unique identifier for the notif prefixed with 'notif_'",
         ),
+        
+        "resourceId": fields.Integer(
+            attribute=lambda x: x.asso_id,
+            description="The ID of the association that is hosting the event, to associate events and resources",
+        ),
         "title": fields.String(
             attribute=lambda x: f"{x.association.name} - {x.name}" if x.association else "Unnamed Event",
             description="The name of the association or the main title of the event",
@@ -39,9 +44,9 @@ fullcalendar_notif_model = api.model(
 notification_post_model = api.model(
     "NotificationPost",
     {
-        "sent_by_user_id": fields.Integer(
+        "asso_id": fields.Integer(
             required=True,
-            description="The unique identifier of the user sending the notification",
+            description="The unique identifier of the association sending the notification",
         ),
         "title": fields.String(required=True, description="The name of the notification"),
         "content": fields.String(description="A description of the notification"),
@@ -64,8 +69,8 @@ notification_recipients_post_model = api.model(
             description="User level to filter which users will receive the notification",
             required=False,
         ),
-        "sender_id": fields.Integer(
-            description="The unique identifier of the user (asso or admin) sending the notification",
+        "asso_id": fields.Integer(
+            description="The unique identifier of the association sending the notif",
             required=False,
         ),
     },
