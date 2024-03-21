@@ -8,15 +8,17 @@ from betterave_backend.app.decorators import is_valid_apikey, with_instance
 
 
 def add_notification(
-    title,
-    content,
+    
+    asso_id: int,
+    title: str,
+    content: str,
     sent_by_user_id,
     recipient_type
-):
+) -> int:
     """Add a notification to the database."""
     try:
         if recipient_type == "Subscribers":
-            recipient_users = User.query.get(sent_by_user_id).subscribers
+            recipient_users = User.query.get(asso_id).subscribers
         elif recipient_type == "All users":
             recipient_users = User.query.all()
         elif recipient_type == "UserLevel":
@@ -25,6 +27,7 @@ def add_notification(
        
 
         new_notification = Notification(
+            asso_id=asso_id,
             title=title,
             content=content,
             sent_by_user_id=sent_by_user_id,
@@ -85,12 +88,13 @@ def get_all_notifications() -> list[Notification]:
     return Notification.query.all()
 
 @with_instance(User)
-def get_association_notifications(asso: User, limit: int = None) -> list[Notification]:
+def get_association_notifications(asso: User,  limit: Optional[int] = None) -> list[Notification]:
     """Get all Notifications sended by a particular association."""
-    if limit is not None:
-        notifications = Notification.query.filter_by(sent_by_user_id=asso.user_id).limit(limit).all()
-    else:
-        notifications = Notification.query.filter_by(sent_by_user_id=asso.user_id).all()
+    notifications = (
+        Notification.query.filter_by(asso_id=asso.user_id).limit(limit).all()
+        if limit is not None
+        else Notification.query.filter_by(asso_id=asso.user_id).all()
+    )
     return notifications
 
 
@@ -138,7 +142,7 @@ def add_recipient_to_notification(notification_id, user_ids=None, user_level=Non
 
 
 
-def can_create_notification(user, asso_id=None):
+def can_create_notification(user: User, asso_id: Optional[int] = None) -> bool:
     """Check if a user can create a notification."""
     # Assume that admin can create notifications for him, for any association or for all users
     apikey = request.headers.get("X-API-KEY")
@@ -147,6 +151,6 @@ def can_create_notification(user, asso_id=None):
     if user.is_admin:
         return True
     # Associations can only create notifications for themselves
-    if user.is_asso and (asso_id is None or user.user_id == asso_id):
+    if user.is_asso and (asso_id is None or user.user_id == asso_id) :
         return True
     return False
