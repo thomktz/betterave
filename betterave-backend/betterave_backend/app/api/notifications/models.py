@@ -18,7 +18,7 @@ fullcalendar_notif_model = api.model(
     "Event",
     {
         "id": fields.String(
-            attribute=lambda x: f"notif_{x.notif_id}",
+            attribute=lambda x: f"notif_{x.notification_id}",
             description="A unique identifier for the notif prefixed with 'notif_'",
         ),
         "title": fields.String(
@@ -29,8 +29,8 @@ fullcalendar_notif_model = api.model(
             attribute="description",
             description="A brief description or subtitle for the notif",
         ),
-        "notif_id": fields.Integer(
-            attribute="notif_id",
+        "notification_id": fields.Integer(
+            attribute="notification_id",
             description="The internal unique identifier of the notif",
         ),
     },
