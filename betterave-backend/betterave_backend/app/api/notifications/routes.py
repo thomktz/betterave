@@ -33,7 +33,7 @@ class NotificationList(Resource):
     def post(self):
         """Create a new notification."""
         notification_data = api.payload
-        if can_create_notification(current_user, notification_data["asso_id"]):
+        if can_create_notification(current_user):
             notification_id = add_notification(**notification_data)
             notification = get_notification_by_id(notification_id)
             if notification:

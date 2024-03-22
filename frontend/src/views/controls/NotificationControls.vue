@@ -54,7 +54,7 @@
       this.user_type = response.data.user_type;
   
       // Fetch notifications
-      const notificationsResponse = await apiClient.get("/notifications/");
+      const notificationsResponse = await apiClient.get("/users/me/notifications/");
       this.notifications = notificationsResponse.data; // Assume the response has the data in this format
     },
     methods: {

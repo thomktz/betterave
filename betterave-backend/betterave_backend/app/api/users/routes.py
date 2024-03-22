@@ -46,7 +46,6 @@ from betterave_backend.app.operations.event_operations import (
 from betterave_backend.app.operations.notification_operations import (
     get_all_notifications,
     get_user_notifications,
-    get_association_notifications,
 )
 
 from betterave_backend.app.operations.user_class_group_operations import (
@@ -424,9 +423,7 @@ class UserNotifications(Resource):
     @api.marshal_list_with(fullcalendar_notif_model)
     def get(self, user):
         """Get a list of notifications for a specific user."""
-        if user.is_asso:
-            notifications = get_association_notifications(user)
-        elif user.is_admin:
+        if user.is_admin:
             notifications = get_all_notifications()
         else:
             notifications = get_user_notifications(user)

@@ -87,16 +87,6 @@ def get_all_notifications() -> list[Notification]:
     """Return all notifications in the database."""
     return Notification.query.all()
 
-@with_instance(User)
-def get_association_notifications(asso: User,  limit: Optional[int] = None) -> list[Notification]:
-    """Get all Notifications sended by a particular association."""
-    notifications = (
-        Notification.query.filter_by(asso_id=asso.user_id).limit(limit).all()
-        if limit is not None
-        else Notification.query.filter_by(asso_id=asso.user_id).all()
-    )
-    return notifications
-
 
 @with_instance(User)
 def get_user_notifications(user: User, limit: Optional[int] = None) -> list[Notification]:
