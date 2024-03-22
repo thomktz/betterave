@@ -15,7 +15,7 @@ class NotificationBackgroundColorModel(fields.Raw):
         return "#FFFFFF"
 
 fullcalendar_notif_model = api.model(
-    "Event",
+    "Notification",
     {
         "id": fields.String(
             attribute=lambda x: f"notif_{x.notification_id}",
@@ -23,11 +23,11 @@ fullcalendar_notif_model = api.model(
         ),
         
         "resourceId": fields.Integer(
-            attribute=lambda x: x.asso_id,
+            attribute=lambda x: x.sent_by_user_id,
             description="The ID of the association that is hosting the event, to associate events and resources",
         ),
         "title": fields.String(
-            attribute=lambda x: f"{x.association.name} - {x.name}" if x.association else "Unnamed Event",
+            attribute= "Unnamed Event",
             description="The name of the association or the main title of the event",
         ),
         "type": fields.String(
@@ -44,9 +44,9 @@ fullcalendar_notif_model = api.model(
 notification_post_model = api.model(
     "NotificationPost",
     {
-        "asso_id": fields.Integer(
+        "sent_by_user_id": fields.Integer(
             required=True,
-            description="The unique identifier of the association sending the notification",
+            description="The unique identifier of the user sending the notification",
         ),
         "title": fields.String(required=True, description="The name of the notification"),
         "content": fields.String(description="A description of the notification"),
@@ -69,8 +69,8 @@ notification_recipients_post_model = api.model(
             description="User level to filter which users will receive the notification",
             required=False,
         ),
-        "asso_id": fields.Integer(
-            description="The unique identifier of the association sending the notif",
+        "sent_by_user_id": fields.Integer(
+            description="The unique identifier of the user sending the notif",
             required=False,
         ),
     },

@@ -8,7 +8,6 @@ from .models import (
 from betterave_backend.app.operations.notification_operations import (
     add_notification,
     add_recipient_to_notification,
-    get_notification_by_id,
     get_all_notifications,
     delete_notification,
     get_notification_by_id,
@@ -64,7 +63,6 @@ class NotificationRecipients(Resource):
         """Link recipients to a notification."""
         user_ids = api.payload.get("user_ids", [])
         user_level = api.payload.get("user_level", None)
-        asso_id = api.payload.get("asso_id", None)
-        if add_recipient_to_notification(notification_id, user_ids, user_level, asso_id):
+        if add_recipient_to_notification(notification_id, user_ids, user_level):
             return {"message": "Recipients added successfully"}, 200
         api.abort(400, "Could not add recipients to the notification")

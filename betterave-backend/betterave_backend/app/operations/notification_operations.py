@@ -9,25 +9,25 @@ from betterave_backend.app.decorators import is_valid_apikey, with_instance
 
 def add_notification(
     
-    asso_id: int,
+    #asso_id: int,
     title: str,
     content: str,
-    sent_by_user_id,
-    recipient_type
+    sent_by_user_id : int,
+    recipient_type,
 ) -> int:
     """Add a notification to the database."""
     try:
         if recipient_type == "Subscribers":
-            recipient_users = User.query.get(asso_id).subscribers
+            recipient_users = User.query.get(sent_by_user_id).subscribers
         elif recipient_type == "All users":
             recipient_users = User.query.all()
-        elif recipient_type == "UserLevel":
+        else:
             # Assuming recipient_type is a UserLevel
             recipient_users = User.query.filter_by(level=UserLevel(recipient_users)).all()
        
 
         new_notification = Notification(
-            asso_id=asso_id,
+            #asso_id=asso_id,
             title=title,
             content=content,
             sent_by_user_id=sent_by_user_id,
@@ -111,26 +111,27 @@ def get_user_notifications(user: User, limit: Optional[int] = None) -> list[Noti
 
 
 
-def add_recipient_to_notification(notification_id, user_ids=None, user_level=None, asso_id=None):
+def add_recipient_to_notification(notification_id, user_ids=None, user_level=None):
     """link new recipients to a notification. If no users are specified, link all users."""
     notification = Notification.query.get(notification_id)
     if not notification:
         return False
 
-    if user_ids:
-        # Link specific users to the notification
-        users = User.query.filter(User.user_id.in_(user_ids)).all()
+    if User.query.filter(User.user_id.in_(user_ids)).all().is_asso :
+        # Link all users subscribed to a particular association to the notification
+        asso = User.query.get(user_ids)
+        if not asso:
+            return False
+        users = asso.subscribers
         notification.recipient_users.extend(users)
+    
     elif user_level:
         # Link all users of a certain level to the notification
         users = User.query.filter_by(level=user_level).all()
         notification.recipient_users.extend(users)
-    elif asso_id:
-        # Link all users subscribed to a particular association to the notification
-        asso = User.query.get(asso_id)
-        if not asso:
-            return False
-        users = asso.subscribers
+    elif not User.query.filter(User.user_id.in_(user_ids)).all().is_asso :
+        # Link specific users to the notification
+        users = User.query.filter(User.user_id.in_(user_ids)).all()
         notification.recipient_users.extend(users)
     else:
         # If no specific users or level provided, assume linking all users
@@ -142,7 +143,7 @@ def add_recipient_to_notification(notification_id, user_ids=None, user_level=Non
 
 
 
-def can_create_notification(user: User, asso_id: Optional[int] = None) -> bool:
+def can_create_notification(user: User) -> bool:
     """Check if a user can create a notification."""
     # Assume that admin can create notifications for him, for any association or for all users
     apikey = request.headers.get("X-API-KEY")
@@ -151,6 +152,6 @@ def can_create_notification(user: User, asso_id: Optional[int] = None) -> bool:
     if user.is_admin:
         return True
     # Associations can only create notifications for themselves
-    if user.is_asso and (asso_id is None or user.user_id == asso_id) :
+    if user.is_asso :
         return True
     return False

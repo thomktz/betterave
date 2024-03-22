@@ -13,7 +13,7 @@ class Notification(db.Model):
     )  # This links the notif to the association.
     title = db.Column(db.String(256), nullable=False)
     content = db.Column(db.String(2048), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    #created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     sent_by_user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
     sender = db.relationship("User", foreign_keys=[sent_by_user_id])
