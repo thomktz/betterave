@@ -21,8 +21,28 @@ RECIPIENT_TYPE = "All users"
 @pytest.fixture
 def setup_user(test_client):
     """Create a user and returns their ID."""
-    user_id = add_user("John", "Doe", "user_pic_url", UserType.USER, UserLevel.NA)
+    user_id = add_user("John", "Doe", "user_pic_url", UserType.ADMIN, UserLevel.NA)
     return user_id
+
+@pytest.fixture
+def setup_notification(test_client):
+    """Fixture to create a notification and return its ID."""
+    event_id = add_notification(
+            title=TITLE,
+            content=CONTENT,
+            sent_by_user_id = SENT_BY_USER_ID ,
+            recipient_type=RECIPIENT_TYPE,
+            )
+    yield event_id
+    delete_notification(event_id)
+    
+@pytest.fixture
+def setup_student(test_client):
+    """Create a student user and returns their ID."""
+    student_id = add_user("John", "Mac", "student_pic_url", UserType.STUDENT, UserLevel._1A)
+    return student_id
+
+
 
 def test_add_notification(test_client):
     """Test adding a new notification."""
@@ -67,5 +87,5 @@ def test_get_user_notifications(test_client, setup_user):
 
 def test_add_recipient_to_notification(test_client, setup_notification):
     """Test adding recipients to a notification."""
-    success = add_recipient_to_notification(setup_notification, user_ids=[setup_user])
+    success = add_recipient_to_notification(setup_notification, user_ids=[setup_student])
     assert success is True
