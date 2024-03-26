@@ -54,7 +54,7 @@
       this.user_type = response.data.user_type;
   
       // Fetch notifications
-      const notificationsResponse = await apiClient.get("/users/me/notifications/");
+      const notificationsResponse = await apiClient.get("/users/me/notifications");
       this.notifications = notificationsResponse.data; // Assume the response has the data in this format
     },
     methods: {
@@ -65,6 +65,7 @@
           sent_by_user_id: this.user_id,
           recipient_type: notificationData.recipient_type,
         };
+      console.log(data);
   
         try {
           const response = await apiClient.post("/notifications/", data);
